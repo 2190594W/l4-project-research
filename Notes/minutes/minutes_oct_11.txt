@@ -1,0 +1,41 @@
+October 11th Meeting Minutes
+
+Next week is last meeting
+
+What needs modelled? What should be modelled? What can we leave out?
+(From Mind Maps)
+
+Teaching (exams, resources, school forums, newsletters, minutes from Head of School meetings etc.)
+
+Use Cases: MoSCoW 
+
+Designing ABE Resource System (theoretical model)
+Developing ABE Resource System (software design)
+
+Access Policy nailed down by November 31st. Software begins December 1st.
+
+Start discussing software implementation after Jan’s annual leave.
+
+Students more fine-grained.
+
+Read more papers and lecture slides.
+
+Key distribution, enrolment to be considered. Offline PKG? Online PKG central server?
+
+If offline, then justify it best as possible. Scope, depth, added security.
+
+Could we hook system into Student Centre for Future Work/Deployment discussion, since then we know the user’s courses etc.
+
+Enrolment could be manual, must discuss and explain.
+Must decide where encryption and decryption occurs (client vs server); is the end user expected to be capable of CLI commands.
+
+Network Component Diagram of system.
+ Use case in natural language to Policy language to actual software implementation.
+
+Plans for 2 week Jan annual leave, present next week.
+During leave investigate uses of ABE software.
+Email during 2 weeks, on each meeting day; catch up is quicker.
+Properly write out Use Cases. Define attributes for some Subjects/Users.
+Student persona, Student class rep ??? persona, Lecturer, Head of XXXX, Admin, Technical
+Think of use case for each of above (and more), what might they want to upload/download, how would they do it, what attributes might that have and the resource have. Possible other actions than just upload/download.
+Consider user evaluation & security evaluation.

@@ -1,0 +1,1 @@
+Discussion on progress. Need to consider users and environments as use cases, not just resources directly. Should collect list of staff roles and duties. Consider starting on boolean formulae/type theory/PL theory development

@@ -1,0 +1,31 @@
+October 18th Meeting Minutes
+
+Read blog post on Policy Language.
+
+Define model first and foremost, in order to know what needs written in the language.
+
+Write out Use Cases fully to better understand the system from a User’s perspective. Also defining policy in the process.
+ Shows/drives the expressiveness of the policy language. Whilst also describing the realising of the software product.
+
+Try find an example where two related documents need uploaded with different policies (such as minutes from a meeting, where a redacted copy is more public than the full version).
+
+Upload minutes and use cases to github. Also upload pictures of board from phone.
+
+Use cases can be tests in future.
+
+Could the server in future be amended/altered for new scenarios such as grades storing, coursework submission, HR details etc (non-resource stuff).
+
+Current scenario is strictly a “Staff & Student Teaching Resource Server”.
+
+Primary, Secondary, Tertiary objectives and what were the contributions of the project.
+
+Start to explore OpenABE package (lightly). Some software investigation.
+
+Be able to explain the Policy Language for different use cases, the subject, environment and resource attributes for different use cases. Extrapolate from written out use cases.
+
+Assumption: That the attributes are config based from files, may have to hard code attributes and state configuration as future work to make the system flexible and portable to new environments.
+ We are using a bespoke scenario. The most important thing is that the system works for this scenario. Customisability is a “nice to have”. The defined scenario (scope of the project) is the most important step.
+
+Will the OpenABE package support Key or Ciphertext policy, or both? We may have to pick which one, and/or offer both? Remember scope.
+
+Remember scope when considering the architecture and the process of encryption and decryption.

@@ -1,0 +1,14 @@
+Meeting with Jan to discuss Summer progress and start to plan next few weeks.
+Agree to write down Use Cases for the resource folder, along with matching access policies. Start a research journal to match with Mendeley reference manager. Consider research notes through Sphinx?
+
+https://www.etsi.org/news-events/news/1341-1018-10-news-etsi-tc-cyber-hosts-webinar-series-for-european-cyber-security-month?platform=hootsuite
+
+https://github.com/zeutro/openabe
+
+http://siek.blogspot.com/2012/07/crash-course-on-notation-in-programming.html
+
+https://www.microsoft.com/en-us/research/academic-program/write-great-research-paper/
+
+https://books.google.co.uk/books/about/How_to_Write_and_Publish_a_Scientific_Pa.html
+
+https://www.cs.umd.edu/%7Enspring/software/style-check-readme.html
