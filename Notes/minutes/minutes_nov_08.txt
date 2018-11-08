@@ -1,0 +1,18 @@
+November 8th Meeting Minutes
+
+Avoid coursework submission use cases. Could be treading on Moodle’s shoes, and would potentially be a future co-op work.
+
+Work on Policy language for next meeting, moving to a state where use cases can be summarised in the following format:
+
+Policy(s, e, r) ← Group(s ) ≡ GCHQ 			∧ Level(s ) ≥ SECRECT 			∧ (srcPort(o) ≡ 80 ∨ srcPort(o) ≡ 8080)
+			∧ srcAddr(o) ≡ 123.456.789 
+			∧ CurrentDate(e) ≤ 20160527
+			∧ CurrentDate(e) ≥ 20150927 
+
+Separately describe all the attributes for the s (subject - user), e (environment) and r (resource) at a generic, non-specific state, such as:
+
+Subject (s): 		Group, Roles, Level. . .
+Environment (e):	Locale, Time, Date. . . 
+Resource(r): 		Type, Date, Owner. . . 
+
+Attribute list for each should be as exhaustive as possible, although may not be complete since some attributes will be missed.
