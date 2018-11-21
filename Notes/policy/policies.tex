@@ -1,0 +1,59 @@
+\documentclass[a4paper,11pt]{article}
+\usepackage[utf8]{inputenc}
+
+\title{Policies}
+\author{Chris Watson}
+\date{November 2018}
+
+\begin{document}
+
+\maketitle
+
+\setcounter{secnumdepth}{1}
+
+\section{Policy 1}
+\subsection{Attempting to download JOOSE2 coursework}
+A student wants to login to the service and browse/search for resources of their JOOSE2 course. They may even be searching for the JOOSE2 coursework file directly. This file should show to the student if (and only if) they have certain attributes such as enrollment in the JOOSE2 course. The meta-data of the resource is compared to the student's account for this show/hide service. If they find the resource then the student would like to download the file and decrypt the contents using their Key.\\
+Below are the defined attributes for the policy, where \textbf{\emph{Subject} s}, \textbf{\emph{Environment} e} and \textbf{\emph{Resource} r} are defined as:\\\par
+\textbf{s} $\Rightarrow$ role, jobField, level, enrolledCourses, startDate, endDate,\par
+\hspace{0.8cm}demonstratorClasses, accountStatus\par
+\textbf{r} $\Rightarrow$ releaseDate, owner\par
+\textbf{e} $\Rightarrow$ currentDate, network\\\par
+\noindent With the policy defined as:\\\par
+Policy(\textbf{s},\textbf{r},\textbf{e}) $\leftarrow$ owner(\textbf{s}) $\equiv$ \textbf{s}\par
+\hspace{2.3cm}$\vee{}$ (role(\textbf{s}) $\equiv$ Staff\par
+\hspace{2.8cm}$\wedge{}$ jobField(\textbf{s}) $\equiv$ Research \& Teaching)\par
+\hspace{2.3cm}$\vee{}$ (role(\textbf{s}) $\equiv$ Student\par
+\hspace{2.8cm}$\wedge{}$ level(\textbf{s}) $\equiv$ 2\par
+\hspace{2.8cm}$\wedge{}$ enrolledCourses(\textbf{s}) $\equiv$ 2001, 2008\par
+\hspace{2.8cm}$\wedge{}$ currentDate(\textbf{e}) $\geq$ releaseDate(\textbf{r})\par
+\hspace{2.8cm}$\wedge{}$ network(\textbf{e}) $\equiv$ Internal)\par
+\hspace{2.3cm}$\vee{}$ (role(\textbf{s}) $\equiv$ Staff, Demonstrator\par
+\hspace{2.8cm}$\wedge{}$ level(\textbf{s}) $\equiv$ 4, M, PG\par
+\hspace{2.8cm}$\wedge{}$ startDate(\textbf{s}) $\leq$ currentDate(\textbf{e})\par
+\hspace{2.8cm}$\wedge{}$ endDate(\textbf{s}) $\geq$ currentDate(\textbf{e})\par
+\hspace{2.8cm}$\wedge{}$ demonstratorClasses(\textbf{s}) $\equiv$ 2JP, 2OOSE)\par
+
+\section{Policy 2}
+\subsection{Downloading minutes from class rep meeting}
+Student attended (or missed - we don't care) the class rep meeting but would like to find and download the official minutes from the meeting. There may be many minutes for class rep meetings available, and the student isn't necessarily sure if the latest meeting's minutes are uploaded yet. As such they need to browse all available minutes to find the latest uploaded. Only current class reps should have access to the minutes and other students should not even be able to see the minutes on the server. After finding the latest minutes available, the student's Key should be used with a CLI tool to decrypt the minutes for the student to view them.\\
+Below are the defined attributes for the policy, where \textbf{\emph{Subject} s}, \textbf{\emph{Environment} e} and \textbf{\emph{Resource} r} are defined as:\\\par
+\textbf{s} $\Rightarrow$ role, accountStatus, studentRole, startDate, endDate,\par
+\hspace{0.8cm}demonstratorClasses, accountStatus\par
+\textbf{r} $\Rightarrow$ releaseDate, owner\par
+\textbf{e} $\Rightarrow$ currentDate\\\par
+\noindent With the policy defined as:\\\par
+Policy(\textbf{s},\textbf{r},\textbf{e}) $\leftarrow$ accountStatus(\textbf{s}) $\equiv$ Active\par
+\hspace{2.2cm}$\wedge{}$ ( owner(\textbf{r}) $\equiv$ \textbf{s}\par
+\hspace{2.9cm}$\vee{}$ ( role(\textbf{s}) $\equiv$ Student\par
+\hspace{3.5cm}$\wedge{}$ studentRole(\textbf{s}) $\equiv$ Class Rep\par
+\hspace{3.5cm}$\wedge{}$ startDate(\textbf{s}) $\leq$ releaseDate(\textbf{r})\par
+\hspace{3.5cm}$\wedge{}$ endDate(\textbf{s}) $\geq$ releaseDate(\textbf{r})\par
+\hspace{3.5cm}$\wedge{}$ startDate(\textbf{s}) $\leq$ currentDate(\textbf{e})\par
+\hspace{3.5cm}$\wedge{}$ endDate(\textbf{s}) $\geq$ currentDate(\textbf{e}) )\par
+\hspace{2.9cm}$\vee{}$ ( role(\textbf{s}) $\equiv$ Staff\par
+\hspace{3.5cm}$\wedge{}$ startDate(\textbf{s}) $\leq$ currentDate(\textbf{e})\par
+\hspace{3.5cm}$\wedge{}$ endDate(\textbf{s}) $\geq$ currentDate(\textbf{e}) )\par
+
+
+\end{document}
