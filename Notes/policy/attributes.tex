@@ -11,4 +11,93 @@
 
 \setcounter{secnumdepth}{1}
 
+\section{Attributes for ABE Resource Server}
+\subsection{U$_{s}$ = Subject Attributes}
+Below are the defined attributes for Subjects, in the case of the ABE Resource Server:\\\par
+\textbf{U$_{s}$} ::= role : Staff $|$ Student \par
+\hspace{1.05cm}$|$ staffRole : Professor $|$ Reader $|$ Senior Lecturer $|$ Lecturer $|$ \par
+\hspace{3.15cm}LTS Lecturer $|$ Research Associate $|$ Tutor $|$\par
+\hspace{3.15cm}Demonstrator\par
+\hspace{1.05cm}$|$ studentRole : Tutor $|$ Class Rep $|$ Grad Teaching Assistant $|$ \par
+\hspace{3.75cm}Demonstrator PG $|$ Demonstrator UG \par
+\hspace{1.05cm}$|$ rschGroup : GIST $|$ FATA $|$ IDA $|$ GLASS $|$ CCSE \par
+\hspace{1.05cm}$|$ jobTitle : Head of School $|$ Head of Section $|$ Head of Theme $|$ \par
+\hspace{3.05cm}Professor $|$ Reader $|$ Senior Lecturer $|$ Lecturer $|$ \par
+\hspace{3.05cm}LTS Lecturer $|$ Research Associate $|$ Tutor $|$ \par
+\hspace{3.05cm}Demonstrator \par
+\hspace{1.05cm}$|$ jobField : Research \& Teaching $|$ Tutors \& Demonstrators $|$ \par
+\hspace{3.05cm}Associate $|$ Professional, Administrative \& Support $|$ \par
+\hspace{3.05cm}Honorary \& Visiting \par
+\hspace{1.05cm}$|$ college : College of Social Sciences $|$ College of Arts $|$ \par
+\hspace{2.8cm}College of Science \& Engineering $|$ \par
+\hspace{2.8cm}College of Medical, Veterinary \& Life Sciences \par
+\hspace{1.05cm}$|$ department : DCS $|$ DC $|$ DE $|$ DGES $|$ DMS $|$ DPA $|$ DP \par
+\hspace{1.05cm}$|$ studentLevel : 1 $|$ 2 $|$ 3 $|$ 4 $|$ MSci $|$ Postgraduate \par
+\hspace{1.05cm}$|$ accountStatus : Active $|$ Suspended $|$ Inactive \par
+\hspace{1.05cm}$|$ enrolledCourses : 1001 $|$ 1016 $|$ 1017 $|$ 1018 $|$ 1019 $|$ ... \par
+\hspace{4.33cm}2003 $|$ 2007 $|$ 2011 $|$ 2024 $|$ 2031 $|$ ... \par
+\hspace{4.33cm}3004 $|$ 3005 $|$ \par
+\hspace{4.33cm}4002 $|$ 4021 $|$ 4022 $|$ 4072 $|$ 4075 $|$ ... \par
+\hspace{4.33cm}5002 $|$ 5004 $|$ 5056 $|$ 5083 $|$ 5088 $|$ ... \par
+\hspace{1.05cm}$|$ matriculated : $<$Date$>$ : 19-09-2015 \par
+\hspace{1.05cm}$|$ willGraduate : $<$Date$>$ : 21-06-2019 \par
+\hspace{1.05cm}$|$ startDate : $<$Date$>$ : 17-09-2018 \par
+\hspace{1.05cm}$|$ endDate : $<$Date$>$ : 31-04-2019 \par
+\hspace{1.05cm}$|$ demonstratorClass : 1CT $|$ 1P $|$ 1PX $|$ 2JP $|$ 2OOSE \par
+\hspace{1.05cm}$|$ coordinatorFor : $<$courseCode$>$ : 2024 $|$ 3005 $|$ 5083 $|$ ... \par
+\hspace{1.05cm}$|$ headLecturerFor : $<$courseCode$>$ : 1001 $|$ 2007 $|$ 4021 $|$ ... \par
+\hspace{1.05cm}$|$ teamOrGroup : Systems $|$ MIG $|$ HUSH $|$ NS $|$ GPG $|$ IDI $|$ \par
+\hspace{4cm}CVAS $|$ MOG $|$ IR $|$ ... \par
+
+\subsection{U$_{e}$ = Environment Attributes}
+Below are the defined attributes for Environment, in the case of the ABE Resource Server:\\\par
+\textbf{U$_{e}$} ::= network : External $|$ Internal \par
+\hspace{1.05cm}$|$ internalNetwork : DCS $|$ Campus $|$ Library $|$ Roaming $|$ NULL \par
+\hspace{1.05cm}$|$ connection : IPv4 $|$ IPv6 $|$ HTTP $|$ HTTPS \par
+\hspace{1.05cm}$|$ serverEvents : Busy $|$ Error $|$ Normal $|$ Urgent $|$ Unknown $|$ \par
+\hspace{3.8cm}Maintenance $|$ Migration $|$ Upgrade \par
+\hspace{1.05cm}$|$ serverTime : $<$DateTime$>$ : 19-09-2013 03:14:03.000Z \par
+\hspace{1.05cm}$|$ deviceTime : $<$DateTime$>$ : 21-06-2014 14:44:39.000Z \par
+\hspace{1.05cm}$|$ requestTime : $<$DateTime$>$ : 17-09-2011 22:07:41.000Z \par
+\hspace{1.05cm}$|$ responseTime : $<$DateTime$>$ : 04-11-2020 11:58:55.000Z \par
+\hspace{1.05cm}$|$ clientLocation : GPS $|$ IP Geolocation \par
+\hspace{1.05cm}$|$ serverLocation : GPS $|$ IP Geolocation \par
+\hspace{1.05cm}$|$ device : Desktop $|$ Laptop $|$ Portable $|$ Handheld $|$ Mobile $|$ \par
+\hspace{2.74cm}Tablet $|$ Unknown \par
+\hspace{1.05cm}$|$ deviceOS : Windows $|$ RHEL $|$ Ubuntu $|$ Linux $|$ iOS $|$ Android $|$ \par
+\hspace{3.23cm}Other UNIX $|$ Unknown \par
+\hspace{1.05cm}$|$ request : srcAddress $|$ srcPort $|$ srcMac $|$ srcClient \par
+\hspace{1.05cm}$|$ locale : language $|$ region $|$ timezone $|$ location \par
+\hspace{1.05cm}$|$ clientInfo : version $|$ abeVersion $|$ keyValidity \par
+\hspace{1.05cm}$|$ serverInfo : version $|$ compatibility $|$ storage \par
+\hspace{1.05cm}$|$ abeLifespan : updatedAt $|$ nextUpdate $|$ supportBackDate $|$ \par
+\hspace{3.69cm}updatedBy \par
+\hspace{1.05cm}$|$ keyCreation : $<$DateTime$>$ : 04-12-2018 11:58:55.000Z \par
+\hspace{1.05cm}$|$ keyExpiry : $<$DateTime$>$ : 03-12-2019 11:58:55.000Z \par
+\hspace{1.05cm}$|$ keyUpdated : $<$DateTime$>$ : 03-04-2019 11:58:55.000Z \par
+\hspace{1.05cm}$|$ keyAuthority : serverId $|$ serverName \par
+\hspace{1.05cm}$|$ keyOwner : $<$Subject$>$ : Owner \par
+
+\subsection{U$_{r}$ = Resource Attributes}
+Below are the defined attributes for Resources, in the case of the ABE Resource Server:\\\par
+\textbf{U$_{r}$} ::= mimeType : text/plain $|$ image/png $|$ application/pdf $|$ ... \par
+\hspace{1.05cm}$|$ fileCount : 1 $|$ 2 $|$ 3 $|$ 4 $|$ ... \par
+\hspace{1.05cm}$|$ authorCount : 1 $|$ 2 $|$ 3 $|$ 4 $|$ ... \par
+\hspace{1.05cm}$|$ authors : $<$Subject$>$ : Author  \par
+\hspace{1.05cm}$|$ isCollaboration : True $|$ False \par
+\hspace{1.05cm}$|$ collaborators : $<$Subject$>$ : Collaborator  \par
+\hspace{1.05cm}$|$ dateCreated : $<$DateTime$>$ : 23-05-2013 07:00:43.000Z \par
+\hspace{1.05cm}$|$ dateModified : $<$DateTime$>$ : 01-09-2018 15:41:29.000Z \par
+\hspace{1.05cm}$|$ releaseDate : $<$DateTime$>$ : 17-10-2018 10:00:00.000Z \par
+\hspace{1.05cm}$|$ isDraft :  True $|$ False \par
+\hspace{1.05cm}$|$ title :  "Such a Great Document" $|$ "Important Report $|$ ... \par
+\hspace{1.05cm}$|$ fileSize : 143,761 bytes $|$ 14.3MB $|$ 2.1GB $|$ ... \par
+\hspace{1.05cm}$|$ fileExtension : jpg $|$ png $|$ docx $|$ txt $|$ pdf $|$ ... \par
+\hspace{1.05cm}$|$ associatedResources : $<$Resource$>$ : ResourceA $|$ ResourceB $|$ ... \par
+\hspace{1.05cm}$|$ version : $<$semVer$>$ : 0.0.3 $|$ 1.0.7 $|$ 3.4.0 $|$ ... \par
+\hspace{1.05cm}$|$ modifiedBy : $<$Subject$>$ : Modifier  \par
+\hspace{1.05cm}$|$ abeVersion : $<$semVer$>$ : 0.3.8 $|$ 2.0.17 $|$ 4.14.1 $|$ ...  \par
+\hspace{1.05cm}$|$ signingAuthority : serverId $|$ serverName \par
+
+
 \end{document}
