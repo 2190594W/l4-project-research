@@ -1,5 +1,8 @@
 \documentclass[a4paper,11pt]{article}
 \usepackage[utf8]{inputenc}
+\usepackage[english]{babel}
+
+\usepackage[dvipsnames]{xcolor}
 
 \title{Policies}
 \author{Chris Watson}
@@ -20,19 +23,53 @@ Below are the defined attributes for the policy, where \textbf{\emph{Subject} s}
 \textbf{r} $\Rightarrow$ releaseDate, owner\par
 \textbf{e} $\Rightarrow$ currentDate, network\\\par
 \noindent With the policy defined as:\\\par
-Policy(\textbf{s},\textbf{r},\textbf{e}) $\leftarrow$ owner(\textbf{s}) $\equiv$ \textbf{s}\par
+Policy(\textbf{s},\textbf{r},\textbf{e}) $\leftarrow$ owner(\textbf{r}) $\equiv$ \textbf{s}\par
 \hspace{2.3cm}$\vee{}$ (role(\textbf{s}) $\equiv$ Staff\par
 \hspace{2.8cm}$\wedge{}$ jobField(\textbf{s}) $\equiv$ Research \& Teaching)\par
 \hspace{2.3cm}$\vee{}$ (role(\textbf{s}) $\equiv$ Student\par
-\hspace{2.8cm}$\wedge{}$ level(\textbf{s}) $\equiv$ 2\par
+\hspace{2.8cm}$\wedge{}$ studentLevel(\textbf{s}) $\equiv$ 2\par
 \hspace{2.8cm}$\wedge{}$ enrolledCourses(\textbf{s}) $\equiv$ 2001, 2008\par
 \hspace{2.8cm}$\wedge{}$ currentDate(\textbf{e}) $\geq$ releaseDate(\textbf{r})\par
 \hspace{2.8cm}$\wedge{}$ network(\textbf{e}) $\equiv$ Internal)\par
-\hspace{2.3cm}$\vee{}$ (role(\textbf{s}) $\equiv$ Staff, Demonstrator\par
-\hspace{2.8cm}$\wedge{}$ level(\textbf{s}) $\equiv$ 4, M, PG\par
+\hspace{2.3cm}$\vee{}$ (studentRole(\textbf{s}) $\equiv$ Demonstrator UG\par
+\hspace{2.8cm}$\wedge{}$ studentLevel(\textbf{s}) $\equiv$ 4, M, PG\par
 \hspace{2.8cm}$\wedge{}$ startDate(\textbf{s}) $\leq$ currentDate(\textbf{e})\par
 \hspace{2.8cm}$\wedge{}$ endDate(\textbf{s}) $\geq$ currentDate(\textbf{e})\par
-\hspace{2.8cm}$\wedge{}$ demonstratorClasses(\textbf{s}) $\equiv$ 2JP, 2OOSE)\par
+\hspace{2.8cm}$\wedge{}$ demonstratorClasses(\textbf{s}) $\equiv$ 2JP, 2OOSE)
+\par\par
+
+Below we define an instance scenario with Subject \textbf{s$_{0}$}, Resource \textbf{r$_{0}$} and Environment \textbf{e$_{0}$} that is intentionally designed to demonstrate an instance of the Policy which resolves to \texttt{True} (\textit{and thus grants access to the resource}). This instance also acknowledges the existence of Subject \textbf{s$_{1}$}, however we do not define their attributes, as the only important fact is that \textbf{s$_{0}$} $\neq$ \textbf{s$_{1}$}.\\\par
+
+\textbf{s$_{0}$}$_{attrs}$ $=$ role: Student\par
+\hspace{1.17cm}$X$ studentLevel: 2\par
+\hspace{1.17cm}$X$ enrolledCourses: 2001,2003,2007,2008,2021,2028\\\par
+
+\textbf{r$_{0}$}$_{attrs}$ $=$ owner: \textbf{s1}\par
+\hspace{1.17cm}$X$ releaseDate: $<$DateTime$>$:2018-09-17 10:00:00.000Z\\\par
+
+\textbf{e$_{0}$}$_{attrs}$ $=$ network: Internal\par
+\hspace{1.17cm}$X$ internalNetwork: DCS\par
+\hspace{1.17cm}$X$ currentDate: $<$DateTime$>$:2018-09-19 16:14:36.000Z\\\par
+
+Hence, we can fill out the above policy with the above attributes, defined for this instance of Policy(\textbf{s$_{0}$},\textbf{r$_{0}$},\textbf{e$_{0}$}) with the calculated values shown in \textbf{bold}:\\\par
+
+Policy(\textbf{s$_{0}$},\textbf{r$_{0}$},\textbf{e$_{0}$}) $\leftarrow$ \textbf{s$_{1}$} $\equiv$ \textbf{s$_{0}$}\par
+\hspace{2.3cm}$\vee{}$ (\textbf{Student} $\equiv$ Staff\par
+\hspace{2.8cm}$\wedge{}$ \textbf{NULL} $\equiv$ Research \& Teaching)\par
+\hspace{2.3cm}$\vee{}$ ({\color{Mahogany} \textbf{Student} $\equiv$ Student\par
+\hspace{2.8cm}$\wedge{}$ \textbf{2} $\equiv$ 2\par
+\hspace{2.8cm}$\wedge{}$ \textbf{2001,2003,2007,2008,2021,2028} $\equiv$ 2001, 2008\par
+\hspace{2.8cm}$\wedge{}$ \textbf{2018-09-19 16:14:36.000Z} $\geq$ \textbf{2018-09-17 10:00:00.000Z}\par
+\hspace{2.8cm}$\wedge{}$ \textbf{Internal} $\equiv$ Internal})\par
+\hspace{2.3cm}$\vee{}$ (\textbf{NULL} $\equiv$ Demonstrator UG\par
+\hspace{2.8cm}$\wedge{}$ \textbf{2} $\equiv$ 4, M, PG\par
+\hspace{2.8cm}$\wedge{}$ \textbf{NULL} $\leq$ \textbf{2018-09-19 16:14:36.000Z}\par
+\hspace{2.8cm}$\wedge{}$ \textbf{NULL} $\geq$ \textbf{2018-09-19 16:14:36.000Z}\par
+\hspace{2.8cm}$\wedge{}$ \textbf{NULL} $\equiv$ 2JP, 2OOSE)
+\\\par
+
+As shown by the third set of conditions (\textcolor{Mahogany}{highlighted in dark red}) above, the Policy(\textbf{s$_{0}$},\textbf{r$_{0}$},\textbf{e$_{0}$}) instance resolves to \texttt{True}, since all 5 conditions within the third set evaluate to \texttt{True}. This resolves correctly, since the policy consists of 4 sets of conditions linked by \texttt{or} operators, thus it can be calculated to \texttt{False $\vee{}$ Unknown $\vee{}$ True $\vee{}$ Unknown} which clearly resolves to \texttt{True}.
+
 
 \section{Policy 2}
 \subsection{Downloading minutes from class rep meeting}
