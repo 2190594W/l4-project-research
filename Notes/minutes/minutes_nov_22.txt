@@ -1,0 +1,13 @@
+November 22nd Meeting Minutes
+
+Discussed syntax across languages.
+
+Discussed UML diagrams -> Class and Object diagrams and discussed the implications of defining attributes through a Java-like Class system.
+
+Check with openABE to compare Policies with their syntax in python.
+
+Add example Subjects, Environments and Resources to Policies with written out proofs that show the examples do or do not work for the policy.
+
+Move to a Markup language for notes, as LaTeX can be too time consuming.
+
+Add primitive types to Attributes and account for them with set-like notation.

@@ -1,0 +1,21 @@
+November 29th Meeting Minutes
+
+After getting OpenABE to compile correctly, work on getting the PyOpenABE bindings to compile as well.
+
+Next week: Change of meeting date???
+
+For 2 weeks of 3rd to 14th December, start full work on project code.
+Aiming to get both the Key Server & Resource Server up and running at least as prototypes. A simple prototype of a Web Server would be good, with some form of ABAC system in use.
+
+Write 2-week status report in advance of progress, aiming to detail what WILL have been achieved.
+
+Using PlantUML:
+Class Diagram to build design of the servers -> the architecture and infrastructure.
+Sequence Diagram to show flow of information:
+	1. Enrollment Sequence
+	2. Encryption Sequence
+	3. Decryption Sequence
+
+Prioritise with a TODO list for the 2 weeks.
+
+Determine policy decision point???
