@@ -22,7 +22,7 @@ The ABE system will run the cipher text policy (CP) scheme and rely on the OpenA
 * *ABE library chosen: project will utilise the OpenABE library from Zeutro LLC, as mentioned above.*
 * *Web server framework chosen: project will make use of Django to build a simple and quick-to-deploy web server.*
 * *Background research conducted on ABE technologies.*
-* *Software and network architecture outlined.*
+* *Component diagram for software and network architecture outlined.*
 * *Sequence diagrams designed to describe the flow of information within the product.*
 * *OpenABE library downloaded, compiled and tested.*
 * *Python bindings for OpenABE (PyOpenABE) compiled and tested.*
