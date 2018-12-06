@@ -1,0 +1,24 @@
+@startuml
+autonumber
+actor User
+control "OpenABE CLI"
+entity "Resource Server"
+User -> "Resource Server": requests available files
+"Resource Server" -> "Resource Server": determines files to return;\nemploys an ABAC system for this process
+"Resource Server" -> User: returns list of available files for user
+User -> User: determines which file(s) to download
+User -> "Resource Server": requests encrypted file(s) for download
+"Resource Server" -> "Resource Server": processes request;\nvalidates access against ABAC system
+alt access denied
+  "Resource Server" -> User: returns access denied response
+else access granted
+  "Resource Server" -> User: returns requested encrypted file to user
+  User -> "OpenABE CLI": requests decryption of resource;\nprovides private key & encrypted resource
+  "OpenABE CLI" -> "OpenABE CLI": attempts decryption of resource
+  alt successful decryption
+    "OpenABE CLI" -> User: returns decrypted file
+  else decryption failed
+    "OpenABE CLI" -> User: returns error code
+  end
+end
+@enduml

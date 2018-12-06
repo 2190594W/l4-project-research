@@ -1,0 +1,16 @@
+@startuml
+autonumber
+actor Staff
+actor "Teaching Assistant"
+database "Staff HR System"
+entity "Master Key Server"
+Staff -> "Teaching Assistant": requests enrollment;\nprovides staffID
+"Teaching Assistant" -> "Staff HR System": requests data on staff
+"Staff HR System" -> "Staff HR System": collates and processes data
+"Staff HR System" -> "Teaching Assistant": returns staff attributes\ne.g. startDate, rschGroup, jobTitle
+"Teaching Assistant" -> "Teaching Assistant": processes attributes for staff
+"Teaching Assistant" -> "Master Key Server": requests new key;\nsends staff attributes
+"Master Key Server" -> "Master Key Server": generates key from attributes
+"Master Key Server" -> "Teaching Assistant": returns generated key for staff
+"Teaching Assistant" -> Staff: sends staff's new key
+@enduml

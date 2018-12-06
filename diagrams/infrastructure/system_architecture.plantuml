@@ -1,0 +1,61 @@
+@startuml
+'define deployment entities
+database auth_db #PaleTurquoise
+storage resources #Moccasin
+
+'define components
+component [Resource Server] as rs #Aquamarine
+component [Web Server] as ws #PaleVioletRed
+component [Master Key Server] as mks #LightSeaGreen
+component [Client Resource Server] as crs #LightGreen
+component [ABE Client Library] as abecl #LightCoral
+
+'define links to deployment entities
+rs <-right-> resources: "stores & retrieves\nencrypted resources"
+ws <-right-> auth_db: "user management"
+
+'define interfaces for mks, rs & abecl
+abac_model -- mks
+enrollment -- mks
+master_public_key -- mks
+upload -- rs
+download -- rs
+stats -- rs
+all_file_names -- rs
+all_metadata -- rs
+latest_abac_model -- rs
+decrypt -- abecl
+encrypt -- abecl
+import_user_key -- abecl
+generate_params -- abecl
+
+'define use of interfaces for crs & rs
+crs -down-( upload
+crs -down-( download
+crs -down-( stats
+crs -down-( all_file_names
+crs -down-( all_metadata
+crs -down-( decrypt
+crs -down-( encrypt
+crs -down-( import_user_key
+crs -down-( generate_params
+rs ..( abac_model: "offline/manual update"
+
+'define interfaces for crs & ws
+obtain_file_list -- crs
+upload_file -- crs
+encrypt_upload_file -- crs
+encrypt_file -- crs
+obtain_file -- crs
+obtain_decrypt_file -- crs
+decrypt_file -- crs
+search_files -- ws
+login -- ws
+logout -- ws
+
+'define web server interface use
+ws -down-( obtain_file_list
+ws -down-( obtain_file
+ws -down-( latest_abac_model
+
+@enduml
