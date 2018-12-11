@@ -2,6 +2,7 @@
 *.top_secret
 *.key
 *.config
+*.cpabe
 venv/
 __pycache__/
 openabe/
