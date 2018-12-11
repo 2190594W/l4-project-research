@@ -7,13 +7,15 @@ openabe = pyopenabe.PyOpenABE()
 
 cpabe = openabe.CreateABEContext("CP-ABE")
 
-# cpabe.generateParams()
-msk_file = open("org1.msk.cpabe", "rb")
-msk = msk_file.read()
-msk_file.close()
-mpk_file = open("org1.mpk.cpabe", "rb")
-mpk = mpk_file.read()
-mpk_file.close()
+cpabe.generateParams()
+
+# msk_file = open("org1.msk.cpabe", "rb")
+# msk = msk_file.read()
+# msk_file.close()
+# mpk_file = open("org1.mpk.cpabe", "rb")
+# mpk = mpk_file.read()
+# mpk_file.close()
+
 input_file = open("input.txt", "rb")
 pt1 = input_file.read()
 input_file.close()
@@ -22,11 +24,11 @@ print(pt1)
 
 print("read the param files")
 
-msk = msk.split(b'-----')[2].strip()
-mpk = mpk.split(b'-----')[2].strip()
+# msk = msk.split(b'-----')[2].strip()
+# mpk = mpk.split(b'-----')[2].strip()
 
-cpabe.importSecretParams(msk)
-cpabe.importPublicParams(mpk)
+# cpabe.importSecretParams(msk)
+# cpabe.importPublicParams(mpk)
 
 cpabe.keygen("|two|three|", "alice")
 
@@ -41,9 +43,10 @@ msk2 = cpabe.exportSecretParams()
 
 print("Testing key import")
 
-# msk = cpabe.exportSecretParams()
-# mpk = cpabe.exportPublicParams()
+msk = cpabe.exportSecretParams()
+mpk = cpabe.exportPublicParams()
 uk = cpabe.exportUserKey("alice")
+uk2 = cpabe.exportUserKey("luke")
 
 cpabe2 = openabe.CreateABEContext("CP-ABE")
 
@@ -73,18 +76,6 @@ cpabe4.generateParams()
 cpabe4.importPublicParams(mpk)
 cpabe4.importUserKey("alice", uk)
 
-barray2 = ""
-max = 0
-for char in barray:
-    max = char if char > max else max
-    try:
-        barray2 += str(chr(char))
-    except:
-        print("Not sure")
-
-print(barray2)
-print(max)
-
 out_file = open("test_output.cpabe", "wb")
 ciphertext = b'-----BEGIN ABE CIPHERTEXT BLOCK-----\n' + mpk + b'\n-----END ABE CIPHERTEXT BLOCK-----\n'
 ciphertext += b'-----BEGIN CIPHERTEXT BLOCK-----\n' + ct + b'\n-----END CIPHERTEXT BLOCK-----'
@@ -104,6 +95,10 @@ out_file.write(master_secret_key)
 out_file.close()
 out_file = open("test_userkey.key", "wb")
 userkey = b'-----BEGIN USER PRIVATE KEY BLOCK-----\n' + uk + b'\n-----END USER PRIVATE KEY BLOCK-----\n'
+out_file.write(userkey)
+out_file.close()
+out_file = open("test_userkey2.key", "wb")
+userkey = b'-----BEGIN USER PRIVATE KEY BLOCK-----\n' + uk2 + b'\n-----END USER PRIVATE KEY BLOCK-----\n'
 out_file.write(userkey)
 out_file.close()
 
