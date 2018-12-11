@@ -1,12 +1,12 @@
 import pyopenabe
 # TODO: Consider dropping templates, for heightened security (sessions too)
-from flask import Flask, flash, session, request, redirect,\
-send_file, render_template, jsonify
 from io import BytesIO
 from sys import exc_info
 from os import urandom, path
 from datetime import datetime
 from functools import partial
+from flask import Flask, flash, session, request, redirect,\
+send_file, render_template, jsonify
 
 
 VERSION = 'v0.0.1'
