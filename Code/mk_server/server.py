@@ -5,8 +5,7 @@ from sys import exc_info
 from os import urandom, path
 from datetime import datetime
 from functools import partial
-from flask import Flask, flash, session, request, redirect,\
-send_file, render_template, jsonify, abort
+from flask import Flask, session, request, send_file, render_template, jsonify, abort
 
 VERSION = 'v0.0.1'
 
