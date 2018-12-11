@@ -1,4 +1,5 @@
-import os, sys, pyopenabe, datetime
+import os, sys, pyopenabe
+from datetime import datetime
 from flask import Flask, flash, session, request, redirect, render_template,\
 url_for, send_from_directory, jsonify
 from werkzeug.utils import secure_filename
@@ -57,10 +58,24 @@ def upload_file():
     return render_template('upload.html')
 
 
-@app.route('/uploads/<filename>')
+@app.route('/download/<filename>')
 def uploaded_file(filename):
     return send_from_directory(
         app.config['UPLOAD_FOLDER'], filename)
+
+# TODO: This is a näive implementation. If there are too many files,
+# the response would be massive, so paging would be needed here
+@app.route('/get_filenames')
+def get_filenames():
+    all_files = []
+    for root, dirs, files in os.walk(app.config['UPLOAD_FOLDER']):
+        all_files.extend(files)
+    filenames_payload = {
+        'files': all_files,
+        'updated_at': datetime.now(),
+        'abe_version': VERSION
+    }
+    return jsonify(filenames_payload)
 
 @app.errorhandler(404)
 def page_not_found(e):
