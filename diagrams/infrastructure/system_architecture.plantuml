@@ -40,6 +40,7 @@ crs -down-( encrypt
 crs -down-( import_user_key
 crs -down-( generate_params
 rs ..( abac_model: "offline/manual update"
+rs ..( master_public_key: "offline/manual update"
 
 'define interfaces for crs & ws
 obtain_file_list -- crs
