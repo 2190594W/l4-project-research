@@ -1,4 +1,6 @@
 .DS_Store
-.top_secret
-.key
-.config
+*.top_secret
+*.key
+*.config
+venv/
+__pycache__/
