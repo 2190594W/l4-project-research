@@ -8,10 +8,18 @@ component [Resource Server] as rs #Aquamarine
 component [Web Server] as ws #PaleVioletRed
 component [Master Key Server] as mks #LightSeaGreen
 component [Client Resource Server] as crs #LightGreen
-component [ABE Client Library] as abecl #LightCoral
+
+package "OpenABE Library" {
+  component [ABE Client Library] as abecl #LightCoral
+  import_public_params -- abecl
+  decrypt -- abecl
+  encrypt -- abecl
+  import_user_key -- abecl
+  generate_params -right- abecl
+}
 
 'define links to deployment entities
-rs <-right-> resources: "stores & retrieves\nencrypted resources"
+rs <-left-> resources: "stores & retrieves\nencrypted resources"
 ws <-right-> auth_db: "user management"
 
 'define interfaces for mks, rs & abecl
@@ -23,27 +31,26 @@ download -- rs
 stats -- rs
 all_file_names -- rs
 all_metadata -- rs
+latest_mpk -- rs
 latest_abac_model -- rs
-decrypt -- abecl
-encrypt -- abecl
-import_user_key -- abecl
-generate_params -- abecl
 
-'define use of interfaces for crs & rs
+'define use of interfaces for crs, mks & rs
+mks -right-( generate_params
 crs -down-( upload
 crs -down-( download
 crs -down-( stats
 crs -down-( all_file_names
 crs -down-( all_metadata
+crs -down-( latest_mpk
 crs -down-( decrypt
 crs -down-( encrypt
 crs -down-( import_user_key
-crs -down-( generate_params
+crs -down-( import_public_params
 rs ..( abac_model: "offline/manual update"
 rs ..( master_public_key: "offline/manual update"
 
 'define interfaces for crs & ws
-obtain_file_list -- crs
+obtain_file_list -left- crs
 upload_file -- crs
 encrypt_upload_file -- crs
 encrypt_file -- crs
