@@ -29,7 +29,7 @@ master_public_key -- mks
 upload -- rs
 download -- rs
 stats -- rs
-all_file_names -- rs
+all_filenames -- rs
 all_metadata -- rs
 latest_mpk -- rs
 latest_abac_model -- rs
@@ -39,7 +39,7 @@ mks -right-( generate_params
 crs -down-( upload
 crs -down-( download
 crs -down-( stats
-crs -down-( all_file_names
+crs -down-( all_filenames
 crs -down-( all_metadata
 crs -down-( latest_mpk
 crs -down-( decrypt
