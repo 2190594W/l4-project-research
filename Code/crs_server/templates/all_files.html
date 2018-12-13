@@ -1,0 +1,19 @@
+{% extends "layout.html" %}
+{% block body %}
+  <h1>File listing for Resource Server</h1>
+  {% if files|length > 0 %}
+    <table>
+      {% for file in files %}
+        <tr>
+          <td>
+            {{file}}
+          </td>
+        </tr>
+      {% endfor %}
+    </table>
+  {% else %}
+    <h3>No files found!</h3>
+  {% endif %}
+  <br/><br/>
+  <a href="/">Return to homepage</a>
+{% endblock %}

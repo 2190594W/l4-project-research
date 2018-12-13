@@ -1,0 +1,22 @@
+{% extends "layout.html" %}
+{% block body %}
+  <h1>Global ABE Attributes Update Staus</h1><br/>
+  {% if updated %}
+    <h3>Global ABE Attributes <strong>successfully</strong> updated!</h3>
+  {% else %}
+    <h3>Global ABE Attributes <strong>not</strong> updated. Current version matches latest.</h3>
+  {% endif %}
+  {% if gaaj %}
+    <p>
+      <strong>Current Global ABE Attributes:</strong> {{gaaj}}
+    </p>
+    {% if gaau %}
+      <p>
+        <strong>Last updated:</strong> {{gaau}}
+      </p>
+    {% endif %}
+    <a href="/abe/latest_attributes_file">Download current Global ABE Attributes!</a>
+  {% endif %}
+  <br/><br/>
+  <a href="/">Return to homepage</a>
+{% endblock %}

@@ -1,0 +1,22 @@
+{% extends "layout.html" %}
+{% block body %}
+  <h1>Master Public Key Update Staus</h1><br/>
+  {% if updated %}
+    <h3>Master Public Key <strong>successfully</strong> updated!</h3>
+  {% else %}
+    <h3>Master Public Key <strong>not</strong> updated. Current version matches latest.</h3>
+  {% endif %}
+  {% if mpk %}
+    <p>
+      <strong>Current MPK:</strong> {{mpk}}
+    </p>
+    {% if mku %}
+      <p>
+        <strong>Last updated:</strong> {{mku}}
+      </p>
+    {% endif %}
+    <a href="/abe/latest_mpk_file">Download current MPK!</a>
+  {% endif %}
+  <br/><br/>
+  <a href="/">Return to homepage</a>
+{% endblock %}
