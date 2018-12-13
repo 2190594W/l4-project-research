@@ -8,19 +8,19 @@
 ### Motivation
 *Sharing resources across organisations or departments is a difficult and daunting task. Security is extremely important for resources and determining access control is an equally complex and error-prone task. Common methods include the Role-based access control (RBAC) approach, however even incorporating permissions matrices does not often provide a suitably fine-grained system for precise or modular access.  
 This problem is easily solved with the use of Attribute-based access control (ABAC) instead. Wherein, users are granted specific attributes instead of roles, allowing for any user to be given an extremely precise and even unique set of attributes. As such the likelihood of granting too much access to a user is greatly reduced compared with RBAC.  
-In the case of this project's resource server, an ABAC system was determined to be inadequate as resources stored on the server would be left vulnerable to attacks or leaks. Consequently, an Attribute-based encryption (ABE) system should be built into the server to handle the secure storage and transmission of resources through advanced encryption. Like ABAC, the ABE system would utilise attributes for users to determine if a resource should be decrypted by a given user.*
+In the case of this project's resource server, an ABAC system was determined to be inadequate as resources stored on the server would be left vulnerable to attacks or leaks. Consequently, an Attribute-based encryption (ABE) system should be built into the server to handle the secure storage and transmission of resources through advanced encryption. Like ABAC, the ABE system would utilise policies of attributes for users to determine if a resource should be decrypted by a given user.*
 
 
 ### Aims
 *This project will develop a full resource server product that meets the definition of "cryptographically secure". The product will feature 2 servers: an online 'dumb' resource server to store the ABE encrypted resources and an offline 'cold storage' master key server. The online server will store all uploaded encrypted files, but will not be aware of the contents of said resources, while supporting uploading and downloading of resources. The master key server will be tasked with the distribution of keys for users, with keys containing the signed attributes of said user.  
-The online server should also have a simple web server layered on top to fulfil the role of a GUI for end users, whilst utilising an ABAC system to display only resources that the logged-in user would be able to decrypt. Additionally, a CLI tool will be supported in order for user's to encrypt and decrypt resources downloaded from the online server.  
-The ABE system will run the cipher text policy (CP) scheme and rely on the OpenABE library - and associated PyOpenABE package - from Zeutro LLC ([found here](https://github.com/zeutro/openabe)). With the web server using Python's Django framework and an undetermined Python ABAC library such as VAKT ([found here](https://github.com/kolotaev/vakt)) or django-abac ([found here](https://github.com/Weltraum/django-abac)).*
+The end user will also have a locally running web client for communication with the resource server, allowing for simple encryption & decryption of files, along with uploading & downloading. Additionally, a CLI tool will be supported in order for user's to encrypt and decrypt resources downloaded from the online server.  
+The ABE system will run the cipher text policy (CP) scheme and rely on the OpenABE library - and associated PyOpenABE package - from Zeutro LLC ([found here](https://github.com/zeutro/openabe)). With the web server using Python's Django framework and an undetermined Python ABAC library such as VAKT ([found here](https://github.com/kolotaev/vakt)).*
 
 
 ## Progress
 * *Language chosen: project will be implemented in Python with libraries that wrap/bind to lower-level C libraries.*
 * *ABE library chosen: project will utilise the OpenABE library from Zeutro LLC, as mentioned above.*
-* *Web server framework chosen: project will make use of Django to build a simple and quick-to-deploy web server.*
+* *Web server framework chosen: project will make use of Flask to build a simple and quick-to-deploy web server.*
 * *Background research conducted on ABE technologies.*
 * *Component diagram for software and network architecture outlined.*
 * *Sequence diagrams designed to describe the flow of information within the product.*
@@ -41,6 +41,7 @@ The ABE system will run the cipher text policy (CP) scheme and rely on the OpenA
 * *The OpenABE library is both new and relatively inactive, and as such the available documentation can be unclear with regards to certain problems.*
 * *OpenABE itself proved troublesome to correctly compile on the development system.*
 * *Further, the PyOpenABE bindings were extremely difficult to compile due to compatibility issues with macOS 10.14.1 and the OpenSSL library.*
+* *Lastly, files encrypted by PyOpenABE do not, at present, appear to be compatible with OpenABE CLI tools.*
 
 
 ### Risks
