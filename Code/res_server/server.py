@@ -1,13 +1,18 @@
-import json, requests, pyopenabe
+"""
+Resource Server module
+"""
+
 from sys import exc_info
 from os import urandom, path, walk
 from datetime import datetime
-from flask import Flask, flash, session, request, redirect, render_template,\
+import json
+import requests
+from flask import Flask, flash, request, redirect, render_template,\
 url_for, send_from_directory, jsonify
 from werkzeug.utils import secure_filename
 
 UPLOAD_FOLDER = '/tmp/flask/file/uploads'
-ALLOWED_EXTENSIONS = set(['cpabe', 'jp2'])
+ALLOWED_EXTENSIONS = set(['cpabe'])
 
 VERSION = 'v0.0.1'
 

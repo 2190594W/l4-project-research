@@ -1,11 +1,15 @@
-import json, jsonpickle, pyopenabe
-# TODO: Consider dropping templates, for heightened security (sessions too)
+"""
+Master Key Server module
+"""
+
 from io import BytesIO
 from sys import exc_info
 from os import urandom, path
 from datetime import datetime
 from functools import partial
-from flask import Flask, session, request, send_file, render_template, jsonify, abort
+import jsonpickle
+import pyopenabe
+from flask import Flask, request, send_file, render_template, jsonify, abort
 
 VERSION = 'v0.0.1'
 
