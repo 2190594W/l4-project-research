@@ -112,6 +112,7 @@ def create_attr_list(attrs):
     return user_attr_list
 
 def update_global_attrs(attrs):
+    global GLOBAL_ABE_ATTRS_JSON_PICKLED
     for attr_type, attrs in attrs.items():
         if attr_type in ('strings','integers','dates','arrays','flags'):
             for key in attrs:
