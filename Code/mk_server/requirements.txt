@@ -4,9 +4,9 @@ Cython==0.29.1
 Flask==1.0.2
 itsdangerous==1.1.0
 Jinja2==2.10
+jsonpickle==1.0
 MarkupSafe==1.1.0
 pathtools==0.1.2
-pyopenabe==1.0.0
 python-dotenv==0.10.0
 PyYAML==3.13
 simplejson==3.16.0
