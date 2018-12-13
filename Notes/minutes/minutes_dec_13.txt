@@ -1,0 +1,54 @@
+December 13th Meeting Minutes
+
+Focused on product update.
+Talked through progress with product in its current 3 ‘server’ state.
+
+Where there is:
+
+	1. Remote - (but ‘offline’) Master Key Server (MKS)
+	2. Remote - Resource Server (RS)
+	3. Local - Client Resource ’Web’ Server (CRS)
+
+Agreed that an effort should be made to extract methods from current CRS setup so as to create a separate module of methods that wrap the OpenABE library. This would allow for simplified creation of a CLI tool later on. Then both the Web Server and CLI tool utilise the module’s methods instead of defining their own.
+This library of methods would be much more useful and valuable and should not take too much time to create.
+
+After this library is created, produce a simple Python CLI tool/script that can carry out similar steps as the flask-web server. (flask is a Python web server package, similar to django)
+
+Finalise Policies and Attributes from previous Use Case, then show general rules for converting the designed Policies and Attributes to a format compatible with OpenABE.
+
+Get download and download & decrypt routes up and running ASAP.
+
+Attempt to determine if a resource’s policy can consistently be extracted from the cipher text (it should be possible - with current understanding). Since it appears the PyOpenABE binding concatenates to ciphers together prior to Base64 encoding???
+
+Additionally, need to be able to extract and/or store Attributes from User Keys.
+
+Regarding policy/attribute extraction: Should this prove impossible or infeasible, then look into manually writing the attributes/policy either to a separate ‘metadata’ file or prepending a plaintext line to output files with the attribute/policy.
+This would obviously have to be processed at key-generation/file-encryption time.
+
+If policy cannot be extracted, implement a method for uploading a resource’s policy with the resource at upload-time.
+
+Implement a simple DB setup on Resource folder for tracking uploaded resources. Should be aware of current filename, filename-at-upload, current MIME type, MIME-type-at-upload and policy of said resource.
+May have to either extract the policy at upload-time from the resource, or at upload-time extract from the request.
+Would be nice to have file size, extension, uploader etc.
+
+Consider giving an uploaded encrypted file a new, unique filename that is paired to the original filename within the DB. This should help against duplicate filenames (and overwriting issues) whilst providing limited security-through-obscurity, since a resource on the server would not be identifiable by name.
+Consider MongoDB for this role.
+
+Look into a custom MIME type for PyOpenABE encrypted files.
+
+Must start to implement some form of ABAC for the CRS, may have to use custom AC for this based off of the attributes and policies that are available in the format that is settled on. Or look at either XACML (possible ndg_xacml) or one of the available ABAC python packages.
+
+Aim to implement a search functionality to CRS. May require a simple fuzzy finder package. Should also hook into ABAC system if possible, to only return files that are available to the user. Such ABAC linking also required for listing all files.
+
+Watch for required pagination when returning available files, as potential for 1000s of files uploaded at any one time in future.
+
+Implement Use Case tests (designed policies and scenarios) in product to validate processes.
+
+When developing Web server, do not focus too much on brilliant UI & UX (especially regarding CSS), the priority is entirely on functionality not prettiness.
+
+Start to write up some dissertation text, as the earlier it’s started, the better!
+
+Evaluate admin processes, such as the process for generating a new Master Key pair… Would the RS maintain old copies of MPKs in case old files need decrypted?
+
+Unless a response is received from Joseph (of Zeutro LLC) that clarifies compatibility with PyOpenABE and OpenABE CLI tools, then will need to acknowledge the ‘quirk’ of ciphertexts produced by either method being incompatible with each other.
+It may prove possible to split PyOpenABE ciphertexts so as to allow for re-formatting to a OpenABE CLI compatible format.
