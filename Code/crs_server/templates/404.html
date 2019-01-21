@@ -4,7 +4,9 @@
   <h1>Page Not Found</h1>
   <p>What you were looking for is just not there.</p>
   <p><a href="/">Go somewhere nice</a></p>
-  <p>
-    {{event}}
-  </p>
+  {% if error %}
+    <p>
+      {{error}}
+    </p>
+  {% endif %}
 {% endblock %}
