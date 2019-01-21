@@ -6,7 +6,9 @@
       {% for file in files %}
         <tr>
           <td>
-            {{file}}
+            {{file}}<br />
+            <a href="/download/{{file}}" style="padding-left:5em">Download encrypted CPABE format</a><br />
+            <a href="/decrypt_download/{{file}}" style="padding-left:5em">Download decrypted format</a>
           </td>
         </tr>
       {% endfor %}

@@ -1,5 +1,5 @@
 <!doctype html>
-<title>Master Key Server</title>
+<title>Client Resource Server</title>
 {% with messages = get_flashed_messages(with_categories=true) %}
   {% if messages %}
     <ul class=flashes>
@@ -9,4 +9,5 @@
     </ul>
   {% endif %}
 {% endwith %}
-{% block body %}{% endblock %}
+{% block body %}{% endblock %}<br /><br />
+<a href="/">Homepage</a>

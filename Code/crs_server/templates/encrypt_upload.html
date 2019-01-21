@@ -1,9 +1,12 @@
 {% extends "layout.html" %}
 {% block body %}
-  <h1>Upload new File</h1>
+  <h1>Encrypt & Upload new File</h1>
   <form method=post enctype=multipart/form-data>
-    <input type=file name=file>
-    <input type=text name=policy>
+    <label for="file">File:</label>
+    <input type=file name=file id=file><br/>
+    <label for="policy">Policy [((enrolled_2001 and Male) or (enrolled_2003 and Female)) and Student]:</label><br/>
+    <textarea type=text name=policy id=policy>
+    </textarea><br/>
     <input type=submit value=Upload>
   </form>
 {% endblock %}
