@@ -97,34 +97,34 @@ def get_attributes():
     }
     return jsonify(attributes_payload)
 
-def assign_value_key(type, key, value):
+def assign_value_key(attr_type, key, value):
     attr_separators = {"strings": ":", "integers": "=", "dates": " = ", "arrays": ":"}
-    separator = attr_separators[type]
-    value = ",".join(map(str, value)) if type == "arrays" else value
+    separator = attr_separators[attr_type]
+    value = f"|{key}{separator}".join(map(str, value)) if attr_type == "arrays" else value
     return f"{key}{separator}{value}"
 
 def create_attr_list(attrs):
     user_attr_list = "|"
-    for attr_type, attrs in attrs.items():
-        if attr_type in ('strings','integers','dates','arrays'):
-            formatted_attrs = list(map(partial(assign_value_key, attr_type), attrs.keys(), attrs.values()))
+    for attr_type, attr in attrs.items():
+        if attr_type in ('strings', 'integers', 'dates', 'arrays'):
+            formatted_attrs = list(map(partial(assign_value_key, attr_type), attr.keys(), attr.values()))
             user_attr_list += "|".join(formatted_attrs) + "|"
         elif attr_type == 'flags':
-            user_attr_list += "|".join(attrs) + "|"
+            user_attr_list += "|".join(attr) + "|"
         else:
             pass
     return user_attr_list
 
 def update_global_attrs(attrs):
-    global GLOBAL_ABE_ATTRS_JSON_PICKLED
-    for attr_type, attrs in attrs.items():
-        if attr_type in ('strings','integers','dates','arrays','flags'):
-            for key in attrs:
+    global GLOBAL_ABE_ATTRS_JSON_PICKLED, GLOBAL_ABE_ATTRS_GENERATED
+    for attr_type, attr in attrs.items():
+        if attr_type in ('strings', 'integers', 'dates', 'arrays', 'flags'):
+            for key in attr:
                 GLOBAL_ABE_ATTRS[attr_type].add(key)
     if GLOBAL_ABE_ATTRS_JSON_PICKLED != jsonpickle.encode(GLOBAL_ABE_ATTRS):
         GLOBAL_ABE_ATTRS_JSON_PICKLED = jsonpickle.encode(GLOBAL_ABE_ATTRS)
-        with open(GLOBAL_ABE_ATTRS_FILE, 'w') as gaaf:
-            gaaf.write(GLOBAL_ABE_ATTRS_JSON_PICKLED)
+        with open(GLOBAL_ABE_ATTRS_FILE, 'w') as gaa_f:
+            gaa_f.write(GLOBAL_ABE_ATTRS_JSON_PICKLED)
         GLOBAL_ABE_ATTRS_GENERATED = datetime.now()
 
 
