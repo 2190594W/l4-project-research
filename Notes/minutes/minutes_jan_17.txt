@@ -1,0 +1,59 @@
+January 17th Meeting Minutes
+
+Project Submission:
+
+Provide a README & Installation guide.
+Assume that OpenABE is installed and tested.  With Python bindings installed.
+
+Implement decrypt, download, encrypt and upload individual methods. ✅
+Fix issues with encrypt & upload process. ✅
+Fix issues with decrypt & download process. ✅
+
+Extract meta data from encrypted files and save as an extra file.
+
+Package manager-like setup with local index and resource server index???
+
+
+
+Evaluation
+
+Case studies
+	- some small enough to easily place throughout report
+	- 1 or 2 that are longer and require detailed examination
+		- to show off the expressiveness of policy language
+	- compare policy language to implementation
+
+Security Eval / Risk Assessment
+	1. Identify your scope (avoid deployment)
+	2. Identify your assets
+		- assets contain assets
+		- assets may be physical
+	3. For each asset
+		- identify vulnerability
+		- identify threat
+	4. Look at risk
+		risk = vulnerability x threat
+	5. Analysis
+		- accept
+		- treat (control)
+		- transfer
+
+Security Eval is VITAL to the dissertation. It helps to prove that the engineering is also secure and not just reliant on the mathematical security of the cryptography.
+
+
+
+Start writing up what can be written.
+Finish reading Mendeley references.
+
+LaTeX tools:
+	latexmk, TeXShop
+
+	Convert plantuml diagrams to PDF or EPS
+
+	For the preamble: csquotes (\enquote{ ….. }), nag, fontenc, inputenc, isodate, datetime, enumitem, cleverref, graphicx, minted (alternative to listings - code formatting)
+
+	[For now use /verbatim to represent Policy Language]
+
+	[Check above packages are not in class file first]
+
+alias latexBuild=‘latexmk -pdf -pvc -bibtex-cond’
