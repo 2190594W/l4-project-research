@@ -1,0 +1,12 @@
+{% extends "layout.html" %}
+{% block body %}
+  <h1>Error with decrypting file from Resource Server</h1>
+  {% if file %}
+    <p>
+      Perhaps try downloading the encrypted, ciphertext format <a href="/download/{{file}}">here</a> and attempt manual decryption with a CLI tool or script.
+    </p>
+  {% endif %}
+  <p>
+    It may be worth checking the current list of available files <a href="/all_filenames">here</a>.
+  </p>
+{% endblock %}
