@@ -109,8 +109,8 @@ def upload_file():
         if file.filename == '':
             flash('No selected file')
             return redirect(request.url)
-        print(file.filename)
-        print(file.content_type)
+        # print(file.filename)
+        # print(file.content_type)
         if file and allowed_file(file.filename):
             flash('successfully uploaded!')
             filename = secure_filename(file.filename)
