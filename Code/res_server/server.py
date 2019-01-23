@@ -10,6 +10,10 @@ import requests
 from flask import Flask, flash, request, redirect, render_template,\
 url_for, send_from_directory, jsonify
 from werkzeug.utils import secure_filename
+import pymongo
+
+CONNECTION = pymongo.MongoClient('localhost', 27017)
+DB = CONNECTION.ResourceServer
 
 UPLOAD_FOLDER = '/tmp/flask/file/uploads'
 ALLOWED_EXTENSIONS = set(['cpabe'])
