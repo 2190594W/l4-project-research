@@ -3,8 +3,9 @@ Resource Server module
 """
 
 from sys import exc_info
-from os import urandom, path, walk
+from os import urandom, path, walk, stat
 from datetime import datetime
+import uuid
 import json
 import requests
 from flask import Flask, flash, request, redirect, render_template,\
@@ -13,7 +14,7 @@ from flask.logging import create_logger
 from werkzeug.utils import secure_filename
 import pymongo
 
-CONNECTION = pymongo.MongoClient('localhost', 27017)
+CONNECTION = pymongo.MongoClient('localhost', 27017, uuidRepresentation='standard')
 DB = CONNECTION.ResourceServer
 DB.resource_meta.ensure_index('id', unique=True)
 DB.resource_meta.ensure_index('filename')
@@ -108,20 +109,37 @@ def upload_file():
         if 'file' not in request.files:
             flash('No file part')
             return redirect(request.url)
+        if 'author' not in request.form:
+            flash('No author provided! File will be uploaded anonymously.', 'info')
+            author = "Anonymous"
+        else:
+            author = request.form["author"]
         file = request.files['file']
         # if user does not select file, browser also
         # submit an empty part without filename
         if file.filename == '':
             flash('No selected file')
             return redirect(request.url)
-        # print(file.filename)
-        # print(file.content_type)
         if file and allowed_file(file.filename):
-            flash('successfully uploaded!')
-            filename = secure_filename(file.filename)
-            file.save(path.join(APP.config['UPLOAD_FOLDER'], filename))
-            return redirect(url_for('uploaded_file',
-                                    filename=filename))
+            new_filename = uuid.uuid4()
+            file_path = path.join(APP.config['UPLOAD_FOLDER'], str(new_filename) + ".cpabe")
+            try:
+                file.save(file_path)
+                file_obj = {'id': str(new_filename), 'filename': file.filename,\
+                    'mimetype': file.mimetype, 'content-type': file.content_type,\
+                    'content-length': file.content_length, 'author': author,\
+                    'uploader': author, 'filesize': stat(file_path).st_size}
+                try:
+                    with open(file_path[:-5] + 'meta', 'w') as file_meta:
+                        file_meta.write(json.dumps(file_obj))
+                    file_obj['id'] = new_filename
+                    META_DB.save(file_obj)
+                    flash('successfully uploaded!')
+                except EnvironmentError:
+                    flash('Failed to create .meta file correctly!', 'error')
+                return redirect(url_for('get_all_filenames'), code=303)
+            except EnvironmentError:
+                flash('Failed to write .cpabe file correctly!', 'error')
         flash('Error with upload!', 'error')
     return render_template('upload.html')
 
