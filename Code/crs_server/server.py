@@ -359,7 +359,7 @@ def upload_file():
             res_server_res = requests.post(f'http://{RES_SERVER}/upload', files=files)
             if res_server_res.status_code == 200:
                 flash('successfully uploaded!', 'info')
-                return redirect(url_for('get_all_filenames'))
+                return redirect(url_for('get_all_filenames'), code=303)
         flash('Error with upload!', 'error')
     return render_template('upload.html')
 
