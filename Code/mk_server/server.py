@@ -10,26 +10,28 @@ from functools import partial
 import jsonpickle
 import pyopenabe
 from flask import Flask, request, send_file, render_template, jsonify, abort
+from flask.logging import create_logger
 
-VERSION = 'v0.0.1'
+VERSION = 'v0.0.2'
 
 MASTER_SECRET_KEY_FILE = 'master_secret_key.key'
 MASTER_PUBLIC_KEY_FILE = 'master_public_key.key'
 
 GLOBAL_ABE_ATTRS_FILE = 'global_attrs.config'
 
-app = Flask(__name__)
+APP = Flask(__name__)
+LOG = create_logger(APP)
 
 try:
     with open('session_secret.config', 'rb') as session_secret:
-        app.secret_key = session_secret.read().strip()
-        if len(app.secret_key) > 32:
-            app.logger.info("Configured session secret")
+        APP.secret_key = session_secret.read().strip()
+        if len(APP.secret_key) > 32:
+            LOG.info("Configured session secret")
         else:
             raise ValueError("Insufficient session secret provided")
 except:
-    app.logger.error("No sufficient session secret found, auto-generated random 64-bytes.")
-    app.secret_key = urandom(64)
+    LOG.error("No sufficient session secret found, auto-generated random 64-bytes.")
+    APP.secret_key = urandom(64)
 
 openabe = pyopenabe.PyOpenABE()
 cpabe_instance = openabe.CreateABEContext("CP-ABE")
@@ -42,7 +44,7 @@ try:
     cpabe_instance.importSecretParams(MASTER_SECRET_KEY)
     cpabe_instance.importPublicParams(MASTER_PUBLIC_KEY)
     MASTER_KEYS_GENERATED = datetime.fromtimestamp(path.getmtime(MASTER_SECRET_KEY_FILE))
-except:
+except EnvironmentError:
     try:
         cpabe_instance.generateParams()
         MASTER_SECRET_KEY = cpabe_instance.exportSecretParams()
@@ -52,9 +54,9 @@ except:
         with open(MASTER_PUBLIC_KEY_FILE, 'wb') as mpkf:
             mpkf.write(MASTER_PUBLIC_KEY)
         MASTER_KEYS_GENERATED = datetime.now()
-    except:
-        app.logger.error("FATAL ERROR: ABORTING SERVER")
-        app.logger.error("Unexpected error:", exc_info()[0])
+    except EnvironmentError:
+        LOG.error("FATAL ERROR: ABORTING SERVER")
+        LOG.error("Unexpected error: %s", exc_info()[0])
         exit()
 
 try:
@@ -62,19 +64,20 @@ try:
         GLOBAL_ABE_ATTRS_JSON_PICKLED = gaaf.read()
     GLOBAL_ABE_ATTRS = jsonpickle.decode(GLOBAL_ABE_ATTRS_JSON_PICKLED)
     GLOBAL_ABE_ATTRS_GENERATED = datetime.fromtimestamp(path.getmtime(GLOBAL_ABE_ATTRS_FILE))
-except:
-    app.logger.error("Unable to recover global attributes file. Generating blank template...")
-    GLOBAL_ABE_ATTRS = {'strings': set(), 'integers': set(), 'dates': set(), 'arrays': set(), 'flags': set()}
+except EnvironmentError:
+    LOG.error("Unable to recover global attributes file. Generating blank template...")
+    GLOBAL_ABE_ATTRS = {'strings': set(), 'integers': set(), 'dates': set(),\
+        'arrays': set(), 'flags': set()}
     GLOBAL_ABE_ATTRS_JSON_PICKLED = jsonpickle.encode(GLOBAL_ABE_ATTRS)
     GLOBAL_ABE_ATTRS_GENERATED = datetime.now()
 
 del cpabe_instance, openabe
 
-@app.route('/')
+@APP.route('/')
 def hello_world():
     return render_template('index.html')
 
-@app.route('/abe/get_public_key')
+@APP.route('/abe/get_public_key')
 def get_public_key():
     mpk_payload = {
         'generated_at': MASTER_KEYS_GENERATED,
@@ -84,7 +87,7 @@ def get_public_key():
     }
     return jsonify(mpk_payload)
 
-@app.route('/abe/get_attributes')
+@APP.route('/abe/get_attributes')
 def get_attributes():
     new_attrs = GLOBAL_ABE_ATTRS
     for attr in new_attrs:
@@ -107,7 +110,8 @@ def create_attr_list(attrs):
     user_attr_list = "|"
     for attr_type, attr in attrs.items():
         if attr_type in ('strings', 'integers', 'dates', 'arrays'):
-            formatted_attrs = list(map(partial(assign_value_key, attr_type), attr.keys(), attr.values()))
+            formatted_attrs = list(map(partial(assign_value_key, attr_type),\
+                attr.keys(), attr.values()))
             user_attr_list += "|".join(formatted_attrs) + "|"
         elif attr_type == 'flags':
             user_attr_list += "|".join(attr) + "|"
@@ -128,7 +132,7 @@ def update_global_attrs(attrs):
         GLOBAL_ABE_ATTRS_GENERATED = datetime.now()
 
 
-@app.route('/abe/generate_userkey/<string:file_or_json>', methods=['POST'])
+@APP.route('/abe/generate_userkey/<string:file_or_json>', methods=['POST'])
 def generate_userkey(file_or_json):
     if file_or_json not in ("file", "json"):
         abort(404)
@@ -152,7 +156,7 @@ def generate_userkey(file_or_json):
                 userkey_generated_at = datetime.now()
                 userkey = cpabe_instance.exportUserKey(str_username)
             except:
-                app.logger.error("Fatal error during key generation")
+                LOG.error("Fatal error during key generation")
                 return jsonify({'msg': 'FATAL ERROR'}), 500
 
             if file_or_json == "json":
@@ -171,8 +175,28 @@ def generate_userkey(file_or_json):
                     mimetype='text/plain',
                     as_attachment=True,
                     attachment_filename=f"{str_username}.key")
-    return jsonify({'msg': 'Improper JSON values. Ensure both "attributes" and "username" keys are present!'}), 422
+    return jsonify({'msg': 'Improper JSON values. Ensure both "attributes" and\
+        "username" keys are present!'}), 422
 
-@app.errorhandler(404)
-def page_not_found(e):
-    return render_template('404.html'), 404
+@APP.errorhandler(404)
+def page_not_found(error):
+    """404 HTTP error handler.
+    Attached by flask annotation to handle all 404 errors.
+
+    Parameters
+    ----------
+    error : string
+        String representation of HTTP `error`.
+
+    Returns
+    -------
+    Response (flask)
+        Generates flask Response object from Jinja2 template.
+
+    """
+    template_error = None
+    if APP.env == 'development':
+        template_error = error
+    else:
+        print(error)
+    return render_template('404.html', error=template_error), 404

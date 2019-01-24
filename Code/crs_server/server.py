@@ -18,7 +18,7 @@ ENC_ALLOWED_EXTENSIONS = set(['jp2', 'docx', 'txt', 'pdf', 'zip'])
 DEC_ALLOWED_EXTENSIONS = set(['cpabe'])
 KEY_ALLOWED_EXTENSIONS = set(['key'])
 
-VERSION = 'v0.0.1'
+VERSION = 'v0.0.2'
 RES_SERVER = "localhost:5001"
 
 MASTER_PUBLIC_KEY_FILE = 'master_public_key.key'

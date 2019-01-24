@@ -9,43 +9,48 @@ import json
 import requests
 from flask import Flask, flash, request, redirect, render_template,\
 url_for, send_from_directory, jsonify
+from flask.logging import create_logger
 from werkzeug.utils import secure_filename
 import pymongo
 
 CONNECTION = pymongo.MongoClient('localhost', 27017)
 DB = CONNECTION.ResourceServer
+DB.resource_meta.ensure_index('id', unique=True)
+DB.resource_meta.ensure_index('filename')
+META_DB = DB.resource_meta
 
 UPLOAD_FOLDER = '/tmp/flask/file/uploads'
 ALLOWED_EXTENSIONS = set(['cpabe'])
 
-VERSION = 'v0.0.1'
+VERSION = 'v0.0.2'
 
 MASTER_PUBLIC_KEY_FILE = 'master_public_key.key'
 
 GLOBAL_ABE_ATTRS_FILE = 'global_attrs.config'
 
-app = Flask(__name__)
+APP = Flask(__name__)
+LOG = create_logger(APP)
 
 try:
     with open('session_secret.config', 'rb') as session_secret:
-        app.secret_key = session_secret.read().strip()
-        if len(app.secret_key) > 32:
-            app.logger.info("Collected session secret from config file.")
+        APP.secret_key = session_secret.read().strip()
+        if len(APP.secret_key) > 32:
+            LOG.info("Collected session secret from config file.")
         else:
             raise ValueError("Insufficient session secret provided")
-except:
-    app.logger.error("No sufficient session secret found, auto-generated random 64-bytes.")
-    app.secret_key = urandom(64)
+except EnvironmentError:
+    LOG.error("No sufficient session secret found, auto-generated random 64-bytes.")
+    APP.secret_key = urandom(64)
 
-app.config['MAX_CONTENT_LENGTH'] = 100 * 1024 * 1024
-app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+APP.config['MAX_CONTENT_LENGTH'] = 100 * 1024 * 1024
+APP.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
 try:
     with open(MASTER_PUBLIC_KEY_FILE, 'rb') as mpkf:
         MASTER_PUBLIC_KEY = mpkf.read()
     MASTER_KEY_UPDATED = datetime.fromtimestamp(path.getmtime(MASTER_PUBLIC_KEY_FILE))
-    app.logger.info("Collected master public key from config file.")
-except:
+    LOG.info("Collected master public key from config file.")
+except EnvironmentError:
     try:
         response = requests.get('http://localhost:5000/abe/get_public_key')
         if response.status_code == 200:
@@ -54,13 +59,13 @@ except:
             with open(MASTER_PUBLIC_KEY_FILE, 'wb') as mpkf:
                 mpkf.write(MASTER_PUBLIC_KEY)
             MASTER_KEY_UPDATED = datetime.now()
-            app.logger.info("DEV: Collected master public key from MSK server.")
+            LOG.info("DEV: Collected master public key from MSK server.")
         else:
             raise Exception('Unable to reach dev msk server.')
-    except:
-        app.logger.error("FATAL ERROR: ABORTING SERVER")
-        app.logger.error(f"Cannot run server without global attributes file: {MASTER_PUBLIC_KEY_FILE}")
-        app.logger.error("Unexpected error:", exc_info()[0])
+    except EnvironmentError:
+        LOG.error("FATAL ERROR: ABORTING SERVER")
+        LOG.error("Cannot run server without global attributes file: %s", MASTER_PUBLIC_KEY_FILE)
+        LOG.error("Unexpected error: %s", exc_info()[0])
         exit()
 
 try:
@@ -68,8 +73,8 @@ try:
         GLOBAL_ABE_ATTRS_JSON = gaaf.read()
     GLOBAL_ABE_ATTRS = json.loads(GLOBAL_ABE_ATTRS_JSON)
     GLOBAL_ABE_ATTRS_UPDATED = datetime.fromtimestamp(path.getmtime(GLOBAL_ABE_ATTRS_FILE))
-    app.logger.info("Collected attributes from config file.")
-except:
+    LOG.info("Collected attributes from config file.")
+except EnvironmentError:
     try:
         response = requests.get('http://localhost:5000/abe/get_attributes')
         if response.status_code == 200:
@@ -79,24 +84,24 @@ except:
             with open(GLOBAL_ABE_ATTRS_FILE, 'w') as gaaf:
                 gaaf.write(GLOBAL_ABE_ATTRS_JSON)
             GLOBAL_ABE_ATTRS_UPDATED = datetime.now()
-            app.logger.info("DEV: Collected attributes from MSK server.")
+            LOG.info("DEV: Collected attributes from MSK server.")
         else:
             raise Exception('Unable to reach dev msk server.')
-    except:
-        app.logger.error("FATAL ERROR: ABORTING SERVER")
-        app.logger.error(f"Cannot run server without global attributes file: {GLOBAL_ABE_ATTRS_FILE}")
-        app.logger.error("Unexpected error:", exc_info()[0])
+    except EnvironmentError:
+        LOG.error("FATAL ERROR: ABORTING SERVER")
+        LOG.error("Cannot run server without global attributes file %s", GLOBAL_ABE_ATTRS_FILE)
+        LOG.error("Unexpected error: %s", exc_info()[0])
         exit()
 
 def allowed_file(filename):
     return '.' in filename and \
            filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
-@app.route('/')
+@APP.route('/')
 def hello_world():
     return render_template('index.html')
 
-@app.route('/upload', methods=['GET', 'POST'])
+@APP.route('/upload', methods=['GET', 'POST'])
 def upload_file():
     if request.method == 'POST':
         # check if the post request has the file part
@@ -114,24 +119,24 @@ def upload_file():
         if file and allowed_file(file.filename):
             flash('successfully uploaded!')
             filename = secure_filename(file.filename)
-            file.save(path.join(app.config['UPLOAD_FOLDER'], filename))
+            file.save(path.join(APP.config['UPLOAD_FOLDER'], filename))
             return redirect(url_for('uploaded_file',
                                     filename=filename))
         flash('Error with upload!', 'error')
     return render_template('upload.html')
 
 
-@app.route('/download/<filename>')
+@APP.route('/download/<filename>')
 def uploaded_file(filename):
     return send_from_directory(
-        app.config['UPLOAD_FOLDER'], filename)
+        APP.config['UPLOAD_FOLDER'], filename)
 
 # TODO: This is a näive implementation. If there are too many files,
 # the response would be massive, so paging would be needed here
-@app.route('/all_filenames')
+@APP.route('/all_filenames')
 def get_all_filenames():
     all_files = []
-    for root, dirs, files in walk(app.config['UPLOAD_FOLDER']):
+    for root, dirs, files in walk(APP.config['UPLOAD_FOLDER']):
         all_files.extend(files)
     filenames_payload = {
         'files': all_files,
@@ -140,7 +145,7 @@ def get_all_filenames():
     }
     return jsonify(filenames_payload)
 
-@app.route('/abe/latest_mpk')
+@APP.route('/abe/latest_mpk')
 def get_latest_mpk():
     mpk_payload = {
         'generated_at': MASTER_KEY_UPDATED,
@@ -150,7 +155,7 @@ def get_latest_mpk():
     }
     return jsonify(mpk_payload)
 
-@app.route('/abe/latest_attributes')
+@APP.route('/abe/latest_attributes')
 def get_latest_attributes():
     attributes_payload = {
         'generated_at': GLOBAL_ABE_ATTRS_UPDATED,
@@ -160,6 +165,25 @@ def get_latest_attributes():
     }
     return jsonify(attributes_payload)
 
-@app.errorhandler(404)
-def page_not_found(e):
-    return render_template('404.html'), 404
+@APP.errorhandler(404)
+def page_not_found(error):
+    """404 HTTP error handler.
+    Attached by flask annotation to handle all 404 errors.
+
+    Parameters
+    ----------
+    error : string
+        String representation of HTTP `error`.
+
+    Returns
+    -------
+    Response (flask)
+        Generates flask Response object from Jinja2 template.
+
+    """
+    template_error = None
+    if APP.env == 'development':
+        template_error = error
+    else:
+        print(error)
+    return render_template('404.html', error=template_error), 404
