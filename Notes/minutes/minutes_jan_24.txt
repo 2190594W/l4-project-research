@@ -1,0 +1,39 @@
+January 24th Meeting Minutes
+
+Finish metadata extraction to meta files and DB setup on Resource Server. Hopefully get a search tool in place.
+
+Aim to stop development before end of February.
+
+Concentrate on the outline of the dissertation for next week.
+
+Write precis for each section, think maybe first person notes describing what each chapter will cover. List what I want to say, then convert points to paragraphs.
+The end result will have small summaries for each chapter, the first paragraph of each chapter describing what is to follow.
+
+Background and Case Studies are probably good starting points for writing.
+
+Will concentrate on 3 specific in-depth Case Studies, but will actually cover 10-15, with the rest included in Appendices.
+
+When using LaTeX different chapters should be in different files. Pulled into master file in the order of appearance.
+A content folder should have chapters contained within as different .tex files.
+
+IMRAD structure (intro, methodology, results, analysis, discussion
+	intro - sets the project, what was done, what was planned, the motivation, enumerate the contributions, outline of the dissertation, could do a reading guide (probably over the top) etc
+	methodology -  background reading, knowledge required for project, how the project was approached, the decisions
+	results - case studies, policies, what happened
+	analysis - risk assessment, how good the implementation is, possible cons and pros, is it secure?,
+	discussion - related work, future work, compare my work to related work, don’t trash talk, just compare to related, and acknowledge strengths of others
+	conclusion - summarise dissertation, touch on future work
+
+future work is not “i failed to do this, i should do this”, what’s next? how could the project be improved for a greater scope? How could some limitations of the project be removed by doing X, Y or Z in future? Since these limitations are a result of the project’s time limitation.
+
+Can acknowledge that I decided to aim for functionality, over ease-of-use or prettiness.
+
+Security risk assessment will be required and slides will be provided to guide this. Information Assurance slides, pages 20-28.
+
+ISO Standard Annex C - Comprehensive list of threats
+ISO Standard Annex D - Comprehensive list of vulnerabilities
+
+Can describe adapting the ISO 27005 Standard to produce a risk assessment.
+Produce an appendix of identified assets. Calculated risks with impacts (enumerated).
+
+Assets can have assets within them (resources within the Resource Server for example).
