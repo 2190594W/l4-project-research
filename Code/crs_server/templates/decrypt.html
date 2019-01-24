@@ -1,11 +1,11 @@
 {% extends "layout.html" %}
 {% block body %}
   <h1>Decrypt an <strong>encrypted</strong> File</h1>
-  <form method=post enctype=multipart/form-data>
+  <form method="post" enctype="multipart/form-data">
     <label for="enc_file">Encrypted File:</label>
-    <input type=file name=enc_file><br />
+    <input type="file" name="enc_file"><br />
     <label for="user_key">User Key:</label>
-    <input type=file name=user_key><br />
-    <input type=submit value=Decrypt>
+    <input type="file" name="user_key"><br />
+    <input type="submit" value="Decrypt">
   </form>
 {% endblock %}
