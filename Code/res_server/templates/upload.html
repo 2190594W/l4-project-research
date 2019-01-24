@@ -1,8 +1,11 @@
 {% extends "layout.html" %}
 {% block body %}
   <h1>Upload new File</h1>
-  <form method=post enctype=multipart/form-data>
-    <input type=file name=file>
-    <input type=submit value=Upload>
+  <form method="post" enctype="multipart/form-data">
+    <label for="file">Encrypted File:</label>
+    <input type="file" name="file"><br /><br />
+    <label for="author">Author:</label>
+    <input type="text" name="author"><br />
+    <input type="submit" value="Upload">
   </form>
 {% endblock %}
