@@ -6,9 +6,9 @@
       {% for file in files %}
         <tr>
           <td>
-            {{file}}<br />
-            <a href="/download/{{file}}" style="padding-left:5em">Download encrypted CPABE format</a><br />
-            <a href="/decrypt_download/{{file}}" style="padding-left:5em">Download decrypted format</a>
+            {{ file.filename }}<br />
+            <a href="/download/{{ file.id }}" style="padding-left:5em">Download encrypted CPABE format</a><br />
+            <a href="/download_decrypt/{{ file.id }}" style="padding-left:5em">Download decrypted format</a>
           </td>
         </tr>
       {% endfor %}
@@ -16,6 +16,4 @@
   {% else %}
     <h3>No files found!</h3>
   {% endif %}
-  <br/><br/>
-  <a href="/">Return to homepage</a>
 {% endblock %}
