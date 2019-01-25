@@ -1,0 +1,31 @@
+{% extends "layout.html" %}
+{% block body %}
+  {% if error %}
+    <h1>Error with decrypting file from Resource Server</h1>
+    {% if file %}
+      <p>
+        Perhaps try downloading the encrypted, ciphertext format <a href="/download/{{file}}">here</a> and attempt manual decryption with a CLI tool or script.
+      </p>
+    {% endif %}
+    <p>
+      It may be worth checking the current list of available files <a href="/all_filenames">here</a>.
+    </p>
+  {% else %}
+    <h1>Download & decrypt an <strong>encrypted</strong> File</h1>
+    <h3>Attempt to download & decrypt the <em>{{ filename }}</em> file?</h3><br /><br />
+    <form method="post" enctype="multipart/form-data">
+      <p>
+        Will download encrypted file: <strong>{{ filename }}</strong> from the Resource Server.
+      </p>
+      <p>
+        After download, will locally decrypt <strong>{{ filename }}</strong> with the User Key provided below.
+      </p><br />
+      <p>
+        Provide your private User Key in order to perform local decryption.
+      </p>
+      <label for="user_key">User Key:</label>
+      <input type="file" name="user_key"><br /><br />
+      <input type="submit" value="Decrypt">
+    </form>
+  {% endif %}
+{% endblock %}
