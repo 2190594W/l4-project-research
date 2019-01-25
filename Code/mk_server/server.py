@@ -7,10 +7,11 @@ from sys import exc_info
 from os import urandom, path
 from datetime import datetime
 from functools import partial
-import jsonpickle
-import pyopenabe
 from flask import Flask, request, send_file, render_template, jsonify, abort
 from flask.logging import create_logger
+#pylint: disable=E0401
+import jsonpickle
+import pyopenabe
 
 VERSION = 'v0.0.2'
 
@@ -29,7 +30,7 @@ try:
             LOG.info("Configured session secret")
         else:
             raise ValueError("Insufficient session secret provided")
-except:
+except EnvironmentError:
     LOG.error("No sufficient session secret found, auto-generated random 64-bytes.")
     APP.secret_key = urandom(64)
 
@@ -120,6 +121,7 @@ def create_attr_list(attrs):
     return user_attr_list
 
 def update_global_attrs(attrs):
+    #pylint: disable=W0603
     global GLOBAL_ABE_ATTRS_JSON_PICKLED, GLOBAL_ABE_ATTRS_GENERATED
     for attr_type, attr in attrs.items():
         if attr_type in ('strings', 'integers', 'dates', 'arrays', 'flags'):
@@ -136,10 +138,10 @@ def update_global_attrs(attrs):
 def generate_userkey(file_or_json):
     if file_or_json not in ("file", "json"):
         abort(404)
-    openabe = pyopenabe.PyOpenABE()
-    cpabe_instance = openabe.CreateABEContext("CP-ABE")
-    cpabe_instance.importSecretParams(MASTER_SECRET_KEY)
-    cpabe_instance.importPublicParams(MASTER_PUBLIC_KEY)
+    openabe_inst = pyopenabe.PyOpenABE()
+    cpabe = openabe_inst.CreateABEContext("CP-ABE")
+    cpabe.importSecretParams(MASTER_SECRET_KEY)
+    cpabe.importPublicParams(MASTER_PUBLIC_KEY)
     print("imported")
     user_attrs = request.get_json()
     if user_attrs is not None:
@@ -151,12 +153,12 @@ def generate_userkey(file_or_json):
             print(user_attr_list)
             del user_attrs
             try:
-                cpabe_instance.keygen(user_attr_list, str_username)
+                cpabe.keygen(user_attr_list, str_username)
                 print("successfully generated key")
                 userkey_generated_at = datetime.now()
-                userkey = cpabe_instance.exportUserKey(str_username)
-            except:
-                LOG.error("Fatal error during key generation")
+                userkey = cpabe.exportUserKey(str_username)
+            except pyopenabe.PyOpenABEError as err:
+                LOG.error("Fatal error during key generation: %s", err)
                 return jsonify({'msg': 'FATAL ERROR'}), 500
 
             if file_or_json == "json":
@@ -169,12 +171,11 @@ def generate_userkey(file_or_json):
                     'abe_version': VERSION
                 }
                 return jsonify(userkey_payload)
-            else:
-                return send_file(
-                    BytesIO(userkey),
-                    mimetype='text/plain',
-                    as_attachment=True,
-                    attachment_filename=f"{str_username}.key")
+            return send_file(
+                BytesIO(userkey),
+                mimetype='text/plain',
+                as_attachment=True,
+                attachment_filename=f"{str_username}.key")
     return jsonify({'msg': 'Improper JSON values. Ensure both "attributes" and\
         "username" keys are present!'}), 422
 
