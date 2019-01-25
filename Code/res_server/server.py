@@ -3,15 +3,15 @@ Resource Server module
 """
 
 from sys import exc_info
-from os import urandom, path, walk, stat
+from os import path, stat, urandom
 from datetime import datetime
 import uuid
 import json
 import requests
 from flask import Flask, flash, request, redirect, render_template,\
-url_for, send_from_directory, jsonify
+url_for, send_from_directory, jsonify, abort
 from flask.logging import create_logger
-from werkzeug.utils import secure_filename
+#pylint: disable=E0401
 import pymongo
 
 CONNECTION = pymongo.MongoClient('localhost', 27017, uuidRepresentation='standard')
@@ -114,6 +114,11 @@ def upload_file():
             author = "Anonymous"
         else:
             author = request.form["author"]
+        if 'policy' not in request.form:
+            flash('No policy provided for metadat! File will be uploaded without.', 'info')
+            policy = None
+        else:
+            policy = request.form["policy"]
         file = request.files['file']
         # if user does not select file, browser also
         # submit an empty part without filename
@@ -125,14 +130,17 @@ def upload_file():
             file_path = path.join(APP.config['UPLOAD_FOLDER'], str(new_filename) + ".cpabe")
             try:
                 file.save(file_path)
+                uploaded_at = datetime.now()
                 file_obj = {'id': str(new_filename), 'filename': file.filename,\
                     'mimetype': file.mimetype, 'content-type': file.content_type,\
                     'content-length': file.content_length, 'author': author,\
-                    'uploader': author, 'filesize': stat(file_path).st_size}
+                    'uploader': author, 'filesize': stat(file_path).st_size,\
+                    'uploaded_at': str(uploaded_at), "policy": policy}
                 try:
                     with open(file_path[:-5] + 'meta', 'w') as file_meta:
                         file_meta.write(json.dumps(file_obj))
                     file_obj['id'] = new_filename
+                    file_obj['uploaded_at'] = uploaded_at
                     META_DB.save(file_obj)
                     flash('successfully uploaded!')
                 except EnvironmentError:
@@ -144,18 +152,53 @@ def upload_file():
     return render_template('upload.html')
 
 
-@APP.route('/download/<filename>')
-def uploaded_file(filename):
-    return send_from_directory(
-        APP.config['UPLOAD_FOLDER'], filename)
+@APP.route('/download/<file_id>')
+def download_cpabe_file(file_id):
+    file_obj = META_DB.find_one({"id": uuid.UUID(file_id)}, {"filename"})
+    if file_obj is not None:
+        filename = file_obj["filename"]
+        if not filename:
+            filename = file_id + ".cpabe"
+    try:
+        return send_from_directory(
+            APP.config['UPLOAD_FOLDER'], file_id + ".cpabe",\
+                as_attachment=True, attachment_filename=filename)
+    except EnvironmentError:
+        abort(404)
+
+@APP.route('/download_meta/<file_id>')
+def download_meta_file(file_id):
+    file_obj = META_DB.find_one({"id": uuid.UUID(file_id)}, {"filename"})
+    if file_obj is not None:
+        filename = file_obj["filename"]
+        if filename:
+            filename = filename[:-5] + "meta"
+        else:
+            filename = file_id + ".meta"
+    try:
+        return send_from_directory(
+            APP.config['UPLOAD_FOLDER'], file_id + ".meta",\
+                as_attachment=True, attachment_filename=filename)
+    except EnvironmentError:
+        abort(404)
+
+@APP.route('/file_meta/<file_id>')
+def get_file_meta(file_id):
+    try:
+        file_obj = META_DB.find_one({"id": uuid.UUID(file_id)}, {"_id": 0, "id": 0})
+    except ValueError:
+        return abort(404)
+    if file_obj is not None:
+        return jsonify(file_obj)
+    return abort(404)
 
 # TODO: This is a näive implementation. If there are too many files,
 # the response would be massive, so paging would be needed here
 @APP.route('/all_filenames')
 def get_all_filenames():
     all_files = []
-    for root, dirs, files in walk(APP.config['UPLOAD_FOLDER']):
-        all_files.extend(files)
+    for resource in META_DB.find({}, {"id", "filename"}):
+        all_files.append({"id": resource["id"], "filename": resource["filename"]})
     filenames_payload = {
         'files': all_files,
         'updated_at': datetime.now(),
