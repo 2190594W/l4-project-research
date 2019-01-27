@@ -351,12 +351,24 @@ def upload_file():
             flash('No file part', 'info')
             return redirect(request.url)
         if 'author' not in request.form:
-            flash('No author provided! File will be uploaded anonymously.', 'info')
+            flash('No author provided! File has been uploaded anonymously.', 'info')
             author = "Anonymous"
         else:
             author = request.form["author"]
         file = request.files['file']
-        policy = extract_policy(file.read())
+        if 'policy' not in request.form:
+            flash('Policy not provided, attempted to extract from file.', 'info')
+            policy = None
+        else:
+            policy = request.form["policy"]
+        if policy is None or policy == "":
+            try:
+                policy = extract_policy(file.read())
+                flash('Policy extraction successful.', 'info')
+            except IndexError as err:
+                flash('Policy extraction failed.', 'warning')
+                LOG.error("IndexError occurred: %s", err)
+                policy = "Unknown"
         # if user does not select file, browser also
         # submit an empty part without filename
         if file.filename == '':
@@ -451,6 +463,11 @@ def encrypt_upload_file():
         if 'policy' not in request.form:
             flash('No policy provided!', 'info')
             return redirect(request.url)
+        if 'author' not in request.form:
+            flash('No author provided! File has been uploaded anonymously.', 'info')
+            author = "Anonymous"
+        else:
+            author = request.form["author"]
         file = request.files['file']
         policy = request.form['policy']
         # if user does not select file, browser also
@@ -470,7 +487,8 @@ def encrypt_upload_file():
             del openabe, cpabe
             file.filename += '.cpabe'
             files = {'file': (file.filename, ct_file, file.content_type)}
-            res_server_res = requests.post(f'http://{RES_SERVER}/upload', files=files)
+            res_server_res = requests.post(f'http://{RES_SERVER}/upload',\
+                files=files, data={"author": author, "policy": policy})
             if res_server_res.status_code == 200:
                 flash('successfully uploaded!', 'info')
                 return redirect(url_for('get_all_filenames'), code=303)
