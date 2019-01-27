@@ -22,12 +22,10 @@ DEC_ALLOWED_EXTENSIONS = set(['cpabe'])
 KEY_ALLOWED_EXTENSIONS = set(['key'])
 
 VERSION = 'v0.0.2'
-RES_SERVER = "localhost:5001"
+RES_SERVER = 'localhost:5001'
 
 MASTER_PUBLIC_KEY_FILE = 'master_public_key.key'
 GLOBAL_ABE_ATTRS_FILE = 'global_attrs.config'
-
-USERNAME = "2637216p"
 
 APP = Flask(__name__)
 LOG = create_logger(APP)
@@ -140,7 +138,7 @@ except EnvironmentError:
         exit()
 
 def allowed_file(filename, allowed_extensions):
-    """Short summary.
+    """Small function to validate that a given filename ends with a valid extension.
 
     Parameters
     ----------
