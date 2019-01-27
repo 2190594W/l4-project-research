@@ -2,10 +2,13 @@
 {% block body %}
   <h1>Upload new <strong>encrypted</strong> File</h1>
   <form method="post" enctype="multipart/form-data">
-    <label for="file">Encrypted File:</label>
+    <label for="file">Encrypted File (<em>.cpabe</em>):</label>
     <input type="file" name="file">
     <label for="author">Author:</label>
     <input type="text" name="author"><br />
+    <label for="policy">Policy (<em>((enrolled_course:2001 and enrolled_course:2005 and male) or (enrolled_course:2003 and enrolled_course:2007 and enrolled_course:2013 and female)) and student</em>):</label><br/>
+    <textarea type="text" name="policy" id="policy">
+    </textarea><br/>
     <input type="submit" value="Upload">
   </form>
 {% endblock %}
