@@ -1,19 +1,21 @@
 {% extends "layout.html" %}
 {% block body %}
   <h1>File listing for Resource Server</h1>
-  {% if files|length > 0 %}
-    <table>
-      {% for file in files %}
-        <tr>
-          <td>
-            {{ file.filename }}<br />
-            <a href="/download/{{ file.id }}" style="padding-left:5em">Download encrypted CPABE format</a><br />
-            <a href="/download_decrypt/{{ file.id }}" style="padding-left:5em">Download decrypted format</a>
-          </td>
-        </tr>
-      {% endfor %}
-    </table>
-  {% else %}
-    <h3>No files found!</h3>
+  {% if files %}
+    {% if files|length > 0 %}
+      <table>
+        {% for file in files %}
+          <tr>
+            <td>
+              {{ file.filename }}<br />
+              <a href="/download/{{ file.id }}" style="padding-left:5em">Download encrypted CPABE format</a><br />
+              <a href="/download_decrypt/{{ file.id }}" style="padding-left:5em">Download decrypted format</a>
+            </td>
+          </tr>
+        {% endfor %}
+      </table>
+    {% else %}
+      <h3>No files found!</h3>
+    {% endif %}
   {% endif %}
 {% endblock %}
