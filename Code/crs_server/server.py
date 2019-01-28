@@ -690,7 +690,7 @@ def search_files(search_term):
 
     """
     query_str = request.query_string.decode("utf-8")
-    response = requests.get(f'{RES_SERVER}/files/search/' + search_term + "&" + query_str)
+    response = requests.get(f'{RES_SERVER}/files/search/' + search_term + "?" + query_str)
     all_files = None
     if response.status_code == 200:
         res_dict = json.loads(response.content)
