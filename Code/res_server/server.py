@@ -13,18 +13,19 @@ url_for, send_from_directory, jsonify, abort
 from flask.logging import create_logger
 #pylint: disable=E0401
 import pymongo
+from fuzzywuzzy import process
 
 CONNECTION = pymongo.MongoClient('localhost', 27017, uuidRepresentation='standard')
 DB = CONNECTION.ResourceServer
 DB.resource_meta.ensure_index('id', unique=True)
-DB.resource_meta.ensure_index('filename')
+DB.resource_meta.ensure_index([('search_filename', pymongo.TEXT)], default_language='english')
 META_DB = DB.resource_meta
 
 UPLOAD_FOLDER = '/tmp/flask/file/uploads'
 ALLOWED_EXTENSIONS = set(['cpabe'])
 
 VERSION = 'v0.0.2'
-MK_SERVER = 'localhost:5000'
+MK_SERVER = 'http://localhost:5000'
 
 MASTER_PUBLIC_KEY_FILE = 'master_public_key.key'
 
@@ -66,7 +67,7 @@ def update_mpk_file(mk_server, mpk_file_path):
             Datetime object representing the time the MPK was retrieved.
 
     """
-    mpk_res = requests.get(f'http://{mk_server}/abe/get_public_key')
+    mpk_res = requests.get(f'{mk_server}/abe/get_public_key')
     mpk_u = datetime.now()
     if mpk_res.status_code == 200:
         mpk_res_dict = json.loads(mpk_res.content)
@@ -111,7 +112,7 @@ def update_gaa_file(mk_server, gaa_file_path):
             Datetime object representing the time the GAA were retrieved.
 
     """
-    gaa_res = requests.get(f'http://{mk_server}/abe/get_attributes')
+    gaa_res = requests.get(f'{mk_server}/abe/get_attributes')
     gaa_u = datetime.now()
     if gaa_res.status_code == 200:
         gaa_res_dict = json.loads(gaa_res.content)
@@ -218,11 +219,12 @@ def upload_file():
             try:
                 file.save(file_path)
                 uploaded_at = datetime.now()
-                file_obj = {'id': str(new_filename), 'filename': file.filename,\
-                    'mimetype': file.mimetype, 'content-type': file.content_type,\
-                    'content-length': file.content_length, 'author': author,\
-                    'uploader': author, 'filesize': stat(file_path).st_size,\
-                    'uploaded_at': str(uploaded_at), "policy": policy}
+                file_obj = {'id': str(new_filename), 'filename': file.filename,
+                            'search_filename': file.filename.replace("_", "~"),
+                            'mimetype': file.mimetype, 'content-type': file.content_type,
+                            'content-length': file.content_length, 'author': author,
+                            'uploader': author, 'filesize': stat(file_path).st_size,
+                            'uploaded_at': str(uploaded_at), "policy": policy}
                 try:
                     with open(file_path[:-5] + 'meta', 'w') as file_meta:
                         file_meta.write(json.dumps(file_obj))
@@ -239,7 +241,7 @@ def upload_file():
     return render_template('upload.html')
 
 
-@APP.route('/download/<file_id>')
+@APP.route('/download/<string:file_id>')
 def download_cpabe_file(file_id):
     """View to download an encrypted file for the user.
     Retrieves an encrypted file from the uploads directory,
@@ -270,7 +272,7 @@ def download_cpabe_file(file_id):
     except EnvironmentError:
         abort(404)
 
-@APP.route('/download_meta/<file_id>')
+@APP.route('/download_meta/<string:file_id>')
 def download_meta_file(file_id):
     """View to download a metadata file for the user.
     Retrieves a metadata file from the uploads directory,
@@ -303,7 +305,7 @@ def download_meta_file(file_id):
     except EnvironmentError:
         abort(404)
 
-@APP.route('/file_meta/<file_id>')
+@APP.route('/file_meta/<string:file_id>')
 def get_file_meta(file_id):
     """View to return the metadata for a file.
     Retrieves the metadata of a file from the resource DB,
@@ -355,6 +357,100 @@ def get_all_filenames():
         'updated_at': datetime.now(),
         'abe_version': VERSION
     }
+    return jsonify(filenames_payload)
+
+@APP.route('/files/search/<string:search_term>')
+def search_files(search_term):
+    """Fetches list of uploaded filenames from resource DB that meet the
+    provided search term and structures the returned list as a JSON object.
+    Attached to '/files/search/<string:search_term>' route by flask annotation.
+
+    Parameters
+    ----------
+    search_term : string
+        String representing the user's desired `search_term`.
+
+    Returns
+    -------
+    Response (flask - JSON)
+        Generates flask Response object by converting dict to JSON.
+
+    """
+    err_msg = None
+    limit_query = request.query_string.decode("utf-8")
+    try:
+        search_limit = int(limit_query[6:]) if limit_query != "" else 25
+        if search_limit > 200:
+            err_msg = \
+                "Limit too high (>200)! Not applied.\nLimited to 25 items as default."
+            search_limit = 25
+    except ValueError:
+        err_msg = \
+            "Limit has bad format! Not applied to fuzzy search.\nLimited to 25 items as default."
+        search_limit = 25
+    all_files = []
+    for resource in META_DB.find(
+            {"$text": {"$search": search_term}},
+            {"score": {"$meta": "textScore"}, "id": 1, "filename": 1}
+        ).sort([("score", {"$meta": "textScore"})]).limit(search_limit):
+        all_files.append({
+            "id": str(resource["id"]),
+            "filename": resource["filename"],
+            "search_score": resource["score"]
+        })
+    filenames_payload = {
+        'files': all_files,
+        'updated_at': datetime.now(),
+        'abe_version': VERSION
+    }
+    if err_msg:
+        filenames_payload['err_msg'] = err_msg
+    return jsonify(filenames_payload)
+
+@APP.route('/files/fuzzy_search/<string:search_term>')
+def fuzzy_search_files(search_term):
+    """Fetches list of uploaded filenames from resource DB and
+    structures the returned list in JSON object. Applies a fuzzy
+    search algorithm on returned values to match search term.
+    Attached to '/files/fuzzy_search/<string:search_term>' route by flask annotation.
+
+    Parameters
+    ----------
+    search_term : string
+        String representing the user's desired `search_term`.
+
+    Returns
+    -------
+    Response (flask - JSON)
+        Generates flask Response object by converting dict to JSON.
+
+    """
+    err_msg = None
+    limit_query = request.query_string.decode("utf-8")
+    try:
+        fuzzy_limit = int(limit_query[6:]) if limit_query != "" else 25
+        if fuzzy_limit > 200:
+            err_msg = \
+                "Limit too high (>200)! Not applied.\nLimited to 25 items as default."
+            fuzzy_limit = 25
+    except ValueError:
+        err_msg = \
+            "Limit has bad format! Not applied to fuzzy search.\nLimited to 25 items as default."
+        fuzzy_limit = 25
+    all_files = {}
+    for resource in META_DB.find({}, {"id", "filename"}):
+        all_files[str(resource["id"])] = resource["filename"]
+    searched_file_objs = process.extract(search_term, all_files, limit=fuzzy_limit)
+    all_files = []
+    for file in searched_file_objs:
+        all_files.append({"id": file[2], "filename": file[0], "search_score": file[1]})
+    filenames_payload = {
+        'files': all_files,
+        'updated_at': datetime.now(),
+        'abe_version': VERSION
+    }
+    if err_msg:
+        filenames_payload['err_msg'] = err_msg
     return jsonify(filenames_payload)
 
 @APP.route('/abe/latest_mpk')
