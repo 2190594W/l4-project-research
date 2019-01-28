@@ -670,6 +670,29 @@ def get_all_filenames():
         all_files = res_dict['files']
     return render_template('all_files.html', files=all_files)
 
+@APP.route('/files/search')
+def search_files_index():
+    """Simple template to allow a user to enter their desired search
+    query into a form (instead of URL).
+    Attached to '/files/search' route by flask annotation.
+
+    Parameters
+    ----------
+
+
+    Returns
+    -------
+    Response (flask)
+        Generates flask Response object from Jinja2 template.
+
+    """
+    query_str = request.query_string.decode("utf-8")
+    try:
+        search_term = query_str.split("prev_query=")[1].split("&")[0]
+    except IndexError:
+        search_term = ""
+    return render_template('search_files.html', files=None, search_term=search_term)
+
 @APP.route('/files/search/<string:search_term>')
 def search_files(search_term):
     """Fetches list of uploaded filenames from Resource server and
@@ -695,7 +718,30 @@ def search_files(search_term):
     if response.status_code == 200:
         res_dict = json.loads(response.content)
         all_files = res_dict['files']
-    return render_template('search_files.html', files=all_files)
+    return render_template('search_files.html', files=all_files, search_term=search_term)
+
+@APP.route('/files/fuzzy_search')
+def fuzzy_search_files_index():
+    """Simple template to allow a user to enter their desired search
+    query into a form (instead of URL).
+    Attached to '/files/fuzzy_search' route by flask annotation.
+
+    Parameters
+    ----------
+
+
+    Returns
+    -------
+    Response (flask)
+        Generates flask Response object from Jinja2 template.
+
+    """
+    query_str = request.query_string.decode("utf-8")
+    try:
+        search_term = query_str.split("prev_query=")[1].split("&")[0]
+    except IndexError:
+        search_term = ""
+    return render_template('fuzzy_search_files.html', files=None, search_term=search_term)
 
 @APP.route('/files/fuzzy_search/<string:search_term>')
 def fuzzy_search_files(search_term):
@@ -717,13 +763,12 @@ def fuzzy_search_files(search_term):
 
     """
     query_str = request.query_string.decode("utf-8")
-    print(search_term)
     response = requests.get(f'{RES_SERVER}/files/fuzzy_search/' + search_term + "?" + query_str)
     all_files = None
     if response.status_code == 200:
         res_dict = json.loads(response.content)
         all_files = res_dict['files']
-    return render_template('fuzzy_search_files.html', files=all_files)
+    return render_template('fuzzy_search_files.html', files=all_files, search_term=search_term)
 
 @APP.errorhandler(404)
 def page_not_found(error):
