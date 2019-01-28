@@ -1,0 +1,59 @@
+{% extends "layout.html" %}
+{% block body %}
+  {% if files %}
+    <h1>Fuzzy Search Results from Resource Server</h1>
+    <h4>Fuzzy Searched with query: "<em>{{ search_term }}</em>"</h4>
+    {% if files|length > 0 %}
+      <table>
+        {% for file in files %}
+          <tr>
+            <td>
+              {{ file.filename }} - <em>Fuzzy Search Score: {{ file.search_score|round(4) }}%</em><br />
+              <a href="/download/{{ file.id }}" style="padding-left:5em">Download encrypted CPABE format</a><br />
+              <a href="/download_decrypt/{{ file.id }}" style="padding-left:5em">Download decrypted format</a>
+            </td>
+          </tr>
+        {% endfor %}
+      </table>
+    {% else %}
+      <h3>No files found!</h3>
+    {% endif %}
+    <br />
+    <a href="/files/fuzzy_search?prev_query={{ search_term }}">Return to Fuzzy Search</a>
+    <br />
+  {% else %}
+    <h1>Fuzzy Search Files</h1>
+    <script type="text/javascript">
+        function get_action(form) {
+            search_term = document.getElementById("search_term").value;
+            console.log(typeof search_term);
+            form.action = (search_term != "") ? "/files/fuzzy_search/" + search_term : "/files/fuzzy_search";
+        }
+    </script>
+    <p>
+      This search page will perform a fuzzy find on the current filenames uploaded to the Resource server.<br />
+      Fuzzy searching (or <a href="https://en.wikipedia.org/wiki/Approximate_string_matching">approximate
+      string matching</a>) attempts to return the files that most closely resemble the search query provided.<br />
+      As such this page may return files that do not seem related to your query.<br />
+      If you already know the name of the file you wish to find, try
+      {% if search_term %}
+        <a href="/files/search?prev_query={{ search_term }}">searching here</a>
+      {% else %}
+        <a href="/files/search">searching here</a>
+      {% endif %}
+      instead.
+    </p><br />
+    <form onsubmit="get_action(this);" method="get">
+      <label for="search_term">Fuzzy Search Query:</label>
+      {% if search_term %}
+        <input type="text" id="search_term" value="{{ search_term }}" placeholder="{{ search_term }}">
+      {% else %}
+        <input type="text" id="search_term" placeholder="example">
+      {% endif %}
+      <br />
+      <label for="limit">Limit Results:</label>
+      <input type="text" id="limit" name="limit" value="25"><br />
+      <input type="submit" value="Search">
+    </form>
+  {% endif %}
+{% endblock %}
