@@ -13,7 +13,7 @@ from flask import Flask, flash, request, redirect, render_template,\
 url_for, send_file, jsonify, abort
 from flask.logging import create_logger
 from decrypt_encrypt_tools import create_cpabe_instance, process_key_decrypt
-from download_upload_tools import filename_from_attachment, extract_policy
+from download_upload_tools import filename_from_attachment, extract_policy, extract_user_attrs
 #pylint: disable=E0401
 import pyopenabe
 
@@ -522,7 +522,7 @@ def download_file(file_id):
             BytesIO(res_server_res.content),
             mimetype='text/plain',
             as_attachment=True,
-            attachment_filename=filename)
+            attachment_filename=filename if filename is not None else file_id + ".cpabe")
     flash('No file matching that name found', 'error')
     return render_template('download_fail.html')
 
@@ -562,6 +562,7 @@ def decrypt_file():
                 and allowed_file(user_key.filename, KEY_ALLOWED_EXTENSIONS):
                 file_bytes = enc_file.read()
                 key_bytes, username = process_key_decrypt(user_key)
+                print(extract_user_attrs(key_bytes))
                 if file_bytes is not None and key_bytes is not None:
                     openabe, cpabe = create_cpabe_instance(MASTER_PUBLIC_KEY)
                     cpabe.importUserKey(username, key_bytes)
