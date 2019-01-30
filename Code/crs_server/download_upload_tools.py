@@ -20,8 +20,10 @@ def filename_from_attachment(response):
         String representing the filename of the attachment.
 
     """
-    res_content_disp = response.headers["Content-Disposition"]
-    return re.findall("filename=(.+)", res_content_disp)[0]
+    if "Content-Disposition" in response.headers:
+        res_content_disp = response.headers["Content-Disposition"]
+        return re.findall("filename=(.+)", res_content_disp)[0]
+    return None
 
 
 def extract_policy(file_bytes):
@@ -46,3 +48,26 @@ def extract_policy(file_bytes):
     re_policy = re.findall(br"(?:policy\W+ )(.+)(?:\W\/\W)", file_contents)
     policy = re_policy[0].decode("utf-8")
     return policy
+
+def extract_user_attrs(key_bytes):
+    """Function to extract the user's attributes from a user key,
+    directly from the ciphertext. Since the user's attributes are
+    not encrypted but stored in plaintext, within the file.
+    Requires decoding the base64 bytes and using regex to extract
+    the user's attributes text.
+
+    Parameters
+    ----------
+    key_bytes : Bytes
+        Bytes object representing the ciphertext file `key_bytes`.
+
+    Returns
+    -------
+    user_attrs : string (utf-8)
+        String representing the user's attributes.
+
+    """
+    file_contents = base64.b64decode(key_bytes)
+    re_attrs = re.findall(br"(?:input\W+ *\|)(.*)(?:\|$)", file_contents)
+    user_attrs = re_attrs[0].decode("utf-8")
+    return user_attrs
