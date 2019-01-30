@@ -44,7 +44,8 @@ try:
         MASTER_PUBLIC_KEY = mpkf.read()
     CPABE.importSecretParams(MASTER_SECRET_KEY)
     CPABE.importPublicParams(MASTER_PUBLIC_KEY)
-    MASTER_KEYS_GENERATED = datetime.fromtimestamp(path.getmtime(MASTER_SECRET_KEY_FILE))
+    MASTER_KEYS_GENERATED = datetime.fromtimestamp(
+        path.getmtime(MASTER_SECRET_KEY_FILE))
 except EnvironmentError:
     try:
         CPABE.generateParams()
@@ -64,15 +65,18 @@ try:
     with open(GLOBAL_ABE_ATTRS_FILE, 'r') as gaaf:
         GLOBAL_ABE_ATTRS_JSON_PICKLED = gaaf.read()
     GLOBAL_ABE_ATTRS = jsonpickle.decode(GLOBAL_ABE_ATTRS_JSON_PICKLED)
-    GLOBAL_ABE_ATTRS_GENERATED = datetime.fromtimestamp(path.getmtime(GLOBAL_ABE_ATTRS_FILE))
+    GLOBAL_ABE_ATTRS_GENERATED = datetime.fromtimestamp(
+        path.getmtime(GLOBAL_ABE_ATTRS_FILE))
 except EnvironmentError:
-    LOG.error("Unable to recover global attributes file. Generating blank template...")
-    GLOBAL_ABE_ATTRS = {'strings': set(), 'integers': set(), 'dates': set(),\
-        'arrays': set(), 'flags': set()}
+    LOG.error(
+        "Unable to recover global attributes file. Generating blank template...")
+    GLOBAL_ABE_ATTRS = {'strings': set(), 'integers': set(), 'dates': set(),
+                        'arrays': set(), 'flags': set()}
     GLOBAL_ABE_ATTRS_JSON_PICKLED = jsonpickle.encode(GLOBAL_ABE_ATTRS)
     GLOBAL_ABE_ATTRS_GENERATED = datetime.now()
 
 del CPABE, OPENABE
+
 
 @APP.route('/')
 def hello_world():
@@ -90,6 +94,7 @@ def hello_world():
 
     """
     return render_template('index.html')
+
 
 @APP.route('/abe/get_public_key')
 def get_public_key():
@@ -114,6 +119,7 @@ def get_public_key():
         'abe_version': VERSION
     }
     return jsonify(mpk_payload)
+
 
 @APP.route('/abe/get_attributes')
 def get_attributes():
@@ -142,6 +148,7 @@ def get_attributes():
     }
     return jsonify(attributes_payload)
 
+
 def assign_value_key(attr_type, key, value):
     """Small function to provide the correct PyOpenABE separator
     for an attribute, based on its type.
@@ -161,10 +168,13 @@ def assign_value_key(attr_type, key, value):
         Reformatted string equivalent of the attribute.
 
     """
-    attr_separators = {"strings": ":", "integers": "=", "dates": " = ", "arrays": ":"}
+    attr_separators = {"strings": ":",
+                       "integers": "=", "dates": " = ", "arrays": ":"}
     separator = attr_separators[attr_type]
-    value = f"|{key}{separator}".join(map(str, value)) if attr_type == "arrays" else value
+    value = f"|{key}{separator}".join(
+        map(str, value)) if attr_type == "arrays" else value
     return f"{key}{separator}{value}"
+
 
 def create_attr_list(attrs):
     """Create string 'list' of user attributes from a dictionary.
@@ -184,14 +194,15 @@ def create_attr_list(attrs):
     user_attr_list = "|"
     for attr_type, attr in attrs.items():
         if attr_type in ('strings', 'integers', 'dates', 'arrays'):
-            formatted_attrs = list(map(partial(assign_value_key, attr_type),\
-                attr.keys(), attr.values()))
+            formatted_attrs = list(map(partial(assign_value_key, attr_type),
+                                       attr.keys(), attr.values()))
             user_attr_list += "|".join(formatted_attrs) + "|"
         elif attr_type == 'flags':
             user_attr_list += "|".join(attr) + "|"
         else:
             pass
     return user_attr_list
+
 
 def update_global_attrs(attrs):
     """Given a dictionary of recently issued attributes, updates
@@ -280,6 +291,7 @@ def generate_userkey(file_or_json):
                 attachment_filename=f"{str_username}.key")
     return jsonify({'msg': 'Improper JSON values. Ensure both "attributes" and\
         "username" keys are present!'}), 422
+
 
 @APP.errorhandler(404)
 def page_not_found(error):

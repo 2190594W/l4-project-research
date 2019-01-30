@@ -9,16 +9,18 @@ import uuid
 import json
 import requests
 from flask import Flask, flash, request, redirect, render_template,\
-url_for, send_from_directory, jsonify, abort
+    url_for, send_from_directory, jsonify, abort
 from flask.logging import create_logger
 #pylint: disable=E0401
 import pymongo
 from fuzzywuzzy import process
 
-CONNECTION = pymongo.MongoClient('localhost', 27017, uuidRepresentation='standard')
+CONNECTION = pymongo.MongoClient(
+    'localhost', 27017, uuidRepresentation='standard')
 DB = CONNECTION.ResourceServer
 DB.resource_meta.ensure_index('id', unique=True)
-DB.resource_meta.ensure_index([('search_filename', pymongo.TEXT)], default_language='english')
+DB.resource_meta.ensure_index(
+    [('search_filename', pymongo.TEXT)], default_language='english')
 META_DB = DB.resource_meta
 
 UPLOAD_FOLDER = '/tmp/flask/file/uploads'
@@ -47,6 +49,7 @@ except EnvironmentError:
 
 APP.config['MAX_CONTENT_LENGTH'] = 100 * 1024 * 1024
 APP.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+
 
 def update_mpk_file(mk_server, mpk_file_path):
     """Function to process updating the given MASTER PUBLIC KEY (MPK)
@@ -78,19 +81,24 @@ def update_mpk_file(mk_server, mpk_file_path):
         return mpk, mpk_u
     raise EnvironmentError('Unable to reach dev msk server.')
 
+
 try:
     with open(MASTER_PUBLIC_KEY_FILE, 'rb') as mpkf:
         MASTER_PUBLIC_KEY = mpkf.read()
-    MASTER_KEY_UPDATED = datetime.fromtimestamp(path.getmtime(MASTER_PUBLIC_KEY_FILE))
+    MASTER_KEY_UPDATED = datetime.fromtimestamp(
+        path.getmtime(MASTER_PUBLIC_KEY_FILE))
     LOG.info("Collected master public key from config file.")
 except EnvironmentError:
     try:
-        MASTER_PUBLIC_KEY, MASTER_KEY_UPDATED = update_mpk_file(MK_SERVER, MASTER_PUBLIC_KEY_FILE)
+        MASTER_PUBLIC_KEY, MASTER_KEY_UPDATED = update_mpk_file(
+            MK_SERVER, MASTER_PUBLIC_KEY_FILE)
     except EnvironmentError:
         LOG.error("FATAL ERROR: ABORTING SERVER")
-        LOG.error("Cannot run server without global attributes file: %s", MASTER_PUBLIC_KEY_FILE)
+        LOG.error("Cannot run server without global attributes file: %s",
+                  MASTER_PUBLIC_KEY_FILE)
         LOG.error("Unexpected error: %s", exc_info()[0])
         exit()
+
 
 def update_gaa_file(mk_server, gaa_file_path):
     """Function to process updating the given GLOBAL ABE ATTRS (GAA)
@@ -124,11 +132,13 @@ def update_gaa_file(mk_server, gaa_file_path):
         return gaa, gaa_j, gaa_u
     raise EnvironmentError('Unable to reach dev msk server.')
 
+
 try:
     with open(GLOBAL_ABE_ATTRS_FILE, 'r') as gaaf:
         GLOBAL_ABE_ATTRS_JSON = gaaf.read()
     GLOBAL_ABE_ATTRS = json.loads(GLOBAL_ABE_ATTRS_JSON)
-    GLOBAL_ABE_ATTRS_UPDATED = datetime.fromtimestamp(path.getmtime(GLOBAL_ABE_ATTRS_FILE))
+    GLOBAL_ABE_ATTRS_UPDATED = datetime.fromtimestamp(
+        path.getmtime(GLOBAL_ABE_ATTRS_FILE))
     LOG.info("Collected attributes from config file.")
 except EnvironmentError:
     try:
@@ -136,9 +146,11 @@ except EnvironmentError:
             update_gaa_file(MK_SERVER, GLOBAL_ABE_ATTRS_FILE)
     except EnvironmentError:
         LOG.error("FATAL ERROR: ABORTING SERVER")
-        LOG.error("Cannot run server without global attributes file %s", GLOBAL_ABE_ATTRS_FILE)
+        LOG.error("Cannot run server without global attributes file %s",
+                  GLOBAL_ABE_ATTRS_FILE)
         LOG.error("Unexpected error: %s", exc_info()[0])
         exit()
+
 
 def allowed_file(filename):
     """Small function to validate that a given filename ends with a valid extension.
@@ -157,6 +169,7 @@ def allowed_file(filename):
     return '.' in filename and \
            filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
+
 @APP.route('/')
 def hello_world():
     """Simple template generation for homepage/index of app.
@@ -173,6 +186,7 @@ def hello_world():
 
     """
     return render_template('index.html')
+
 
 @APP.route('/upload', methods=['GET', 'POST'])
 def upload_file():
@@ -203,7 +217,8 @@ def upload_file():
         else:
             author = request.form["author"]
         if 'policy' not in request.form:
-            flash('No policy provided for metadata! File will be uploaded without.', 'info')
+            flash(
+                'No policy provided for metadata! File will be uploaded without.', 'info')
             policy = None
         else:
             policy = request.form["policy"]
@@ -215,7 +230,8 @@ def upload_file():
             return redirect(request.url)
         if file and allowed_file(file.filename):
             new_filename = uuid.uuid4()
-            file_path = path.join(APP.config['UPLOAD_FOLDER'], str(new_filename) + ".cpabe")
+            file_path = path.join(
+                APP.config['UPLOAD_FOLDER'], str(new_filename) + ".cpabe")
             try:
                 file.save(file_path)
                 uploaded_at = datetime.now()
@@ -267,10 +283,11 @@ def download_cpabe_file(file_id):
             filename = file_id + ".cpabe"
     try:
         return send_from_directory(
-            APP.config['UPLOAD_FOLDER'], file_id + ".cpabe",\
-                as_attachment=True, attachment_filename=filename)
+            APP.config['UPLOAD_FOLDER'], file_id + ".cpabe",
+            as_attachment=True, attachment_filename=filename)
     except EnvironmentError:
         abort(404)
+
 
 @APP.route('/download_meta/<string:file_id>')
 def download_meta_file(file_id):
@@ -300,10 +317,11 @@ def download_meta_file(file_id):
             filename = file_id + ".meta"
     try:
         return send_from_directory(
-            APP.config['UPLOAD_FOLDER'], file_id + ".meta",\
-                as_attachment=True, attachment_filename=filename)
+            APP.config['UPLOAD_FOLDER'], file_id + ".meta",
+            as_attachment=True, attachment_filename=filename)
     except EnvironmentError:
         abort(404)
+
 
 @APP.route('/file_meta/<string:file_id>')
 def get_file_meta(file_id):
@@ -324,12 +342,14 @@ def get_file_meta(file_id):
 
     """
     try:
-        file_obj = META_DB.find_one({"id": uuid.UUID(file_id)}, {"_id": 0, "id": 0})
+        file_obj = META_DB.find_one(
+            {"id": uuid.UUID(file_id)}, {"_id": 0, "id": 0})
     except ValueError:
         return abort(404)
     if file_obj is not None:
         return jsonify(file_obj)
     return abort(404)
+
 
 # TODO: This is a näive implementation. If there are too many files,
 # the response would be massive, so paging would be needed here
@@ -351,13 +371,15 @@ def get_all_filenames():
     """
     all_files = []
     for resource in META_DB.find({}, {"id", "filename"}):
-        all_files.append({"id": resource["id"], "filename": resource["filename"]})
+        all_files.append(
+            {"id": resource["id"], "filename": resource["filename"]})
     filenames_payload = {
         'files': all_files,
         'updated_at': datetime.now(),
         'abe_version': VERSION
     }
     return jsonify(filenames_payload)
+
 
 @APP.route('/files/search/<string:search_term>')
 def search_files(search_term):
@@ -392,7 +414,7 @@ def search_files(search_term):
     for resource in META_DB.find(
             {"$text": {"$search": search_term}},
             {"score": {"$meta": "textScore"}, "id": 1, "filename": 1}
-        ).sort([("score", {"$meta": "textScore"})]).limit(search_limit):
+    ).sort([("score", {"$meta": "textScore"})]).limit(search_limit):
         all_files.append({
             "id": str(resource["id"]),
             "filename": resource["filename"],
@@ -406,6 +428,7 @@ def search_files(search_term):
     if err_msg:
         filenames_payload['err_msg'] = err_msg
     return jsonify(filenames_payload)
+
 
 @APP.route('/files/fuzzy_search/<string:search_term>')
 def fuzzy_search_files(search_term):
@@ -440,10 +463,12 @@ def fuzzy_search_files(search_term):
     all_files = {}
     for resource in META_DB.find({}, {"id", "filename"}):
         all_files[str(resource["id"])] = resource["filename"]
-    searched_file_objs = process.extract(search_term, all_files, limit=fuzzy_limit)
+    searched_file_objs = process.extract(
+        search_term, all_files, limit=fuzzy_limit)
     all_files = []
     for file in searched_file_objs:
-        all_files.append({"id": file[2], "filename": file[0], "search_score": file[1]})
+        all_files.append(
+            {"id": file[2], "filename": file[0], "search_score": file[1]})
     filenames_payload = {
         'files': all_files,
         'updated_at': datetime.now(),
@@ -452,6 +477,7 @@ def fuzzy_search_files(search_term):
     if err_msg:
         filenames_payload['err_msg'] = err_msg
     return jsonify(filenames_payload)
+
 
 @APP.route('/abe/latest_mpk')
 def get_latest_mpk():
@@ -477,6 +503,7 @@ def get_latest_mpk():
     }
     return jsonify(mpk_payload)
 
+
 @APP.route('/abe/latest_attributes')
 def get_latest_attributes():
     """Send latest Global ABE Attributes (gaa) value as JSON,
@@ -500,6 +527,7 @@ def get_latest_attributes():
         'abe_version': VERSION
     }
     return jsonify(attributes_payload)
+
 
 @APP.errorhandler(404)
 def page_not_found(error):
