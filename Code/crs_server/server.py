@@ -10,7 +10,7 @@ import json
 import requests
 from werkzeug.utils import secure_filename
 from flask import Flask, flash, request, redirect, render_template,\
-url_for, send_file, jsonify, abort
+    url_for, send_file, jsonify, abort
 from flask.logging import create_logger
 from decrypt_encrypt_tools import create_cpabe_instance, process_key_decrypt
 from download_upload_tools import filename_from_attachment, extract_policy, extract_user_attrs
@@ -51,6 +51,7 @@ except EnvironmentError:
 
 APP.config['MAX_CONTENT_LENGTH'] = 100 * 1024 * 1024
 
+
 def get_latest_mpk(mpk_f):
     """Collect latest Master Public Key (mpk) file from Resource Server.
 
@@ -78,19 +79,24 @@ def get_latest_mpk(mpk_f):
         return mpk, mku
     raise EnvironmentError('Unable to reach dev res server.')
 
+
 try:
     with open(MASTER_PUBLIC_KEY_FILE, 'rb') as mpkf:
         MASTER_PUBLIC_KEY = mpkf.read()
-    MASTER_KEY_UPDATED = datetime.fromtimestamp(path.getmtime(MASTER_PUBLIC_KEY_FILE))
+    MASTER_KEY_UPDATED = datetime.fromtimestamp(
+        path.getmtime(MASTER_PUBLIC_KEY_FILE))
     LOG.info("Collected master public key from config file.")
 except EnvironmentError:
     try:
-        MASTER_PUBLIC_KEY, MASTER_KEY_UPDATED = get_latest_mpk(MASTER_PUBLIC_KEY_FILE)
+        MASTER_PUBLIC_KEY, MASTER_KEY_UPDATED = get_latest_mpk(
+            MASTER_PUBLIC_KEY_FILE)
     except EnvironmentError:
         LOG.error("FATAL ERROR: ABORTING SERVER")
-        LOG.error("Cannot run server without global attributes file: %s", MASTER_PUBLIC_KEY_FILE)
+        LOG.error("Cannot run server without global attributes file: %s",
+                  MASTER_PUBLIC_KEY_FILE)
         LOG.error("Unexpected error: %s", exc_info()[0])
         exit()
+
 
 def get_latest_attributes(gaa_f):
     """Collect latest Global ABE Attributes (gaa) file from Resource Server.
@@ -122,11 +128,13 @@ def get_latest_attributes(gaa_f):
         return gaa, gaaj, gaau
     raise EnvironmentError('Unable to reach dev res server.')
 
+
 try:
     with open(GLOBAL_ABE_ATTRS_FILE, 'r') as gaaf:
         GLOBAL_ABE_ATTRS_JSON = gaaf.read()
     GLOBAL_ABE_ATTRS = json.loads(GLOBAL_ABE_ATTRS_JSON)
-    GLOBAL_ABE_ATTRS_UPDATED = datetime.fromtimestamp(path.getmtime(GLOBAL_ABE_ATTRS_FILE))
+    GLOBAL_ABE_ATTRS_UPDATED = datetime.fromtimestamp(
+        path.getmtime(GLOBAL_ABE_ATTRS_FILE))
     LOG.info("Collected attributes from config file.")
 except EnvironmentError:
     try:
@@ -134,9 +142,11 @@ except EnvironmentError:
             = get_latest_attributes(GLOBAL_ABE_ATTRS_FILE)
     except EnvironmentError:
         LOG.error("FATAL ERROR: ABORTING SERVER")
-        LOG.error("Cannot run server without global attributes file: %s", GLOBAL_ABE_ATTRS_FILE)
+        LOG.error("Cannot run server without global attributes file: %s",
+                  GLOBAL_ABE_ATTRS_FILE)
         LOG.error("Unexpected error: %s", exc_info()[0])
         exit()
+
 
 def allowed_file(filename, allowed_extensions):
     """Small function to validate that a given filename ends with a valid extension.
@@ -157,6 +167,7 @@ def allowed_file(filename, allowed_extensions):
     return '.' in filename and \
            filename.rsplit('.', 1)[1].lower() in allowed_extensions
 
+
 @APP.route('/')
 def hello_world():
     """Simple template generation for homepage/index of app.
@@ -173,6 +184,7 @@ def hello_world():
 
     """
     return render_template('index.html')
+
 
 @APP.route('/abe/check_mpk_updated')
 def check_mpk_updated():
@@ -197,10 +209,11 @@ def check_mpk_updated():
     if mpk2 != MASTER_PUBLIC_KEY:
         MASTER_PUBLIC_KEY = mpk2
         MASTER_KEY_UPDATED = mku2
-        return render_template('mpk_updated.html', updated=True,\
-            mpk=MASTER_PUBLIC_KEY.decode('UTF-8'), mku=MASTER_KEY_UPDATED)
-    return render_template('mpk_updated.html', updated=False,\
-        mpk=MASTER_PUBLIC_KEY, mku=MASTER_KEY_UPDATED)
+        return render_template('mpk_updated.html', updated=True,
+                               mpk=MASTER_PUBLIC_KEY.decode('UTF-8'), mku=MASTER_KEY_UPDATED)
+    return render_template('mpk_updated.html', updated=False,
+                           mpk=MASTER_PUBLIC_KEY, mku=MASTER_KEY_UPDATED)
+
 
 @APP.route('/abe/latest_mpk_file')
 def latest_mpk_file():
@@ -224,6 +237,7 @@ def latest_mpk_file():
         mimetype='text/plain',
         as_attachment=True,
         attachment_filename="master_public_key.key")
+
 
 @APP.route('/abe/latest_mpk_json')
 def latest_mpk_json():
@@ -250,6 +264,7 @@ def latest_mpk_json():
     }
     return jsonify(mpk_payload)
 
+
 @APP.route('/abe/check_attributes_updated')
 def check_attributes_updated():
     """Checks if current stored GAA are up to date with Resource Server.
@@ -275,10 +290,11 @@ def check_attributes_updated():
         GLOBAL_ABE_ATTRS = gaa2
         GLOBAL_ABE_ATTRS_JSON = gaaj2
         GLOBAL_ABE_ATTRS_UPDATED = gaau2
-        return render_template('attrs_updated.html', updated=True, gaaj=GLOBAL_ABE_ATTRS_JSON,\
-            gaau=GLOBAL_ABE_ATTRS_UPDATED)
-    return render_template('attrs_updated.html', updated=False, gaaj=GLOBAL_ABE_ATTRS_JSON,\
-        gaau=GLOBAL_ABE_ATTRS_UPDATED)
+        return render_template('attrs_updated.html', updated=True, gaaj=GLOBAL_ABE_ATTRS_JSON,
+                               gaau=GLOBAL_ABE_ATTRS_UPDATED)
+    return render_template('attrs_updated.html', updated=False, gaaj=GLOBAL_ABE_ATTRS_JSON,
+                           gaau=GLOBAL_ABE_ATTRS_UPDATED)
+
 
 @APP.route('/abe/latest_attributes_file')
 def latest_attributes_file():
@@ -302,6 +318,7 @@ def latest_attributes_file():
         mimetype='text/plain',
         as_attachment=True,
         attachment_filename="global_attrs.config")
+
 
 @APP.route('/abe/latest_attributes_json')
 def latest_attributes_json():
@@ -327,6 +344,7 @@ def latest_attributes_json():
         'abe_version': VERSION
     }
     return jsonify(attributes_payload)
+
 
 @APP.route('/upload', methods=['GET', 'POST'])
 def upload_file():
@@ -357,6 +375,11 @@ def upload_file():
         else:
             author = request.form["author"]
         file = request.files['file']
+        # if user does not select file, browser also
+        # submit an empty part without filename
+        if file.filename == '':
+            flash('No selected file', 'info')
+            return redirect(request.url)
         if 'policy' not in request.form:
             flash('Policy not provided, attempted to extract from file.', 'info')
             policy = None
@@ -370,22 +393,18 @@ def upload_file():
                 flash('Policy extraction failed.', 'warning')
                 LOG.error("IndexError occurred: %s", err)
                 policy = "Unknown"
-        # if user does not select file, browser also
-        # submit an empty part without filename
-        if file.filename == '':
-            flash('No selected file', 'info')
-            return redirect(request.url)
         if file and allowed_file(file.filename, DEC_ALLOWED_EXTENSIONS):
             file.filename = secure_filename(file.filename)
             print(file.filename)
             files = {'file': (file.filename, file.read(), file.content_type)}
-            res_server_res = requests.post(f'{RES_SERVER}/upload',\
-                files=files, data={"author": author, "policy": policy})
+            res_server_res = requests.post(f'{RES_SERVER}/upload',
+                                           files=files, data={"author": author, "policy": policy})
             if res_server_res.status_code == 200:
                 flash('successfully uploaded!', 'info')
                 return redirect(url_for('get_all_filenames'), code=303)
         flash('Error with upload!', 'error')
     return render_template('upload.html')
+
 
 @APP.route('/encrypt', methods=['GET', 'POST'])
 def encrypt_file():
@@ -438,6 +457,7 @@ def encrypt_file():
         flash('Error with encryption!', 'error')
     return render_template('encrypt.html')
 
+
 @APP.route('/encrypt_upload', methods=['GET', 'POST'])
 def encrypt_upload_file():
     """View to encrypt and upload a file for the user.
@@ -488,13 +508,14 @@ def encrypt_upload_file():
             del openabe, cpabe
             file.filename += '.cpabe'
             files = {'file': (file.filename, ct_file, file.content_type)}
-            res_server_res = requests.post(f'{RES_SERVER}/upload',\
-                files=files, data={"author": author, "policy": policy})
+            res_server_res = requests.post(f'{RES_SERVER}/upload',
+                                           files=files, data={"author": author, "policy": policy})
             if res_server_res.status_code == 200:
                 flash('successfully uploaded!', 'info')
                 return redirect(url_for('get_all_filenames'), code=303)
         flash('Error with upload!', 'error')
     return render_template('encrypt_upload.html')
+
 
 @APP.route('/download/<string:file_id>')
 def download_file(file_id):
@@ -525,6 +546,7 @@ def download_file(file_id):
             attachment_filename=filename if filename is not None else file_id + ".cpabe")
     flash('No file matching that name found', 'error')
     return render_template('download_fail.html')
+
 
 @APP.route('/decrypt', methods=['GET', 'POST'])
 def decrypt_file():
@@ -559,7 +581,7 @@ def decrypt_file():
             elif user_key.filename == '':
                 flash('No user key provided!', 'info')
             elif enc_file and user_key and allowed_file(enc_file.filename, DEC_ALLOWED_EXTENSIONS)\
-                and allowed_file(user_key.filename, KEY_ALLOWED_EXTENSIONS):
+                    and allowed_file(user_key.filename, KEY_ALLOWED_EXTENSIONS):
                 file_bytes = enc_file.read()
                 key_bytes, username = process_key_decrypt(user_key)
                 print(extract_user_attrs(key_bytes))
@@ -583,6 +605,7 @@ def decrypt_file():
                 flash('Issue with files! Make sure user key is a .key file and that the\
                     encrypted file is a .cpabe file!', 'error')
     return render_template('decrypt.html')
+
 
 @APP.route('/download_decrypt/<string:file_id>', methods=['GET', 'POST'])
 def download_decrypt_file(file_id):
@@ -645,6 +668,7 @@ def download_decrypt_file(file_id):
         return render_template('download_decrypt.html', file=filename, error=True)
     return render_template('download_decrypt.html', filename=res_json_dict["filename"])
 
+
 # TODO: This is a näive implementation. If there are too many files,
 # the response would be massive, so paging would be needed here
 @APP.route('/all_filenames')
@@ -671,6 +695,7 @@ def get_all_filenames():
         all_files = res_dict['files']
     return render_template('all_files.html', files=all_files)
 
+
 @APP.route('/files/search')
 def search_files_index():
     """Simple template to allow a user to enter their desired search
@@ -694,6 +719,7 @@ def search_files_index():
         search_term = ""
     return render_template('search_files.html', files=None, search_term=search_term)
 
+
 @APP.route('/files/search/<string:search_term>')
 def search_files(search_term):
     """Fetches list of uploaded filenames from Resource server and
@@ -714,12 +740,14 @@ def search_files(search_term):
 
     """
     query_str = request.query_string.decode("utf-8")
-    response = requests.get(f'{RES_SERVER}/files/search/' + search_term + "?" + query_str)
+    response = requests.get(
+        f'{RES_SERVER}/files/search/' + search_term + "?" + query_str)
     all_files = None
     if response.status_code == 200:
         res_dict = json.loads(response.content)
         all_files = res_dict['files']
     return render_template('search_files.html', files=all_files, search_term=search_term)
+
 
 @APP.route('/files/fuzzy_search')
 def fuzzy_search_files_index():
@@ -744,6 +772,7 @@ def fuzzy_search_files_index():
         search_term = ""
     return render_template('fuzzy_search_files.html', files=None, search_term=search_term)
 
+
 @APP.route('/files/fuzzy_search/<string:search_term>')
 def fuzzy_search_files(search_term):
     """Fetches list of uploaded filenames from Resource server and
@@ -764,12 +793,99 @@ def fuzzy_search_files(search_term):
 
     """
     query_str = request.query_string.decode("utf-8")
-    response = requests.get(f'{RES_SERVER}/files/fuzzy_search/' + search_term + "?" + query_str)
+    response = requests.get(
+        f'{RES_SERVER}/files/fuzzy_search/' + search_term + "?" + query_str)
     all_files = None
     if response.status_code == 200:
         res_dict = json.loads(response.content)
         all_files = res_dict['files']
     return render_template('fuzzy_search_files.html', files=all_files, search_term=search_term)
+
+
+@APP.route('/extract_policy', methods=['GET', 'POST'])
+def extract_policy_view():
+    """If GET request, simple template generation for page of app.
+    If POST request, handle extracting the policy embedded
+    in the uploaded file, while validating file and filename.
+    If successful, generates page of extracted info.
+    Attached to '/extract_policy' route by flask annotation.
+
+    Parameters
+    ----------
+
+
+    Returns
+    -------
+    Response (flask)
+        Generates flask Response object from Jinja2 template.
+
+    """
+    if request.method == 'POST':
+        # check if the post request has the file part
+        if 'enc_file' not in request.files:
+            flash('No file part', 'info')
+            return redirect(request.url)
+        file = request.files['enc_file']
+        # if user does not select file, browser also
+        # submit an empty part without filename
+        if file.filename == '':
+            flash('No selected file', 'info')
+            return redirect(request.url)
+        try:
+            extr_policy = extract_policy(file.read())
+            if extr_policy != "Unknown":
+                flash('Policy extraction successful.', 'info')
+            return render_template('extract_policy.html', extr_policy=extr_policy)
+        except IndexError as err:
+            flash('Policy extraction failed.', 'warning')
+            LOG.error("IndexError occurred: %s", err)
+            extr_policy = "Unknown"
+        flash('Error with file for extraction!', 'error')
+        return render_template('extract_policy.html', extr_policy=extr_policy)
+    return render_template('extract_policy.html', extr_policy=None)
+
+@APP.route('/extract_user_attrs', methods=['GET', 'POST'])
+def extract_user_attrs_view():
+    """If GET request, simple template generation for page of app.
+    If POST request, handle extracting the user attributes embedded
+    in the uploaded file, while validating file and filename.
+    If successful, generates page of extracted info.
+    Attached to '/extract_user_attrs' route by flask annotation.
+
+    Parameters
+    ----------
+
+
+    Returns
+    -------
+    Response (flask)
+        Generates flask Response object from Jinja2 template.
+
+    """
+    if request.method == 'POST':
+        # check if the post request has the file part
+        if 'user_key' not in request.files:
+            flash('No file part', 'info')
+            return redirect(request.url)
+        file = request.files['user_key']
+        # if user does not select file, browser also
+        # submit an empty part without filename
+        if file.filename == '':
+            flash('No selected file', 'info')
+            return redirect(request.url)
+        try:
+            user_attrs = extract_user_attrs(file.read())
+            if user_attrs != "Unknown":
+                flash('User attributes extraction successful.', 'info')
+            return render_template('extract_user_attrs.html', user_attrs=user_attrs)
+        except IndexError as err:
+            flash('User attributes extraction failed.', 'warning')
+            LOG.error("IndexError occurred: %s", err)
+            user_attrs = "Unknown"
+        flash('Error with file for extraction!', 'error')
+        return render_template('extract_user_attrs.html', user_attrs=user_attrs)
+    return render_template('extract_user_attrs.html', user_attrs=None)
+
 
 @APP.errorhandler(404)
 def page_not_found(error):
