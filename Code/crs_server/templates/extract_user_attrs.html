@@ -1,0 +1,14 @@
+{% extends "layout.html" %}
+{% block body %}
+  {% if user_attrs %}
+    <h1>Extracted User Attributes</h1><br />
+    <h5>{{ user_attrs }}</h5>
+  {% else %}
+    <h1>Extract User Attributes from User Key</h1>
+    <form method="post" enctype="multipart/form-data">
+      <label for="user_key">User Key File (<em>.key</em>):</label>
+      <input type="file" name="user_key">
+      <input type="submit" value="Extract">
+    </form>
+  {% endif %}
+{% endblock %}

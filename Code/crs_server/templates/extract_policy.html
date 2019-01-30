@@ -1,0 +1,14 @@
+{% extends "layout.html" %}
+{% block body %}
+  {% if extr_policy %}
+    <h1>Extracted Policy</h1><br />
+    <h5>{{ extr_policy }}</h5>
+  {% else %}
+    <h1>Extract Policy from <strong>encrypted</strong> File</h1>
+    <form method="post" enctype="multipart/form-data">
+      <label for="enc_file">Encrypted File (<em>.cpabe</em>):</label>
+      <input type="file" name="enc_file">
+      <input type="submit" value="Extract">
+    </form>
+  {% endif %}
+{% endblock %}
