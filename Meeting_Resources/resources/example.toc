@@ -1,0 +1,7 @@
+\contentsline {paragraph}{Reading Guide}{1}
+\contentsline {section}{\numberline {1}Abstract Syntax, Types, \& Contexts}{2}
+\contentsline {section}{\numberline {2}Typing Rules}{2}
+\contentsline {section}{\numberline {3}Substitution}{2}
+\contentsline {section}{\numberline {4}Big Step Semantics}{3}
+\contentsline {section}{\numberline {5}Interpretation}{3}
+\contentsline {section}{\numberline {6}Note}{4}

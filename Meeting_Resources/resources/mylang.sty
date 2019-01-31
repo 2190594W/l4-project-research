@@ -1,0 +1,51 @@
+\ProvidesPackage{mylang}
+
+\RequirePackage{jfdm-plt}
+\RequirePackage{bbm}
+\RequirePackage{amsmath}
+\RequirePackage{textcomp}
+\RequirePackage{newtxmath}
+
+% It is a good idea to macro names that may change.
+
+\newcommand{\mylang}{\textsc{MyLang}}
+
+% Help us make constructions in our language
+\newcommand{\newExpr}[2]{\ensuremath{#1\,(#2)}}
+
+% -------------------------------------------------------------------- [ Maths ]
+
+\MkEnum{\ExprAdd}{add}
+\MkEnum{\ExprSub}{sub}
+\MkEnum{\ExprMul}{mul}
+\MkEnum{\ExprDiv}{div}
+\MkEnum{\ExprNeg}{neg}
+
+\newcommand{\exprAdd}[2]{\newExpr{\ExprAdd}{#1,#2}}
+\newcommand{\exprSub}[2]{\newExpr{\ExprSub}{#1,#2}}
+\newcommand{\exprDiv}[2]{\newExpr{\ExprDiv}{#1,#2}}
+\newcommand{\exprMul}[2]{\newExpr{\ExprMul}{#1,#2}}
+\newcommand{\exprNeg}[1]{\newExpr{\ExprNeg}{#1}}
+
+% ------------------------------------------------------------------ [ Boolean ]
+
+\MkEnum{\ExprGT}{greaterThan}
+\MkEnum{\ExprLT}{lessThan}
+\MkEnum{\ExprEQ}{equal}
+
+\newcommand{\exprGT}[2]{\newExpr{\ExprGT}{#1,#2}}
+\newcommand{\exprLT}[2]{\newExpr{\ExprLT}{#1,#2}}
+\newcommand{\exprEQ}[2]{\newExpr{\ExprEQ}{#1,#2}}
+
+
+\MkEnum{\ExprOr}{or}
+\MkEnum{\ExprAnd}{and}
+\MkEnum{\ExprXor}{xor}
+\MkEnum{\ExprNot}{not}
+
+\newcommand{\exprOr}[2]{\newExpr{\ExprOr}{#1,#2}}
+\newcommand{\exprAnd}[2]{\newExpr{\ExprAnd}{#1,#2}}
+\newcommand{\exprXor}[2]{\newExpr{\ExprXor}{#1,#2}}
+\newcommand{\exprNot}[1]{\newExpr{\ExprNot}{#1}}
+
+\endinput

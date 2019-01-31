@@ -1,0 +1,569 @@
+\documentclass[10pt,a4paper,british,final]{article}
+
+\usepackage{csquotes}
+
+\usepackage{lmodern}
+\usepackage{isodate}
+\usepackage{geometry}
+\usepackage{inconsolata}
+
+\usepackage{jfdm-plt}
+\usepackage{mylang}
+\usepackage{url}
+\usepackage{cleveref}
+
+\title{Some notes on presenting \emph{formal languages}.}
+\author{Jan de Muijnck-Hughes}
+\date{\printdate{2019-01-29}}
+
+\begin{document}
+\maketitle{}
+
+This document presents a rough guide on formal programming language descriptions.
+We do this through consideration of a simple language for integer and boolean arithmetic.
+The original reduced version of this language was presented by Jeremy Siek in his blog post:
+\begin{center}
+  \url{http://siek.blogspot.com/2012/07/crash-course-on-notation-in-programming.html}
+\end{center}
+
+\noindent
+Jeremy Siek has since released more material from a two part seminar series originally presented at $\lambda$ Conf.\@ 2018.
+  \begin{itemize}
+  \item Part 1: \url{https://youtu.be/vU3caZPtT2I}
+  \item Part 2: \url{https://youtu.be/MhuK_aepu1Y}
+  \item Accompanying notes: \url{https://t.co/nvWmlkPewl}
+\end{itemize}
+
+\paragraph{Reading Guide}
+\begin{itemize}
+\item
+  \Cref{sec:defs,sec:typing-rules,sec:substitution,sec:semantics,sec:interpretation}:
+  If you are interested in describing an executable policy language.
+\item
+  \Cref{sec:defs,sec:typing-rules,sec:substitution,sec:interpretation}:
+  If you are interested in describing a modelling language that goes from one modelling language to another.
+\end{itemize}
+
+\tableofcontents
+\newpage
+\section{Abstract Syntax, Types, \& Contexts}\label{sec:defs}
+
+\begin{figure}[ht]
+  \centering
+\begin{align*}
+  n
+  &
+    \Coloneqq
+    \text{Integers}
+  & \text{Constants}
+  \\
+  b
+  & \Coloneqq
+    \EnumFalse \alt \EnumTrue
+  \\
+  e
+  &
+    \Coloneqq
+    \mu
+    \alt
+    n
+    \alt
+    b
+  & \text{Variables/Constants}
+  \\
+  & \firstAlt
+    \exprAdd{e}{e}
+    \alt
+    \exprSub{e}{e}
+    \alt
+    \exprDiv{e}{e}
+    \alt
+    \exprMul{e}{e}
+    \alt
+    \exprNeg{e}
+  & \text{Expressions}
+  \\
+  &
+    \firstAlt
+    \exprGT{e}{e}
+    \alt
+    \exprLT{e}{e}
+    \alt
+    \exprEQ{e}{e}
+  &
+  \\
+  & \firstAlt
+    \exprOr{e}{e}
+    \alt
+    \exprAnd{e}{e}
+    \alt
+    \exprXor{e}{e}
+    \alt
+    \exprNot{e}
+  &
+  \\
+  &
+    \firstAlt
+    \stmtLet{\mu}{e}{e}
+    \alt
+    \stmtIf{e}{e}{e}
+  &
+    \text{Statements}
+  \\
+  \ty{T}{\mathcal{T}}
+  &
+    \Coloneqq
+    \TyInt
+    \alt
+    \TyBool
+  &
+    \text{Types}
+  \\
+  \Gamma
+  &
+    \Coloneqq
+    \envAdd{(\ty{x}{T})}
+    \alt
+    \emptyset
+    &
+      \text{Context}
+\end{align*}
+  \caption{\label{fig:syntax}Our language's abstract systanx, types, and context.}
+\end{figure}
+
+\Cref{fig:syntax} presents the syntactical structure, and types for our language.
+Our language contains Integers and Boolean values, we leave abstract how integers are written.
+Variables ($\mu$) are constructed using Let-bindings, and conditional statements take the well-known form of \texttt{if-then-else}.
+
+Core expressions allow for addition, substraction, division, multiplication, and negation of integers.
+Integers can also be compared using standard comparison operations of: greater-than, less-than, and equals-to.
+Boolean operators provide logical negation, conjunction, disjunction, and, exclusive disjunction.
+
+A context ($\Gamma$) keeps track of well-typed expressions, and our context can be expanded.
+
+\section{Typing Rules}\label{sec:typing-rules}
+
+\begin{figure}[ht]
+  \centering
+\begin{mathpar}
+  \infer*[left=Intro-Nat]
+  {
+    \\
+  }
+  {
+    \ty{n}{\TyInt}
+  }
+  \and
+  \infer*[left=Intro-F]
+  {
+    \\
+  }
+  {
+    \ty{\EnumFalse}{\TyBool}
+  }
+  \and
+  \infer*[left=Intro-T]
+  {
+    \\
+  }
+  {
+    \ty{\EnumTrue}{\TyBool}
+  }
+  \and
+  \infer*[left=VAR]
+  {
+    \ty{\mu}{T}\in\Gamma
+  }
+  {
+    \ty{\mu}{T}
+  }
+  \and
+  \infer*[left=ADD]
+  {
+    \env{\ty{a}{\TyInt}}\\
+    \env{\ty{b}{\TyInt}}
+  }
+  {
+    \env{\ty{\exprAdd{a}{b}}{\TyInt}}
+  }
+  \and
+  \infer*[left=Sub]
+  {
+    \env{\ty{a}{\TyInt}}\\
+    \env{\ty{b}{\TyInt}}
+  }
+  {
+    \env{\ty{\exprSub{a}{b}}{\TyInt}}
+  }
+  \and
+  \infer*[left=DIV]
+  {
+    \env{\ty{a}{\TyInt}}\\
+    \env{\ty{b}{\TyInt}}
+  }
+  {
+    \env{\ty{\exprDiv{a}{b}}{\TyInt}}
+  }
+  \and
+  \infer*[left=MUL]
+  {
+    \env{\ty{a}{\TyInt}}\\
+    \env{\ty{b}{\TyInt}}
+  }
+  {
+    \env{\ty{\exprMul{a}{b}}{\TyInt}}
+  }
+  \and
+  \infer*[left=NEG]
+  {
+    \env{\ty{n}{\TyInt}}
+  }
+  {
+    \env{\ty{\exprNeg{n}}{\TyInt}}
+  }
+  \and
+  \infer*[left=OR]
+  {
+    \env{\ty{a}{\TyBool}}\\
+    \env{\ty{b}{\TyBool}}
+  }
+  {
+    \env{\ty{\exprOr{a}{b}}{\TyBool}}
+  }
+  \and
+  \infer*[left=AND]
+  {
+    \env{\ty{a}{\TyBool}}\\
+    \env{\ty{b}{\TyBool}}
+  }
+  {
+    \env{\ty{\exprAnd{a}{b}}{\TyBool}}
+  }
+  \and
+  \infer*[left=Xor]
+  {
+    \env{\ty{a}{\TyBool}}\\
+    \env{\ty{b}{\TyBool}}
+  }
+  {
+    \env{\ty{\exprXor{a}{b}}{\TyBool}}
+  }
+  \and
+  \infer*[left=NOT]
+  {
+    \env{\ty{n}{\TyBool}}
+  }
+  {
+    \env{\ty{\exprNot{n}}{\TyBool}}
+  }
+  \and
+  \infer*[left=GT]
+  {
+    \env{\ty{a}{\TyInt}}\\
+    \env{\ty{b}{\TyInt}}
+  }
+  {
+    \env{\ty{\exprGT{a}{b}}{\TyBool}}
+  }
+  \and
+  \infer*[left=LT]
+  {
+    \env{\ty{a}{\TyInt}}\\
+    \env{\ty{b}{\TyInt}}
+  }
+  {
+    \env{\ty{\exprLT{a}{b}}{\TyBool}}
+  }
+  \and
+  \infer*[left=EQ]
+  {
+    \env{\ty{a}{\TyInt}}\\
+    \env{\ty{b}{\TyInt}}
+  }
+  {
+    \env{\ty{\exprEQ{a}{b}}{\TyBool}}
+  }
+  \and
+  \infer*[left=Let]
+  {
+    \ty{\mu}{T_{1}}\\
+    \env{\ty{e_1}{T_1}}\\
+    \env[\envAdd{(\ty{\mu}{T_{1}})}]{\ty{e_{2}}{T_{2}}}
+  }
+  {
+    \env{\ty{\stmtLet{\mu}{{e}_{1}}{e_{2}}}{T_{2}}}
+  }
+  \and
+  \infer*[left=IF]
+  {
+    \env{\ty{e}{\TyBool}}\\
+    \env{\ty{l}{T}}\\
+    \env{\ty{r}{T}}
+  }
+  {
+    \env{\ty{\stmtIf{e}{l}{r}}{T}}
+  }
+\end{mathpar}
+  \caption{\label{fig:rules}Typing Rules}
+\end{figure}
+
+\Cref{fig:rules} present's our language's typing rules.
+These rules dictate what it means for an expression/statement to be well-formed.
+We do this by assigning types to expressions/statements.
+We read typing rules as follows: Things above the lines are premises such that if all premises are true then the judgement (below the line) will also be true.
+When given any expression/statement in our language we can use the typing rules to construct a derivation that provides proof that the expression/statement is well-typed, that is we can apply each rule and form a derivation tree.
+If we cannot construct this tree then the expression is ill-typed and syntactically not valid.
+Typing rules are a compile time static check.
+
+We can only proceed to computation/evaluation of our language iff it is well-typed.
+
+\section{Substitution}\label{sec:substitution}
+
+\begin{figure}[ht]
+  \centering
+\begin{align*}
+  \subst{\mu}{e}{x}
+  &
+    \Coloneqq
+    \begin{cases}
+      e&x\equiv\mu\\
+      x&x\not\equiv\mu\\
+    \end{cases}
+  \\
+  \subst{\exprAdd{a}{b}}{e}{x}&\Coloneqq\exprAdd{\subst{a}{e}{x}}{\subst{b}{e}{x}}\\
+  \subst{\exprSub{a}{b}}{e}{x}&\Coloneqq\exprSub{\subst{a}{e}{x}}{\subst{b}{e}{x}}\\
+  \subst{\exprDiv{a}{b}}{e}{x}&\Coloneqq\exprDiv{\subst{a}{e}{x}}{\subst{b}{e}{x}}\\
+  \subst{\exprMul{a}{b}}{e}{x}&\Coloneqq\exprMul{\subst{a}{e}{x}}{\subst{b}{e}{x}}\\
+  \subst{\exprNeg{a}}{e}{x}&\Coloneqq\exprNeg{\subst{a}{e}{x}}\\
+  \subst{\exprOr{a}{b}}{e}{x}&\Coloneqq\exprOr{\subst{a}{e}{x}}{\subst{b}{e}{x}}\\
+  \subst{\exprAnd{a}{b}}{e}{x}&\Coloneqq\exprAnd{\subst{a}{e}{x}}{\subst{b}{e}{x}}\\
+  \subst{\exprXor{a}{b}}{e}{x}&\Coloneqq\exprXor{\subst{a}{e}{x}}{\subst{b}{e}{x}}\\
+  \subst{\exprNot{a}}{e}{x}&\Coloneqq\exprNot{\subst{a}{e}{x}}\\
+  \subst{\exprGT{a}{b}}{e}{x}&\Coloneqq\exprGT{\subst{a}{e}{x}}{\subst{b}{e}{x}}\\
+  \subst{\exprLT{a}{b}}{e}{x}&\Coloneqq\exprLT{\subst{a}{e}{x}}{\subst{b}{e}{x}}\\
+  \subst{\exprEQ{a}{b}}{e}{x}&\Coloneqq\exprEQ{\subst{a}{e}{x}}{\subst{b}{e}{x}}\\
+  \subst{\stmtIf{e_1}{l}{r}}{e}{x}&\Coloneqq\stmtIf{\subst{e_1}{e}{x}}{\subst{l}{e}{x}}{\subst{r}{e}{x}}\\
+  \subst{\stmtLet{\mu}{e_1}{e_2}}{e}{x}&\Coloneqq\stmtLet{\mu}{\subst{e_1}{e}{x}}{\subst{e_2}{e}{x}}
+\end{align*}
+  \caption{\label{fig:subst}Substitution Rules}
+\end{figure}
+
+\Cref{fig:subst} presents a standard set of substitution rules for our language.
+These rules describe how we can interate over our expressions/statements and swap variables for values.
+Note how they form a recursive call.
+We will use these rules to help us describe how we can transform our program instances.
+
+\section{Big Step Semantics}\label{sec:semantics}
+
+\begin{figure}[ht]
+  \centering
+\begin{mathpar}
+  \infer*[left=Nat]
+  {
+    \\
+  }
+  {
+    n\Downarrow{}n
+  }
+  \and
+  \infer*[left=Bool]
+  {
+    \\
+  }
+  {
+    b\Downarrow{}b
+  }
+  \and
+  \infer*[left=ADD]
+  {
+    a\Downarrow{}\primed{a}\\
+    b\Downarrow{}\primed{b}
+  }
+  {
+    \exprAdd{a}{b}\Downarrow\primed{a}+\primed{b}
+  }
+  \and
+  \infer*[left=Sub]
+  {
+    a\Downarrow{}\primed{a}\\
+    b\Downarrow{}\primed{b}
+  }
+  {
+    \exprSub{a}{b}\Downarrow\primed{a}-\primed{b}
+  }
+  \and
+  \infer*[left=DIV]
+  {
+    a\Downarrow{}\primed{a}\\
+    b\Downarrow{}\primed{b}
+  }
+  {
+    \exprDiv{a}{b}\Downarrow\frac{\primed{a}}{\primed{b}}
+  }
+  \and
+  \infer*[left=MUL]
+  {
+    a\Downarrow{}\primed{a}\\
+    b\Downarrow{}\primed{b}
+  }
+  {
+    \exprMul{a}{b}\Downarrow\primed{a}\times\primed{b}
+  }
+  \and
+  \infer*[left=NEG]
+  {
+    n\Downarrow{}\primed{n}
+  }
+  {
+    \exprNeg{n}\Downarrow{}(-1)\times{}\primed{n}
+  }
+  \and
+  \infer*[left=OR]
+  {
+    a\Downarrow{}\primed{a}\\
+    b\Downarrow{}\primed{b}
+  }
+  {
+    \exprOr{a}{b}\Downarrow\primed{a}\vee\primed{b}
+  }
+  \and
+  \infer*[left=AND]
+  {
+    a\Downarrow{}\primed{a}\\
+    b\Downarrow{}\primed{b}
+  }
+  {
+    \exprAnd{a}{b}\Downarrow\primed{a}\wedge\primed{b}
+  }
+  \and
+  \infer*[left=Xor]
+  {
+    a\Downarrow{}\primed{a}\\
+    b\Downarrow{}\primed{b}
+  }
+  {
+    \exprXor{a}{b}\Downarrow\primed{a}\oplus\primed{b}
+  }
+  \and
+  \infer*[left=NOT]
+  {
+    n\Downarrow{}\primed{n}
+  }
+  {
+    \exprNot{n}\Downarrow\neg{}n
+  }
+  \and
+  \infer*[left=GT]
+  {
+    a\Downarrow{}\primed{a}\\
+    b\Downarrow{}\primed{b}
+  }
+  {
+    \exprGT{a}{b}\Downarrow\primed{a}>\primed{b}
+  }
+  \and
+  \infer*[left=LT]
+  {
+    a\Downarrow{}\primed{a}\\
+    b\Downarrow{}\primed{b}
+  }
+  {
+    \exprLT{a}{b}\Downarrow\primed{a}<\primed{b}
+  }
+  \and
+  \infer*[left=EQ]
+  {
+    a\Downarrow{}\primed{a}\\
+    b\Downarrow{}\primed{b}
+  }
+  {
+    \exprEQ{a}{b}\Downarrow\primed{a}\equiv\primed{b}
+  }
+  \and
+  \infer*[left=Let]
+  {
+    e_1\Downarrow\primed{e_1}\\
+    \subst{e_2}{\mu}{\primed{e_1}}\Downarrow\primed{e_2}
+  }
+  {
+    \stmtLet{\mu}{{e}_{1}}{e_{2}}\Downarrow\primed{e_2}
+  }
+  \and
+  \infer*[left=IF-True]
+  {
+    e\Downarrow{}\EnumTrue{}\\
+    l\Downarrow{}\primed{l}
+  }
+  {
+    \stmtIf{e}{l}{r}\Downarrow{}\primed{l}
+  }
+  \and
+  \infer*[left=IF-False]
+  {
+    e\Downarrow{}\EnumFalse{}\\
+    r\Downarrow{}\primed{r}
+  }
+  {
+    \stmtIf{e}{l}{r}\Downarrow{}\primed{r}
+  }\end{mathpar}
+  \caption{\label{fig:semantics}Big Step Semantics}
+\end{figure}
+
+Operational semantics describe how we evaluate our programs.
+This describes how we can \emph{reduce}/evaluate our language expressions and statements to a single value.
+There are generally two common styles of operational semantics: Big-Step, and Small-Step.
+There are more formal names given but we generally refer to the styles using these names.
+
+Big-Step semantics are concerned with what the final result is; we can skip description of intermediate computations.
+Small-Step semantics are concerned with how we get to the final result; we cannot skip intermediate computations.
+Both have pros and cons.
+
+\Cref{fig:semantics} presents Big-Step style semantics, here we use \emph{real} operations to show how an expression is reduced using \emph{real} integer and boolean operators.
+Interestingly are the rules for \textsc{IF-True} and \textsc{IF-False}, they describe the branching that occurs with use of conditional statements.
+
+\section{Interpretation}\label{sec:interpretation}
+
+\begin{figure}[ht]
+  \centering
+  \begin{align*}
+    \textsc{ArithLang}&\rightarrow\textsc{Java}\\
+        \interpB{\TyInt}&\Coloneqq\text{\ttfamily Integer}\\
+    \interpB{\TyBool}&\Coloneqq\text{\ttfamily Boolean}\\
+  \interpB{n}&\Coloneqq\text{\ttfamily new Integer(}n\text{\ttfamily);}\\
+  \interpB{\EnumFalse}&\Coloneqq\text{\ttfamily False}\\
+  \interpB{\EnumTrue} &\Coloneqq\text{\ttfamily True}\\
+  \interpB{\exprAdd{a}{b}} &\Coloneqq\interpB{a}\,\text{\ttfamily +}\,\interpB{b}\\
+  \interpB{\exprSub{a}{b}} &\Coloneqq\interpB{a}\,\text{\ttfamily -}\,\interpB{b}\\
+  \interpB{\exprDiv{a}{b}} &\Coloneqq\interpB{a}\,\text{\ttfamily /}\,\interpB{b}\\
+  \interpB{\exprMul{a}{b}} &\Coloneqq\interpB{a}\,\text{\ttfamily *}\,\interpB{b}\\
+  \interpB{\exprNeg{a}}    &\Coloneqq\text{\ttfamily-1*}\,\interpB{a}\\
+  \interpB{\exprOr{a}{b}}  &\Coloneqq\interpB{a}\,\text{\ttfamily ||}\,\interpB{b}\\
+  \interpB{\exprAnd{a}{b}} &\Coloneqq\interpB{a}\,\text{\ttfamily \&\&}\,\interpB{b}\\
+  \interpB{\exprXor{a}{b}} &\Coloneqq\interpB{a}\,\text{\ttfamily \textasciicircum}\,\interpB{b}\\
+  \interpB{\exprNot{a}}    &\Coloneqq\text{\ttfamily !}\;\interpB{a}\\
+  \interpB{\exprGT{a}{b}}  &\Coloneqq\interpB{a}\,\text{\ttfamily \textgreater}\,\interpB{b}\\
+  \interpB{\exprLT{a}{b}}  &\Coloneqq\interpB{a}\,\text{\ttfamily \textless}\,\interpB{b}\\
+  \interpB{\exprEQ{a}{b}}  &\Coloneqq\interpB{a}\,\text{\ttfamily ==}\,\interpB{b}\\
+  \interpB{\stmtIf{e_1}{l}{r}} &\Coloneqq\interpB{e_1}\;\text{\ttfamily ?}\;\interpB{l}\;\text{\ttfamily :}\;\interpB{r}\\
+  \interpB{\stmtLet{\mu}{e_1}{e_2}}&\Coloneqq\interpB{\subst{e_{2}}{\mu}{e_{1}}}
+\end{align*}
+  \caption{\label{fig:interp}Interpretation Rules}
+\end{figure}
+
+In this final section we describe how we can interpret our language to another form, in this case concrete Java expressions.
+Like substitution, interpretation recursively operates over each language statement and expression.
+At each step if replaces the expression from our language with it's equivalent Java form.
+If we interpret a language we do not need to provide operational semantics, the target language provides this.
+
+\section{Note}
+
+We can use substitution, operational semantics, and interpretation forms more than one.
+It is common to provide a rich, somewhat complex, abstract syntax for a language that has simpler (reduced) forms.
+We can use interpretation, big-step semantics, and substitution to describe how we go from one form to another.
+
+\end{document}
+
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: t
+%%% End:
