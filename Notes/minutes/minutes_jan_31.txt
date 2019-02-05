@@ -1,0 +1,37 @@
+January 31st Meeting Minutes
+
+Ensure search functionality is properly described so that it’s clear that only metadata is searchable.
+
+Personas: Admin, Student, Staff etc
+	Consider key users of the system
+	Associated to personas
+
+Admin staff should be able to upload minutes from a meeting that can only be accessed by those that attended.
+
+Markdown outline
+	intro
+		motivation/problem
+		hypothesis/aims
+			primary/secondary/tertiary aims
+			mention johns hopkins medical records achievement
+			why can’t this work for us
+		contribution
+			policy produced
+			software produced
+			how these meet the aims
+		outline/reading guide
+
+	background
+		access control
+		encryption
+			classical (1-to-1)
+			modern (1-to-many)
+		public key infrastructure
+		Resource server
+
+
+Working on UX and user flow.
+Prepare to run through a full demonstration of the product as an end user next week.
+Either import user key by command line (at launch) or implement a login functionality.
+
+Run through LaTeX resources from Jan and prepare questions and/or project versions of the types, constants, expressions etc.
