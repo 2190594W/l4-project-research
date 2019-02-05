@@ -1,3 +1,4 @@
+#pylint: disable=C0302
 """
 Client Resource Server module
 """
