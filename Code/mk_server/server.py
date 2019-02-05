@@ -13,7 +13,7 @@ from flask.logging import create_logger
 import jsonpickle
 import pyopenabe
 
-VERSION = 'v0.0.2'
+VERSION = 'v0.0.3'
 
 MASTER_SECRET_KEY_FILE = 'master_secret_key.key'
 MASTER_PUBLIC_KEY_FILE = 'master_public_key.key'
@@ -79,7 +79,7 @@ del CPABE, OPENABE
 
 
 @APP.route('/')
-def hello_world():
+def index():
     """Simple template generation for homepage/index of app.
     Attached to '/' route by flask annotation.
 
