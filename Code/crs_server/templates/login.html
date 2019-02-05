@@ -1,0 +1,23 @@
+{% extends "layout.html" %}
+{% block body %}
+  <h1>Login</h1>
+  {% if current_user.is_authenticated %}
+    <h4>You're already logged in, {{ current_user.username }}!</h4>
+    <p>
+      Perhaps try <a href="logout">logging out</a> first?
+    </p>
+  {% else %}
+    <form method="post" enctype="multipart/form-data">
+      {% if username %}
+        <label for="username">Username:</label>
+        <input type="text" name="username" value="{{ username }}"><br />
+      {% else %}
+        <label for="username">Username:</label>
+        <input type="text" name="username"><br />
+      {% endif %}
+      <label for="passwd">Password:</label>
+      <input type="password" name="passwd"><br />
+      <input type="submit" value="Login">
+    </form>
+  {% endif %}
+{% endblock %}
