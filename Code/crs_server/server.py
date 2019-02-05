@@ -832,39 +832,38 @@ def download_decrypt_file(file_id):
     res_server_res = requests.get(f'{RES_SERVER}/file_meta/{file_id}')
     res_json_dict = json.loads(res_server_res.content)
     if request.method == 'POST':
-        # check if the post request has the file part
-        if 'user_key' not in request.files:
-            flash('No user key provided!', 'info')
+        if not current_user.is_authenticated:
+            try:
+                user_key = request.files['user_key']
+                if user_key.filename == "":
+                    raise KeyError("No key file")
+                key_bytes, username = process_key_decrypt(user_key)
+            except KeyError:
+                flash('No user key provided!', 'info')
         else:
+            key_bytes = current_user.user_key
+            username = current_user.username
+        if None not in (key_bytes, username):
             res_server_res = requests.get(f'{RES_SERVER}/download/{file_id}')
             if res_server_res.status_code != 200:
                 abort(404)
             filename = filename_from_attachment(res_server_res)
             file_bytes = res_server_res.content
             if file_bytes is not None:
-                user_key = request.files['user_key']
-                # if user does not select key, browser may also
-                # submit an empty part without filename
-                if user_key.filename == '':
-                    flash('No user key provided!', 'info')
-                elif user_key:
-                    key_bytes, username = process_key_decrypt(user_key)
-                    openabe, cpabe = create_cpabe_instance(MASTER_PUBLIC_KEY)
-                    print("created cpabe instance")
-                    cpabe.importUserKey(username, key_bytes)
-                    print("imported key!")
-                    try:
-                        dec_file = cpabe.decrypt(username, file_bytes)
-                        del openabe, cpabe
-                        return send_file(
-                            BytesIO(dec_file),
-                            mimetype='text/plain',
-                            as_attachment=True,
-                            attachment_filename=res_json_dict["filename"][:-6])
-                    except pyopenabe.PyOpenABEError as err:
-                        del openabe, cpabe
-                        LOG.error("PyOpenABE error: %s", err)
-                        flash('Decryption of file failed', 'error')
+                openabe, cpabe = create_cpabe_instance(MASTER_PUBLIC_KEY)
+                cpabe.importUserKey(username, key_bytes)
+                try:
+                    dec_file = cpabe.decrypt(username, file_bytes)
+                    del openabe, cpabe
+                    return send_file(
+                        BytesIO(dec_file),
+                        mimetype='text/plain',
+                        as_attachment=True,
+                        attachment_filename=res_json_dict["filename"][:-6])
+                except pyopenabe.PyOpenABEError as err:
+                    del openabe, cpabe
+                    LOG.error("PyOpenABE error: %s", err)
+                    flash('Decryption of file failed', 'error')
                 else:
                     flash('User Key not uploaded properly!', 'error')
         return render_template('download_decrypt.html', file=filename, error=True)
