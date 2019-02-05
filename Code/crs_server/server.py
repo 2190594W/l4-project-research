@@ -8,29 +8,224 @@ from os import urandom, path
 from io import BytesIO
 from datetime import datetime
 import json
+import uuid
 import requests
 from werkzeug.utils import secure_filename
 from flask import Flask, flash, request, redirect, render_template,\
     url_for, send_file, jsonify, abort
 from flask.logging import create_logger
+from user_class import User
 from decrypt_encrypt_tools import create_cpabe_instance, process_key_decrypt
 from download_upload_tools import filename_from_attachment, extract_policy, extract_user_attrs
+from authentication_tools import is_safe_url, validate_passwd
 #pylint: disable=E0401
 import pyopenabe
+import pymongo
+from flask_login import LoginManager, login_user, logout_user, login_required, current_user
+from argon2 import PasswordHasher, exceptions
 
 ENC_ALLOWED_EXTENSIONS = set(['jp2', 'jpg', 'png', 'svg', 'ics', 'ppt', 'pptx',
                               'xls', 'xlsx', 'doc', 'docx', 'txt', 'pdf', 'zip'])
 DEC_ALLOWED_EXTENSIONS = set(['cpabe'])
 KEY_ALLOWED_EXTENSIONS = set(['key'])
 
-VERSION = 'v0.0.2'
+VERSION = 'v0.0.3'
 RES_SERVER = 'http://localhost:5001'
+
+DB_HOST = "localhost"
+DB_PORT = 27017
 
 MASTER_PUBLIC_KEY_FILE = 'master_public_key.key'
 GLOBAL_ABE_ATTRS_FILE = 'global_attrs.config'
 
+CONNECTION = pymongo.MongoClient(
+    DB_HOST, DB_PORT, uuidRepresentation='standard')
+DB = CONNECTION.UserServer
+DB.users.ensure_index('id', unique=True)
+DB.users.ensure_index('username', unique=True)
+ACCOUNT_DB = DB.users
+
+LOGIN_MANAGER = LoginManager()
+
 APP = Flask(__name__)
 LOG = create_logger(APP)
+
+LOGIN_MANAGER.init_app(APP)
+LOGIN_MANAGER.session_protection = "strong"
+
+PH = PasswordHasher()
+
+@LOGIN_MANAGER.user_loader
+def load_user(user_id):
+    """Callback function for flask_login to retrieve a user object from session.
+
+    Parameters
+    ----------
+    user_id : UUID
+        UUID representing the `user_id` of the user.
+
+    Returns
+    -------
+    User
+        Returns instance of the User class with the retrieved details.
+
+    """
+    user = ACCOUNT_DB.find_one(
+        {"id": uuid.UUID(user_id)},
+        {"password_hash": 0, "_id": 0}
+    )
+    if user:
+        return User(user["id"], user["username"], user["user_attrs"], user["user_key"])
+    return None
+
+@APP.route('/login', methods=['GET', 'POST'])
+def login():
+    """Login handler for authentication.
+    Authenticates provided password via argon2 verification
+    with password hash in local user accounts DB.
+    Attached to '/login' route by flask annotation.
+
+    Parameters
+    ----------
+
+
+    Returns
+    -------
+    Response (flask)
+        Generates flask Response object from Jinja2 template.
+
+    """
+    if request.method == 'POST':
+        if 'username' not in request.form:
+            flash('No username provided', 'warning')
+            return redirect(request.url)
+        if 'passwd' not in request.form:
+            flash('No password provided', 'warning')
+            return redirect(request.url)
+        username = request.form["username"]
+        password = request.form["passwd"]
+        if username is not None and password is not None:
+            username = username.lower()
+            passwd_hash = ACCOUNT_DB.find_one(
+                {"username": username},
+                {"password_hash":1, "_id":0}
+            )
+            try:
+                ph_verify = PH.verify(passwd_hash["password_hash"], password)
+            except exceptions.VerifyMismatchError:
+                ph_verify = False
+            except TypeError:
+                ph_verify = False
+            if ph_verify:
+                user_record = ACCOUNT_DB.find_one(
+                    {"username": username},
+                    {"password_hash": 0, "_id": 0}
+                )
+                if user_record is not None:
+                    user = User(user_record["id"], user_record["username"],
+                                user_record["user_attrs"], user_record["user_key"])
+
+                    login_user(user)
+                    flash('Logged in successfully.')
+
+                    next_loc = request.args.get('next')
+                    if not is_safe_url(next_loc):
+                        return abort(400)
+
+                    return redirect(next_loc or url_for('index'))
+                flash("There was an issue processing the login")
+            flash("Username or password incorrect!")
+            return render_template('login.html', username=username)
+        flash("Username or password not provided")
+    return render_template('login.html')
+
+@APP.route('/register', methods=['GET', 'POST'])
+#pylint: disable=R0911
+def register():
+    """Registration handler for authentication.
+    Authenticates provided password via argon2 verification
+    with password hash in local user accounts DB.
+    Attached to '/register' route by flask annotation.
+
+    Parameters
+    ----------
+
+
+    Returns
+    -------
+    Response (flask)
+        Generates flask Response object from Jinja2 template.
+
+    """
+    if request.method == 'POST':
+        if 'username' not in request.form:
+            flash('No username provided', 'warning')
+            return redirect(request.url)
+        if 'passwd' not in request.form:
+            flash('No password provided', 'warning')
+            return redirect(request.url)
+        if 'confirm_passwd' not in request.form:
+            flash('No password confirmation provided', 'warning')
+            return redirect(request.url)
+        if 'user_key' not in request.files:
+            flash('No user key provided', 'warning')
+            return redirect(request.url)
+        username = request.form["username"]
+        password = request.form["passwd"]
+        confirm_password = request.form["confirm_passwd"]
+        user_key = request.files["user_key"]
+        # if user does not select file, browser may also
+        # submit an empty part without filename
+        if user_key.filename == '':
+            flash('No selected file', 'info')
+            return redirect(request.url)
+        if not validate_passwd(password):
+            return redirect(request.url)
+        if None not in (username, password, confirm_password, user_key):
+            username = username.lower()
+            if password != confirm_password:
+                flash('Passwords do not match!', 'warning')
+                return redirect(request.url)
+            user_passwd_hash = PH.hash(password)
+            key_bytes = user_key.read().strip()
+            user_attrs = extract_user_attrs(key_bytes)
+            user_id = uuid.uuid4()
+            if user_passwd_hash and key_bytes and user_attrs and user_id:
+                user_obj = {'id': user_id, 'username': username, 'user_key': key_bytes,
+                            'password_hash': user_passwd_hash, 'user_attrs': user_attrs}
+                ACCOUNT_DB.save(user_obj)
+
+                flash('Registered successfully.')
+
+                next_loc = request.args.get('next')
+                if not is_safe_url(next_loc):
+                    return abort(400)
+
+                return redirect(next_loc or url_for('login'))
+            flash("Failed to process registration! Please try again.")
+            return render_template('register.html')
+        flash("Username or password not provided")
+    return render_template('register.html')
+
+@APP.route("/logout")
+@login_required
+def logout():
+    """Logout handler for authentication.
+    Logs the user out and removes sessions.
+    Attached to '/logout' route by flask annotation.
+
+    Parameters
+    ----------
+
+
+    Returns
+    -------
+    Response (flask)
+        Generates flask Response object from Jinja2 template.
+
+    """
+    logout_user()
+    return redirect(url_for('index'))
 
 try:
     with open('userkey.key', 'rb') as userkey:
