@@ -15,23 +15,26 @@ from flask.logging import create_logger
 import pymongo
 from fuzzywuzzy import process
 
-CONNECTION = pymongo.MongoClient(
-    'localhost', 27017, uuidRepresentation='standard')
-DB = CONNECTION.ResourceServer
-DB.resource_meta.ensure_index('id', unique=True)
-DB.resource_meta.ensure_index(
-    [('search_filename', pymongo.TEXT)], default_language='english')
-META_DB = DB.resource_meta
+DB_HOST = "localhost"
+DB_PORT = 27017
 
 UPLOAD_FOLDER = '/tmp/flask/file/uploads'
 ALLOWED_EXTENSIONS = set(['cpabe'])
 
-VERSION = 'v0.0.2'
+VERSION = 'v0.0.3'
 MK_SERVER = 'http://localhost:5000'
 
 MASTER_PUBLIC_KEY_FILE = 'master_public_key.key'
 
 GLOBAL_ABE_ATTRS_FILE = 'global_attrs.config'
+
+CONNECTION = pymongo.MongoClient(
+    DB_HOST, DB_PORT, uuidRepresentation='standard')
+DB = CONNECTION.ResourceServer
+DB.resource_meta.ensure_index('id', unique=True)
+DB.resource_meta.ensure_index(
+    [('search_filename', pymongo.TEXT)], default_language='english')
+META_DB = DB.resource_meta
 
 APP = Flask(__name__)
 LOG = create_logger(APP)
@@ -171,7 +174,7 @@ def allowed_file(filename):
 
 
 @APP.route('/')
-def hello_world():
+def index():
     """Simple template generation for homepage/index of app.
     Attached to '/' route by flask annotation.
 
