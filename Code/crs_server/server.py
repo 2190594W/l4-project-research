@@ -365,7 +365,7 @@ def allowed_file(filename, allowed_extensions):
 
 
 @APP.route('/')
-def hello_world():
+def index():
     """Simple template generation for homepage/index of app.
     Attached to '/' route by flask annotation.
 
@@ -571,7 +571,7 @@ def upload_file():
         else:
             author = request.form["author"]
         file = request.files['file']
-        # if user does not select file, browser also
+        # if user does not select file, browser may also
         # submit an empty part without filename
         if file.filename == '':
             flash('No selected file', 'info')
@@ -763,25 +763,29 @@ def decrypt_file():
     """
     if request.method == 'POST':
         # check if the post request has the file part
-        if 'enc_file' not in request.files:
-            flash('No encrypted file provided!', 'info')
-        elif 'user_key' not in request.files:
-            flash('No user key provided!', 'info')
-        else:
+        try:
             enc_file = request.files['enc_file']
-            user_key = request.files['user_key']
-            # if user does not select file, browser also
-            # submit an empty part without filename
-            if enc_file.filename == '':
-                flash('No encrypted file provided!', 'info')
-            elif user_key.filename == '':
-                flash('No user key provided!', 'info')
-            elif enc_file and user_key and allowed_file(enc_file.filename, DEC_ALLOWED_EXTENSIONS)\
-                    and allowed_file(user_key.filename, KEY_ALLOWED_EXTENSIONS):
-                file_bytes = enc_file.read()
+            ef_filename = enc_file.filename
+        except KeyError:
+            flash('No encrypted file provided!', 'info')
+            ef_filename = None
+        if not current_user.is_authenticated:
+            try:
+                user_key = request.files['user_key']
+                if user_key.filename == "":
+                    raise KeyError("No key file")
                 key_bytes, username = process_key_decrypt(user_key)
-                print(extract_user_attrs(key_bytes))
-                if file_bytes is not None and key_bytes is not None:
+            except KeyError:
+                flash('No user key provided!', 'info')
+        else:
+            key_bytes = current_user.user_key
+            username = current_user.username
+        if None not in (ef_filename, key_bytes, username):
+            # if user does not select file, browser may also
+            # submit an empty part without filename
+            if allowed_file(ef_filename, DEC_ALLOWED_EXTENSIONS):
+                file_bytes = enc_file.read()
+                if file_bytes is not None:
                     openabe, cpabe = create_cpabe_instance(MASTER_PUBLIC_KEY)
                     cpabe.importUserKey(username, key_bytes)
                     try:
@@ -791,11 +795,13 @@ def decrypt_file():
                         dec_file = None
                     del openabe, cpabe
                     if dec_file is not None:
+                        ef_filename = ef_filename.split(".cpabe")[0]
+                        ef_filename = ef_filename.split(" ")[0]
                         return send_file(
                             BytesIO(dec_file),
                             mimetype='text/plain',
                             as_attachment=True,
-                            attachment_filename=enc_file.filename[:-6])
+                            attachment_filename=ef_filename)
                 flash('Decryption of file failed', 'error')
             else:
                 flash('Issue with files! Make sure user key is a .key file and that the\
