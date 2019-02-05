@@ -898,6 +898,7 @@ def get_all_filenames():
 
 
 @APP.route('/files/search')
+@login_required
 def search_files_index():
     """Simple template to allow a user to enter their desired search
     query into a form (instead of URL).
@@ -922,6 +923,7 @@ def search_files_index():
 
 
 @APP.route('/files/search/<string:search_term>')
+@login_required
 def search_files(search_term):
     """Fetches list of uploaded filenames from Resource server and
     displays the returned list in a Jinja2 template. The provided
@@ -951,6 +953,7 @@ def search_files(search_term):
 
 
 @APP.route('/files/fuzzy_search')
+@login_required
 def fuzzy_search_files_index():
     """Simple template to allow a user to enter their desired search
     query into a form (instead of URL).
@@ -975,6 +978,7 @@ def fuzzy_search_files_index():
 
 
 @APP.route('/files/fuzzy_search/<string:search_term>')
+@login_required
 def fuzzy_search_files(search_term):
     """Fetches list of uploaded filenames from Resource server and
     displays the returned list in a Jinja2 template. The provided
@@ -1004,6 +1008,7 @@ def fuzzy_search_files(search_term):
 
 
 @APP.route('/extract_policy', methods=['GET', 'POST'])
+@login_required
 def extract_policy_view():
     """If GET request, simple template generation for page of app.
     If POST request, handle extracting the policy embedded
@@ -1046,6 +1051,7 @@ def extract_policy_view():
     return render_template('extract_policy.html', extr_policy=None)
 
 @APP.route('/extract_user_attrs', methods=['GET', 'POST'])
+@login_required
 def extract_user_attrs_view():
     """If GET request, simple template generation for page of app.
     If POST request, handle extracting the user attributes embedded
