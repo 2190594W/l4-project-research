@@ -50,22 +50,32 @@ def validate_passwd(passwd):
     if len(passwd) < 12:
         flash('Password must be at least 12 characters long!', 'warning')
         len_error = True
+    else:
+        len_error = False
     # searching for digits
     if re.search(r"\d", passwd) is None:
         flash('Password must contain at least 1 number!', 'warning')
         digit_error = True
+    else:
+        digit_error = False
     # searching for uppercase
     if re.search(r"[A-Z]", passwd) is None:
         flash('Password must contain at least 1 uppercase character!', 'warning')
         upper_error = True
+    else:
+        upper_error = False
     # searching for lowercase
     if re.search(r"[a-z]", passwd) is None:
         flash('Password must contain at least 1 lowercase character!', 'warning')
         lower_error = True
+    else:
+        lower_error = False
     # searching for symbols
     if re.search(r"\W", passwd) is None:
         flash('Password must contain at least 1 special character!', 'warning')
         symbol_error = True
+    else:
+        symbol_error = False
 
     # overall result
     return not (len_error or digit_error or upper_error or lower_error or symbol_error)
