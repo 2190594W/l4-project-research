@@ -126,17 +126,17 @@ def login():
                                 user_record["user_attrs"], user_record["user_key"])
 
                     login_user(user)
-                    flash('Logged in successfully.')
+                    flash('Logged in successfully.', 'success')
 
                     next_loc = request.args.get('next')
                     if not is_safe_url(next_loc):
                         return abort(400)
 
                     return redirect(next_loc or url_for('index'))
-                flash("There was an issue processing the login")
+                flash("There was an issue processing the login", "warning")
             flash("Username or password incorrect!")
             return render_template('login.html', username=username)
-        flash("Username or password not provided")
+        flash("Username or password not provided", "warning")
     return render_template('login.html')
 
 @APP.route('/register', methods=['GET', 'POST'])
@@ -160,27 +160,27 @@ def register():
     if request.method == 'POST':
         if 'username' not in request.form:
             flash('No username provided', 'warning')
-            return redirect(request.url)
+            return render_template('register.html')
+        username = request.form["username"]
         if 'passwd' not in request.form:
             flash('No password provided', 'warning')
-            return redirect(request.url)
+            return render_template('register.html', username=username)
+        password = request.form["passwd"]
         if 'confirm_passwd' not in request.form:
             flash('No password confirmation provided', 'warning')
-            return redirect(request.url)
+            return render_template('register.html', username=username)
+        confirm_password = request.form["confirm_passwd"]
         if 'user_key' not in request.files:
             flash('No user key provided', 'warning')
-            return redirect(request.url)
-        username = request.form["username"]
-        password = request.form["passwd"]
-        confirm_password = request.form["confirm_passwd"]
+            return render_template('register.html', username=username)
         user_key = request.files["user_key"]
         # if user does not select file, browser may also
         # submit an empty part without filename
         if user_key.filename == '':
             flash('No selected file', 'info')
-            return redirect(request.url)
+            return render_template('register.html', username=username)
         if not validate_passwd(password):
-            return redirect(request.url)
+            return render_template('register.html', username=username)
         if None not in (username, password, confirm_password, user_key):
             username = username.lower()
             if password != confirm_password:
@@ -195,17 +195,17 @@ def register():
                             'password_hash': user_passwd_hash, 'user_attrs': user_attrs}
                 ACCOUNT_DB.save(user_obj)
 
-                flash('Registered successfully.')
+                flash('Registered successfully.', 'success')
 
                 next_loc = request.args.get('next')
                 if not is_safe_url(next_loc):
                     return abort(400)
 
                 return redirect(next_loc or url_for('login'))
-            flash("Failed to process registration! Please try again.")
-            return render_template('register.html')
-        flash("Username or password not provided")
-    return render_template('register.html')
+            flash("Failed to process registration! Please try again.", "warning")
+            return render_template('register.html', username=username)
+        flash("Username or password not provided", "warning")
+    return render_template('register.html', username=None)
 
 @APP.route("/logout")
 @login_required
@@ -919,7 +919,8 @@ def search_files_index():
         search_term = query_str.split("prev_query=")[1].split("&")[0]
     except IndexError:
         search_term = ""
-    return render_template('search_files.html', files=None, search_term=search_term)
+    return render_template('search_files.html', searched=False,
+                           files=None, search_term=search_term)
 
 
 @APP.route('/files/search/<string:search_term>')
@@ -947,9 +948,12 @@ def search_files(search_term):
         f'{RES_SERVER}/files/search/' + search_term + "?" + query_str)
     all_files = None
     if response.status_code == 200:
+        print("success")
         res_dict = json.loads(response.content)
         all_files = res_dict['files']
-    return render_template('search_files.html', files=all_files, search_term=search_term)
+        print(all_files)
+    return render_template('search_files.html', searched=True,
+                           files=all_files, search_term=search_term)
 
 
 @APP.route('/files/fuzzy_search')
@@ -974,7 +978,8 @@ def fuzzy_search_files_index():
         search_term = query_str.split("prev_query=")[1].split("&")[0]
     except IndexError:
         search_term = ""
-    return render_template('fuzzy_search_files.html', files=None, search_term=search_term)
+    return render_template('fuzzy_search_files.html', searched=False,
+                           files=None, search_term=search_term)
 
 
 @APP.route('/files/fuzzy_search/<string:search_term>')
@@ -1004,7 +1009,8 @@ def fuzzy_search_files(search_term):
     if response.status_code == 200:
         res_dict = json.loads(response.content)
         all_files = res_dict['files']
-    return render_template('fuzzy_search_files.html', files=all_files, search_term=search_term)
+    return render_template('fuzzy_search_files.html', searched=True,
+                           files=all_files, search_term=search_term)
 
 
 @APP.route('/extract_policy', methods=['GET', 'POST'])
@@ -1084,7 +1090,8 @@ def extract_user_attrs_view():
             user_attrs = extract_user_attrs(file.read())
             if user_attrs != "Unknown":
                 flash('User attributes extraction successful.', 'info')
-            return render_template('extract_user_attrs.html', user_attrs=user_attrs)
+            return render_template('extract_user_attrs.html',
+                                   user_attrs=user_attrs.replace("|", "\n"))
         except IndexError as err:
             flash('User attributes extraction failed.', 'warning')
             LOG.error("IndexError occurred: %s", err)
