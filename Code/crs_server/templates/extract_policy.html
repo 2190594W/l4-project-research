@@ -2,13 +2,28 @@
 {% block body %}
   {% if extr_policy %}
     <h1>Extracted Policy</h1><br />
-    <h4>{{ extr_policy }}</h4>
+    <textarea readonly type="text" class="form-control" name="policy" id="policy" rows="6">{{ extr_policy }}</textarea>
   {% else %}
-    <h1>Extract Policy from <strong>encrypted</strong> File</h1>
+    <h1>Extract Policy from <strong>encrypted</strong> File</h1><br />
     <form method="post" enctype="multipart/form-data">
-      <label for="enc_file">Encrypted File (<em>.cpabe</em>):</label>
-      <input type="file" name="enc_file">
-      <input type="submit" value="Extract">
+      <div class="form-group">
+        <label for="enc_file_label">Import an Encrypted file (<em>.cpabe</em>):</label><br />
+        <label class="btn btn-outline-info" id="enc_file_label">
+          <input type="file" class="form-control-file" name="enc_file" id="enc_file" style="display: none;"/>
+          Choose Encrypted File
+        </label>
+        <span id="file-selected"></span>
+      </div><br />
+      <button type="submit" class="btn btn-outline-primary">Extract</button>
     </form>
+    <script type="text/javascript">
+      $('#enc_file').bind('change',
+        function() {
+          var filePath, fileName = '';
+          filePath = $(this).val().split("\\");
+          fileName = filePath[filePath.length -1];
+          $('#file-selected').html(fileName);
+        });
+    </script>
   {% endif %}
 {% endblock %}

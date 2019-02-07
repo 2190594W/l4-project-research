@@ -1,11 +1,62 @@
 {% extends "layout.html" %}
 {% block body %}
-  <h1>Decrypt an <strong>encrypted</strong> File</h1>
+  <h1>Decrypt an <strong>encrypted</strong> File</h1><br /><br />
   <form method="post" enctype="multipart/form-data">
-    <label for="enc_file">Encrypted File:</label>
-    <input type="file" name="enc_file"><br />
-    <label for="user_key">User Key:</label>
-    <input type="file" name="user_key"><br />
-    <input type="submit" value="Decrypt">
+    <div class="form-group">
+      <label for="enc_file_label">Import an Encrypted file (<em>.cpabe</em>):</label><br />
+      <label class="btn btn-outline-info" id="enc_file_label">
+        <input type="file" class="form-control-file" name="enc_file" id="enc_file" style="display: none;"/>
+        Choose Encrypted File
+      </label>
+      <span id="file-selected"></span>
+    </div>
+    {% if current_user.is_authenticated %}
+      <div class="form-group">
+        <p>
+          Since you are already logged in, <strong>{{ current_user.username }}</strong>, you may optionally import an alternative User Key below to decrypt the .cpabe file.<br />
+          If you do not import a User Key, the system will attempt to use the User Key already attached to your account, with the following attributes:<br /><br />
+          <a class="btn btn-outline-success" data-toggle="collapse" href="#collapseAttrs" role="button" aria-expanded="false" aria-controls="collapseAttrs">
+            Show my Attributes
+          </a>
+        </p>
+        <div class="collapse" id="collapseAttrs">
+          <textarea readonly type="text" class="form-control" name="attrs" id="attrs" rows="6">{{ current_user.attrs }}</textarea>
+        </div>
+      </div><br />
+      <div class="form-group">
+        <label for="user_key_label">Import an Alternative User Key file (<em>.key</em>):</label><br />
+        <label class="btn btn-outline-info" id="user_key_label">
+          <input type="file" class="form-control-file" name="user_key" id="user_key" style="display: none;"/>
+          Choose Alternative User Key
+        </label>
+        <span id="key-selected"></span>
+      </div>
+    {% else %}
+      <div class="form-group">
+        <label for="user_key_label">Import a User Key file (<em>.key</em>):</label><br />
+        <label class="btn btn-outline-info" id="user_key_label">
+          <input type="file" class="form-control-file" name="user_key" id="user_key" style="display: none;"/>
+          Choose User Key
+        </label>
+        <span id="key-selected"></span>
+      </div>
+    {% endif %}<br />
+    <button type="submit" class="btn btn-outline-primary">Decrypt</button>
   </form>
+  <script type="text/javascript">
+    $('#user_key').bind('change',
+      function() {
+        var filePath, fileName = '';
+        filePath = $(this).val().split("\\");
+        fileName = filePath[filePath.length -1];
+        $('#key-selected').html(fileName);
+      });
+    $('#enc_file').bind('change',
+      function() {
+        var filePath, fileName = '';
+        filePath = $(this).val().split("\\");
+        fileName = filePath[filePath.length -1];
+        $('#file-selected').html(fileName);
+      });
+  </script>
 {% endblock %}

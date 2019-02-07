@@ -2,13 +2,28 @@
 {% block body %}
   {% if user_attrs %}
     <h1>Extracted User Attributes</h1><br />
-    <h4>{{ user_attrs }}</h4>
+    <textarea readonly type="text" class="form-control" name="attrs" id="attrs" rows="6">{{ user_attrs }}</textarea>
   {% else %}
-    <h1>Extract User Attributes from User Key</h1>
+    <h1>Extract User Attributes from User Key</h1><br />
     <form method="post" enctype="multipart/form-data">
-      <label for="user_key">User Key File (<em>.key</em>):</label>
-      <input type="file" name="user_key">
-      <input type="submit" value="Extract">
+      <div class="form-group">
+        <label for="user_key_label">Import a User Key file (<em>.key</em>):</label><br />
+        <label class="btn btn-outline-info" id="user_key_label">
+          <input type="file" class="form-control-file" name="user_key" id="user_key" style="display: none;"/>
+          Choose User Key
+        </label>
+        <span id="key-selected"></span>
+      </div><br />
+      <button type="submit" class="btn btn-outline-primary">Extract</button>
     </form>
+    <script type="text/javascript">
+      $('#user_key').bind('change',
+        function() {
+          var filePath, fileName = '';
+          filePath = $(this).val().split("\\");
+          fileName = filePath[filePath.length -1];
+          $('#key-selected').html(fileName);
+        });
+    </script>
   {% endif %}
 {% endblock %}

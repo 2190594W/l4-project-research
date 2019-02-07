@@ -5,18 +5,18 @@
     <h3>Master Public Key <strong>successfully</strong> updated!</h3>
   {% else %}
     <h3>Master Public Key <strong>not</strong> updated. Current version matches latest.</h3>
-  {% endif %}
+  {% endif %}<br />
   {% if mpk %}
     <p>
-      <strong>Current MPK:</strong> {{mpk}}
+      <strong>Current MPK:</strong>
+      <textarea readonly type="text" class="form-control" name="public_key" id="public_key" rows="6">{{ mpk }}</textarea>
     </p>
     {% if mku %}
       <p>
-        <strong>Last updated:</strong> {{mku}}
+        <strong>Last updated:</strong>
+        <input readonly type="text" class="form-control" name="updated" value="{{ mku }}"style="width: 40%;"><br />
       </p>
     {% endif %}
-    <a href="/abe/latest_mpk_file">Download current MPK!</a>
+    <a href="/abe/latest_mpk_file" class="btn btn-outline-info">Download current MPK!</a>
   {% endif %}
-  <br/><br/>
-  <a href="/">Return to homepage</a>
 {% endblock %}

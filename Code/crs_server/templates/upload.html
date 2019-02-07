@@ -1,14 +1,32 @@
 {% extends "layout.html" %}
 {% block body %}
-  <h1>Upload new <strong>encrypted</strong> File</h1>
+  <h1>Upload new <strong>encrypted</strong> File</h1><br />
   <form method="post" enctype="multipart/form-data">
-    <label for="file">Encrypted File (<em>.cpabe</em>):</label>
-    <input type="file" name="file">
-    <label for="author">Author:</label>
-    <input type="text" name="author"><br />
-    <label for="policy">Policy (<em>((enrolled_course:2001 and enrolled_course:2005 and male) or (enrolled_course:2003 and enrolled_course:2007 and enrolled_course:2013 and female)) and student</em>):</label><br/>
-    <textarea type="text" name="policy" id="policy">
-    </textarea><br/>
-    <input type="submit" value="Upload">
+    <div class="form-group">
+      <label for="enc_file_label">Import an Encrypted file (<em>.cpabe</em>):</label><br />
+      <label class="btn btn-outline-info" id="enc_file_label">
+        <input type="file" class="form-control-file" name="enc_file" id="enc_file" style="display: none;"/>
+        Choose Encrypted File
+      </label>
+      <span id="file-selected"></span>
+    </div>
+    <div class="form-group">
+      <label for="author">Author:</label>
+      <input type="text" class="form-control" name="author" placeholder="John Doe" style="width: 40%;"><br />
+    </div>
+    <div class="form-group">
+      <label for="policy">Policy:</label>
+      <textarea type="text" class="form-control" name="policy" id="policy" rows="6" placeholder="((enrolled_course:2001 and enrolled_course:2005 and male) or (enrolled_course:2003 and enrolled_course:2007 and enrolled_course:2013 and female)) and student"></textarea>
+    </div><br />
+    <button type="submit" class="btn btn-outline-primary">Upload</button>
   </form>
+  <script type="text/javascript">
+    $('#enc_file').bind('change',
+      function() {
+        var filePath, fileName = '';
+        filePath = $(this).val().split("\\");
+        fileName = filePath[filePath.length -1];
+        $('#file-selected').html(fileName);
+      });
+  </script>
 {% endblock %}

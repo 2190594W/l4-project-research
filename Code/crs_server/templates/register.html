@@ -3,18 +3,41 @@
   <h1>Register a <strong>new</strong> Account</h1>
   <form method="post" enctype="multipart/form-data">
     {% if username %}
-      <label for="username">Username:</label>
-      <input type="text" name="username" value="{{ username }}"><br />
+      <div class="form-group">
+        <label for="username">Username:</label>
+        <input type="text" class="form-control" name="username" value="{{ username }}" style="width: 30%;">
+      </div>
     {% else %}
-      <label for="username">Username:</label>
-      <input type="text" name="username"><br />
+      <div class="form-group">
+        <label for="username">Username:</label>
+        <input type="text" class="form-control" name="username" style="width: 30%;">
+      </div>
     {% endif %}
-    <label for="passwd">Password:</label>
-    <input type="password" name="passwd"><br />
-    <label for="confirm_passwd">Confirm Password:</label>
-    <input type="password" name="confirm_passwd"><br />
-    <label for="user_key">User Key:</label>
-    <input type="file" name="user_key"><br />
-    <input type="submit" value="Register">
+    <div class="form-group">
+      <label for="passwd">Password:</label>
+      <input type="password" class="form-control" name="passwd" style="width: 30%;">
+    </div>
+    <div class="form-group">
+      <label for="confirm_passwd">Confirm Password:</label>
+      <input type="password" class="form-control" name="confirm_passwd" style="width: 30%;">
+    </div>
+    <div class="form-group">
+      <label for="user_key_label">Import a User Key file (<em>.key</em>):</label><br />
+      <label class="btn btn-outline-info" id="user_key_label">
+        <input type="file" class="form-control-file" name="user_key" id="user_key" style="display: none;"/>
+        Choose User Key
+      </label>
+      <span id="key-selected"></span>
+    </div><br />
+    <button type="submit" class="btn btn-outline-primary">Register</button>
   </form>
+  <script type="text/javascript">
+    $('#user_key').bind('change',
+      function() {
+        var filePath, fileName = '';
+        filePath = $(this).val().split("\\");
+        fileName = filePath[filePath.length -1];
+        $('#key-selected').html(fileName);
+      })
+  </script>
 {% endblock %}

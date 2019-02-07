@@ -1,6 +1,6 @@
 {% extends "layout.html" %}
 {% block body %}
-  <h1>Global ABE Attributes Update Staus</h1><br/>
+  <h1>Global ABE Attributes Update Status</h1><br/>
   {% if updated %}
     <h3>Global ABE Attributes <strong>successfully</strong> updated!</h3>
   {% else %}
@@ -8,15 +8,15 @@
   {% endif %}
   {% if gaaj %}
     <p>
-      <strong>Current Global ABE Attributes:</strong> {{gaaj}}
+      <strong>Current Global ABE Attributes:</strong>
+      <textarea readonly type="text" class="form-control" name="abe_attrs" id="abe_attrs" rows="6">{{ gaaj }}</textarea>
     </p>
     {% if gaau %}
       <p>
-        <strong>Last updated:</strong> {{gaau}}
+        <strong>Last updated:</strong>
+        <input readonly type="text" class="form-control" name="updated" value="{{ gaau }}"style="width: 40%;"><br />
       </p>
     {% endif %}
-    <a href="/abe/latest_attributes_file">Download current Global ABE Attributes!</a>
+    <a href="/abe/latest_attributes_file" class="btn btn-outline-info">Download current Global ABE Attributes!</a>
   {% endif %}
-  <br/><br/>
-  <a href="/">Return to homepage</a>
 {% endblock %}

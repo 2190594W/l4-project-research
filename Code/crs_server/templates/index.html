@@ -1,12 +1,12 @@
 {% extends "layout.html" %}
 {% block body %}
-  <h1>Welcome to the Client Resource Server</h1>
+  <h1>Welcome to the Client Resource Server</h1><br />
   {% if current_user.is_authenticated %}
-    <a href="logout">Logout</a>
+    <a href="logout" class="btn btn-outline-dark">Logout</a>
   {% else %}
-    <a href="login">Login</a>
+    <a href="login" class="btn btn-outline-primary">Login</a>
   {% endif %}
-  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="register">Register new account</a><br/><br/>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="register" class="btn btn-outline-success">Register new account</a><br /><br /><br />
   <a href="upload">Head to the upload page</a><br/>
   <a href="encrypt_upload">Head to the encrypt & upload page</a><br/>
   <a href="encrypt">Head to the encrypt page</a><br/>

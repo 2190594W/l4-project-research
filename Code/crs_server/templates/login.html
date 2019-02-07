@@ -1,23 +1,29 @@
 {% extends "layout.html" %}
 {% block body %}
-  <h1>Login</h1>
+  <h1>Login</h1><br />
   {% if current_user.is_authenticated %}
-    <h4>You're already logged in, {{ current_user.username }}!</h4>
+    <h4>You're already logged in, <strong>{{ current_user.username }}</strong>!</h4>
     <p>
       Perhaps try <a href="logout">logging out</a> first?
     </p>
   {% else %}
     <form method="post" enctype="multipart/form-data">
       {% if username %}
-        <label for="username">Username:</label>
-        <input type="text" name="username" value="{{ username }}"><br />
+        <div class="form-group">
+          <label for="username">Username:</label>
+          <input type="text" class="form-control" name="username" value="{{ username }}" style="width: 30%;"><br />
+        </div>
       {% else %}
-        <label for="username">Username:</label>
-        <input type="text" name="username"><br />
+        <div class="form-group">
+          <label for="username">Username:</label>
+          <input type="text" class="form-control" name="username" style="width: 30%;"><br />
+        </div>
       {% endif %}
-      <label for="passwd">Password:</label>
-      <input type="password" name="passwd"><br />
-      <input type="submit" value="Login">
+      <div class="form-group">
+        <label for="passwd">Password:</label>
+        <input type="password" class="form-control" name="passwd" style="width: 30%;"><br />
+      </div><br />
+      <button type="submit" class="btn btn-outline-primary">Login</button>
     </form>
   {% endif %}
 {% endblock %}

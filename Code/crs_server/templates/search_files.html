@@ -1,25 +1,29 @@
 {% extends "layout.html" %}
 {% block body %}
-  {% if files %}
-    <h1>Search Results from Resource Server</h1>
+  {% if searched %}
+    <h1>Search Filenames from Resource Server</h1>
     <h4>Searched with query: "<em>{{ search_term }}</em>"</h4>
-    {% if files|length > 0 %}
-      <table>
-        {% for file in files %}
-          <tr>
-            <td>
-              {{ file.filename }} - <em>Search Score: {{ file.search_score|round(4) }}</em><br />
-              <a href="/download/{{ file.id }}" style="padding-left:5em">Download encrypted CPABE format</a><br />
-              <a href="/download_decrypt/{{ file.id }}" style="padding-left:5em">Download decrypted format</a>
-            </td>
-          </tr>
-        {% endfor %}
-      </table>
+    {% if files %}
+      {% if files|length > 0 %}
+        <table>
+          {% for file in files %}
+            <tr>
+              <td>
+                {{ file.filename }} - <em>Search Score: {{ file.search_score|round(4) }}</em><br />
+                <a href="/download/{{ file.id }}" style="padding-left:5em">Download encrypted CPABE format</a><br />
+                <a href="/download_decrypt/{{ file.id }}" style="padding-left:5em">Download decrypted format</a>
+              </td>
+            </tr>
+          {% endfor %}
+        </table>
+      {% else %}
+        <h3>No files found!</h3>
+      {% endif %}
     {% else %}
       <h3>No files found!</h3>
     {% endif %}
     <br />
-    <a href="/files/search?prev_query={{ search_term }}">Return to Search</a>
+    <a href="/files/search?prev_query={{ search_term }}" class="btn btn-outline-secondary">Return to Search</a>
     <br />
     <br />
     <p>
@@ -27,25 +31,27 @@
       Try our <a href="/files/fuzzy_search?prev_query={{ search_term }}">Fuzzy Search page</a> instead. It will try to find the best possible matches based on your search query.
     </p>
   {% else %}
-    <h1>Search Files</h1>
+    <h1>Search Filenames from Resource Server</h1>
     <script type="text/javascript">
         function get_action(form) {
             search_term = document.getElementById("search_term").value;
-            console.log(typeof search_term);
             form.action = (search_term != "") ? "/files/search/" + search_term : "/files/search";
         }
     </script>
     <form onsubmit="get_action(this);" method="get">
-      <label for="search_term">Search Query:</label>
-      {% if search_term %}
-        <input type="text" id="search_term" value="{{ search_term }}" placeholder="{{ search_term }}">
-      {% else %}
-        <input type="text" id="search_term" placeholder="example">
-      {% endif %}
-      <br />
-      <label for="limit">Limit Results:</label>
-      <input type="text" id="limit" name="limit" value="25"><br />
-      <input type="submit" value="Search">
+      <div class="form-group">
+        <label for="search_term">Search Query:</label>
+        {% if search_term %}
+          <input type="text" class="form-control" id="search_term" value="{{ search_term }}" placeholder="{{ search_term }}" style="width: 40%;">
+        {% else %}
+          <input type="text" class="form-control" id="search_term" placeholder="example" style="width: 40%;">
+        {% endif %}
+      </div>
+      <div class="form-group">
+        <label for="limit">Limit Results:</label>
+        <input type="number" class="form-control" id="limit" name="limit" value="25" style="width: 40%;">
+      </div><br />
+      <button type="submit" class="btn btn-outline-primary">Search</button>
     </form>
   {% endif %}
 {% endblock %}
