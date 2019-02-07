@@ -30,11 +30,11 @@ class User(UserMixin):
     active
 
     """
-    #pylint: disable=R0913
+    #pylint: disable=R0913,W0622,C0103
     def __init__(self, id, username, attrs, user_key, active=True):
         self.id = id
         self.username = username
-        self.attrs = attrs
+        self.attrs = attrs.replace("|", "\n")
         self.user_key = user_key
         self.active = active
 
