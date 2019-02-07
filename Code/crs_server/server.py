@@ -134,7 +134,7 @@ def login():
 
                     return redirect(next_loc or url_for('index'))
                 flash("There was an issue processing the login", "warning")
-            flash("Username or password incorrect!")
+            flash("Username or password incorrect!", "warning")
             return render_template('login.html', username=username)
         flash("Username or password not provided", "warning")
     return render_template('login.html')
@@ -598,7 +598,7 @@ def upload_file():
             if res_server_res.status_code == 200:
                 flash('successfully uploaded!', 'info')
                 return redirect(url_for('get_all_filenames'), code=303)
-        flash('Error with upload!', 'error')
+        flash('Error with upload!', 'danger')
     return render_template('upload.html')
 
 
@@ -641,7 +641,7 @@ def encrypt_file():
                 ct_file = cpabe.encrypt(policy, file.read())
             except pyopenabe.PyOpenABEError as err:
                 del openabe, cpabe
-                flash(f"PyOpenABEError: {err}", 'error')
+                flash(f"PyOpenABEError: {err}", 'danger')
                 return render_template('encrypt.html')
             del openabe, cpabe
             file_filename += '.cpabe'
@@ -650,7 +650,7 @@ def encrypt_file():
                 mimetype='text/plain',
                 as_attachment=True,
                 attachment_filename=file_filename)
-        flash('Error with encryption!', 'error')
+        flash('Error with encryption!', 'danger')
     return render_template('encrypt.html')
 
 
@@ -699,7 +699,7 @@ def encrypt_upload_file():
                 ct_file = cpabe.encrypt(policy, file.read())
             except pyopenabe.PyOpenABEError as err:
                 del openabe, cpabe
-                flash(f"PyOpenABEError: {err}", 'error')
+                flash(f"PyOpenABEError: {err}", 'danger')
                 return render_template('encrypt_upload.html')
             del openabe, cpabe
             file.filename += '.cpabe'
@@ -709,7 +709,7 @@ def encrypt_upload_file():
             if res_server_res.status_code == 200:
                 flash('successfully uploaded!', 'info')
                 return redirect(url_for('get_all_filenames'), code=303)
-        flash('Error with upload!', 'error')
+        flash('Error with upload!', 'danger')
     return render_template('encrypt_upload.html')
 
 
@@ -740,7 +740,7 @@ def download_file(file_id):
             mimetype='text/plain',
             as_attachment=True,
             attachment_filename=filename if filename is not None else file_id + ".cpabe")
-    flash('No file matching that name found', 'error')
+    flash('No file matching that name found', 'danger')
     return render_template('download_fail.html')
 
 
@@ -791,7 +791,7 @@ def decrypt_file():
                     try:
                         dec_file = cpabe.decrypt(username, file_bytes)
                     except pyopenabe.PyOpenABEError as err:
-                        flash(f"Decryption of file failed: {err}", 'error')
+                        flash(f"Decryption of file failed: {err}", 'danger')
                         dec_file = None
                     del openabe, cpabe
                     if dec_file is not None:
@@ -802,10 +802,10 @@ def decrypt_file():
                             mimetype='text/plain',
                             as_attachment=True,
                             attachment_filename=ef_filename)
-                flash('Decryption of file failed', 'error')
+                flash('Decryption of file failed', 'danger')
             else:
                 flash('Issue with files! Make sure user key is a .key file and that the\
-                    encrypted file is a .cpabe file!', 'error')
+                    encrypted file is a .cpabe file!', 'danger')
     return render_template('decrypt.html')
 
 
@@ -863,9 +863,9 @@ def download_decrypt_file(file_id):
                 except pyopenabe.PyOpenABEError as err:
                     del openabe, cpabe
                     LOG.error("PyOpenABE error: %s", err)
-                    flash('Decryption of file failed', 'error')
+                    flash('Decryption of file failed', 'danger')
                 else:
-                    flash('User Key not uploaded properly!', 'error')
+                    flash('User Key not uploaded properly!', 'danger')
         return render_template('download_decrypt.html', file=filename, error=True)
     return render_template('download_decrypt.html', filename=res_json_dict["filename"])
 
@@ -1052,7 +1052,7 @@ def extract_policy_view():
             flash('Policy extraction failed.', 'warning')
             LOG.error("IndexError occurred: %s", err)
             extr_policy = "Unknown"
-        flash('Error with file for extraction!', 'error')
+        flash('Error with file for extraction!', 'danger')
         return render_template('extract_policy.html', extr_policy=extr_policy)
     return render_template('extract_policy.html', extr_policy=None)
 
@@ -1096,7 +1096,7 @@ def extract_user_attrs_view():
             flash('User attributes extraction failed.', 'warning')
             LOG.error("IndexError occurred: %s", err)
             user_attrs = "Unknown"
-        flash('Error with file for extraction!', 'error')
+        flash('Error with file for extraction!', 'danger')
         return render_template('extract_user_attrs.html', user_attrs=user_attrs)
     return render_template('extract_user_attrs.html', user_attrs=None)
 
