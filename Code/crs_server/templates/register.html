@@ -5,24 +5,27 @@
     {% if username %}
       <div class="form-group">
         <label for="username">Username:</label>
-        <input type="text" class="form-control" name="username" value="{{ username }}" style="width: 30%;">
+        <input type="text" class="form-control" name="username" value="{{ username }}" style="width: 40%;">
       </div>
     {% else %}
       <div class="form-group">
         <label for="username">Username:</label>
-        <input type="text" class="form-control" name="username" style="width: 30%;">
+        <input type="text" class="form-control" name="username" style="width: 40%;">
       </div>
     {% endif %}
     <div class="form-group">
       <label for="passwd">Password:</label>
-      <input type="password" class="form-control" name="passwd" style="width: 30%;">
+      <input type="password" class="form-control" name="passwd" style="width: 40%;" aria-describedby="passwordHelpBlock">
+      <small id="passwordHelpBlock" class="form-text text-muted" style="width: 40%;">
+        Your password must be greater than 12 characters long, contain at least 1 uppercase and 1 lowercase letter, have at least 1 number and at least 1 special character.
+      </small>
     </div>
     <div class="form-group">
       <label for="confirm_passwd">Confirm Password:</label>
       <input type="password" class="form-control" name="confirm_passwd" style="width: 30%;">
     </div>
     <div class="form-group">
-      <label for="user_key_label">Import a User Key file (<em>.key</em>):</label><br />
+      <label for="user_key_label">Select a User Key file (<em>.key</em>):</label><br />
       <label class="btn btn-outline-info" id="user_key_label">
         <input type="file" class="form-control-file" name="user_key" id="user_key" style="display: none;"/>
         Choose User Key
