@@ -1,0 +1,200 @@
+{% if global_attrs %}
+  <table id="policyBuilderTable" class="table table-striped order-list">
+    <thead>
+      <tr>
+        <th scope="col">#</th>
+        <th scope="col">Attribute Type</th>
+        <th scope="col">Attribute Name</th>
+        <th scope="col">Attribute Value</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <th scope="row">1</th>
+        <td scope="row">
+          <div class="input-group">
+            <div class="input-group-prepend">
+              <label class="input-group-text" for="attrType1">Type</label>
+            </div>
+            <select class="custom-select attrType" id="attrType1">
+              <option selected>Choose...</option>
+              {% for type in global_attrs %}
+                <option value="{{ type|title }}">{{ type|title }}</option>
+              {% endfor %}
+            </select>
+          </div>
+        </td>
+        <td scope="row">
+          <div class="input-group">
+            <div class="input-group-prepend">
+              <label class="input-group-text " for="attrName1">Name</label>
+            </div>
+            <select disabled class="custom-select attrName" id="attrName1">
+              <option selected>Choose...</option>
+            </select>
+          </div>
+        </td>
+        <td scope="row">
+          <div class="input-group">
+            <div class="input-group-prepend">
+              <span class="input-group-text attrValueLabel" id="attrValueLabel1">Value</span>
+            </div>
+            <input readonly type="text" class="form-control attrValue" placeholder="John Doe" aria-label="Value" aria-describedby="attrValueLabel1">
+          </div>
+        </td>
+        <td scope="row"><input type="button" class="ibtnDel btn btn-outline-danger deleteRow" style="display: none;" value="Delete"/></td>
+      </tr>
+    </tbody>
+    <tfoot>
+      <tr>
+        <th scope="row"></th>
+        <td colspan="3" style="text-align: center;">
+            <input type="button" class="btn btn-outline-success" id="addrow" value="Add Row" style="width: 40%;"/>
+        </td>
+      </tr>
+      <tr>
+      </tr>
+    </tfoot>
+  </table>
+
+  <script type="text/javascript">
+    var attrs_dict = {};
+    $(document).ready(function () {
+      var counter = 2;
+      var attrTypeToInputType = {
+        "Arrays": "text",
+        "Dates": "date",
+        "Flags": "text",
+        "Integers": "number",
+        "Strings": "text"
+      };
+      var attrTypeToToolTip = {
+        "Arrays": ["List", "[Example1,Example2,Example3,Example4]"],
+        "Dates": ["Date", "24/07/2015"],
+        "Flags": ["Boolean", "True"],
+        "Integers": ["Number", "2005"],
+        "Strings": ["Text", "John Doe"]
+      };
+
+      {% for type, values in global_attrs.items() %}
+        {% for value in values %}
+          {% if loop.first %}
+            attrs_dict.{{ type|title }} = ["{{ value }}"];
+          {% else %}
+            attrs_dict.{{ type|title }}.push("{{ value }}");
+          {% endif %}
+        {% endfor  %}
+      {% endfor %}
+
+      console.log(attrs_dict);
+
+      $("#addrow").on("click", function () {
+          var newRow = $("<tr>");
+          var cols = "";
+
+          cols += '<th scope="row">' + counter + '</th>';
+          cols += `
+            <td scope="row">
+              <div class="input-group">
+                <div class="input-group-prepend">
+                  <label class="input-group-text" for="attrType${counter}">Type</label>
+                </div>
+                <select class="custom-select attrType" id="attrType${counter}">
+                  <option selected>Choose...</option>
+                  {% for type in global_attrs %}
+                    <option value="{{ type|title }}">{{ type|title }}</option>
+                  {% endfor %}
+                </select>
+              </div>
+            </td>
+          `;
+          cols += `
+            <td scope="row">
+              <div class="input-group">
+                <div class="input-group-prepend">
+                  <label class="input-group-text" for="attrName${counter}">Name</label>
+                </div>
+                <select disabled class="custom-select attrName" id="attrName${counter}">
+                  <option selected>Choose...</option>
+                </select>
+              </div>
+            </td>
+          `;
+          cols += `
+            <td scope="row">
+              <div class="input-group">
+                <div class="input-group-prepend">
+                  <span class="input-group-text attrValueLabel" id="attrValueLabel${counter}">Value</span>
+                </div>
+                <input readonly type="text" class="form-control attrValue" placeholder="John Doe" aria-label="Value" aria-describedby="attrValueLabel${counter}">
+              </div>
+            </td>
+          `;
+          cols += `
+            <td scope="row">
+              <input type="button" class="ibtnDel btn btn-outline-danger" value="Delete"/>
+            </td>
+          `;
+
+          newRow.append(cols);
+          $("table.order-list").append(newRow);
+          counter++;
+      });
+
+
+
+      $("table.order-list").on("click", ".ibtnDel", function (event) {
+          $(this).closest("tr").remove();
+          counter -= 1
+      });
+
+      $("table.order-list").on("change", ".attrType", function (event) {
+        var val = $(this).val();
+        var attrName = $(this).closest('td').next().find("select.attrName");
+        var attrOptions = "<option selected>Choose...</option>";
+        if (val in attrs_dict) {
+          var attrNames = attrs_dict[val];
+          var attrNamesLen = attrNames.length;
+          for (var i = 0; i < attrNamesLen; i++) {
+            attrOptions = attrOptions.concat(`<option>${attrNames[i]}</option>`);
+          }
+          attrName.prop('disabled', false);
+        } else {
+          attrName.prop('disabled', true);
+          attrName.val("Choose...");
+        }
+        $(this).closest('td').next().next().find("input.attrValue").prop('readonly', true);
+        attrName.html(attrOptions);
+      });
+
+      $("table.order-list").on("change", ".attrName", function (event) {
+        var val = $(this).val();
+        var attrValueCell = $(this).closest('td').next();
+        var attrValue = attrValueCell.find("input.attrValue");
+        if (val != "Choose...") {
+          var attrValueLabel = attrValueCell.find(".attrValueLabel");
+          console.log(attrValueLabel);
+          attrType = $(this).closest('td').prev().find("select.attrType").val();
+          attrValue.attr('type', attrTypeToInputType[attrType]);
+          attrValueLabel.html(attrTypeToToolTip[attrType][0]);
+          attrValue.attr('placeholder', attrTypeToToolTip[attrType][1]);
+          if (attrType != "Flags") {
+            attrValue.prop('readonly', false);
+          } else {
+            attrValue.prop('readonly', true);
+          }
+        } else {
+          attrValue.prop('readonly', true);
+        }
+      });
+
+
+    });
+  </script>
+{% else %}
+  <div class="form-group">
+    <label for="policy">Policy:</label>
+    <textarea type="text" class="form-control" name="policy" id="policy" rows="6" placeholder="((enrolled_course:2001 and enrolled_course:2005 and male) or (enrolled_course:2003 and enrolled_course:2007 and enrolled_course:2013 and female)) and student"></textarea>
+  </div><br />
+{% endif %}
