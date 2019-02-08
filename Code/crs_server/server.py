@@ -642,7 +642,7 @@ def encrypt_file():
             except pyopenabe.PyOpenABEError as err:
                 del openabe, cpabe
                 flash(f"PyOpenABEError: {err}", 'danger')
-                return render_template('encrypt.html')
+                return render_template('encrypt.html', global_attrs=GLOBAL_ABE_ATTRS)
             del openabe, cpabe
             file_filename += '.cpabe'
             return send_file(
@@ -651,7 +651,7 @@ def encrypt_file():
                 as_attachment=True,
                 attachment_filename=file_filename)
         flash('Error with encryption!', 'danger')
-    return render_template('encrypt.html')
+    return render_template('encrypt.html', global_attrs=GLOBAL_ABE_ATTRS)
 
 
 @APP.route('/encrypt_upload', methods=['GET', 'POST'])
