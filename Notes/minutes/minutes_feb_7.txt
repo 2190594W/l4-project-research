@@ -1,0 +1,45 @@
+February 7th Meeting Minutes
+
+Future work for login, SSO, AD etc
+	integration
+	current auth is basic, and proof-of-concept
+	intent would be to integrate auth and shift responsibility
+
+user key is not secure
+	risk assessment would identify this as a risk
+	intention would be to secure this in the first place
+	what are we assuming, what are we allowing
+	can we assume the end user is responsible for protecting the user key
+	identify known issues
+		ones that were solved
+		ones we have left
+	transfer risk to institution
+
+we have reg/login, it’s just for local use
+	in future SSO integration would provide a much better solution
+	we can argue the auth is insecure since we are not using SSO
+
+built functionality for CLI encrypting and decrypting
+	but haven’t finished it yet due compatibly issues
+
+
+upload page shouldn’t have policy box ✅
+
+Implement a metadata/header to encrypted binaries to identify them as being encrypted by this toolset
+	if the metadata/header is missing, refuse to upload the file or deal with it
+
+encrypt page should say ‘encrypt’ not ‘upload’ for submit button ✅
+encrypt_upload should say ‘encrypt & upload’ ✅
+
+consider a policy building tool
+	how to communicate the policy language to the end user
+	the scope/universe of the attributes
+	constructing form would limit client so parsing not so needed
+
+Master Key Server should perhaps push data to Res Server, rather than pulling from MK Server
+
+ANTLR for parsing policy as type checking
+
+Dissemination of info from MK Server through Res Server to CRS Server
+
+Start properly on dissertation and risk assessment
