@@ -5,6 +5,7 @@
         <th scope="col">#</th>
         <th scope="col">Attribute Type</th>
         <th scope="col">Attribute Name</th>
+        <th scope="col">Logic</th>
         <th scope="col">Attribute Value</th>
         <th></th>
       </tr>
@@ -17,7 +18,7 @@
             <div class="input-group-prepend">
               <label class="input-group-text" for="attrType1">Type</label>
             </div>
-            <select class="custom-select attrType" id="attrType1">
+            <select required class="custom-select attrType" name="attrType1" id="attrType1">
               <option selected>Choose...</option>
               {% for type in global_attrs %}
                 <option value="{{ type|title }}">{{ type|title }}</option>
@@ -30,7 +31,7 @@
             <div class="input-group-prepend">
               <label class="input-group-text " for="attrName1">Name</label>
             </div>
-            <select disabled class="custom-select attrName" id="attrName1">
+            <select required disabled class="custom-select attrName" name="attrName1" id="attrName1">
               <option selected>Choose...</option>
             </select>
           </div>
@@ -38,19 +39,33 @@
         <td scope="row">
           <div class="input-group">
             <div class="input-group-prepend">
-              <span class="input-group-text attrValueLabel" id="attrValueLabel1">Value</span>
+              <label class="input-group-text " for="logicOperator1">Operator</label>
             </div>
-            <input readonly type="text" class="form-control attrValue" placeholder="John Doe" aria-label="Value" aria-describedby="attrValueLabel1">
+            <select required disabled class="custom-select logicOperator" name="logicOperator1" id="logicOperator1">
+              <option selected value="=">=</option>
+              <option value=">">></option>
+              <option value="<"><</option>
+              <option value=">=">>=</option>
+              <option value="<="><=</option>
+            </select>
           </div>
         </td>
-        <td scope="row"><input type="button" class="ibtnDel btn btn-outline-danger deleteRow" style="display: none;" value="Delete"/></td>
+        <td scope="row">
+          <div class="input-group">
+            <div class="input-group-prepend">
+              <span class="input-group-text attrValueLabel" name="attrValueLabel1" id="attrValueLabel1">Value</span>
+            </div>
+            <input required readonly type="text" class="form-control attrValue" placeholder="John Doe" aria-label="Value" aria-describedby="attrValueLabel1">
+          </div>
+        </td>
+        <td colspan="1" scope="row"><button type="button" class="ibtnDel btn btn-outline-danger deleteRow" style="display: none;">Delete</button></td>
       </tr>
     </tbody>
     <tfoot>
       <tr>
         <th scope="row"></th>
-        <td colspan="3" style="text-align: center;">
-            <input type="button" class="btn btn-outline-success" id="addrow" value="Add Row" style="width: 40%;"/>
+        <td colspan="4" scope="row" style="text-align: center;">
+            <button type="button" class="btn btn-outline-success" id="addrow" style="width: 40%;">Add Row</button>
         </td>
       </tr>
       <tr>
@@ -70,7 +85,7 @@
         "Strings": "text"
       };
       var attrTypeToToolTip = {
-        "Arrays": ["List", "[Example1,Example2,Example3,Example4]"],
+        "Arrays": ["List", "Example1,Example2,Example3,Example4,..."],
         "Dates": ["Date", "24/07/2015"],
         "Flags": ["Boolean", "True"],
         "Integers": ["Number", "2005"],
@@ -87,64 +102,103 @@
         {% endfor  %}
       {% endfor %}
 
-      console.log(attrs_dict);
-
       $("#addrow").on("click", function () {
-          var newRow = $("<tr>");
-          var cols = "";
+        var newLogic = $("<tr>");
+        var newAttr = $("<tr>");
+        var logicCols = "";
+        var attrCols = "";
 
-          cols += '<th scope="row">' + counter + '</th>';
-          cols += `
-            <td scope="row">
-              <div class="input-group">
-                <div class="input-group-prepend">
-                  <label class="input-group-text" for="attrType${counter}">Type</label>
-                </div>
-                <select class="custom-select attrType" id="attrType${counter}">
-                  <option selected>Choose...</option>
-                  {% for type in global_attrs %}
-                    <option value="{{ type|title }}">{{ type|title }}</option>
-                  {% endfor %}
-                </select>
+        logicCols += '<th scope="row"></th>';
+        logicCols += '<td scope="row"></td>';
+        logicCols += `
+          <td scope="row">
+            <div class="input-group">
+              <div class="input-group-prepend">
+                <label class="input-group-text" for="attrLogic${counter - 1}">Logic</label>
               </div>
-            </td>
-          `;
-          cols += `
-            <td scope="row">
-              <div class="input-group">
-                <div class="input-group-prepend">
-                  <label class="input-group-text" for="attrName${counter}">Name</label>
-                </div>
-                <select disabled class="custom-select attrName" id="attrName${counter}">
-                  <option selected>Choose...</option>
-                </select>
-              </div>
-            </td>
-          `;
-          cols += `
-            <td scope="row">
-              <div class="input-group">
-                <div class="input-group-prepend">
-                  <span class="input-group-text attrValueLabel" id="attrValueLabel${counter}">Value</span>
-                </div>
-                <input readonly type="text" class="form-control attrValue" placeholder="John Doe" aria-label="Value" aria-describedby="attrValueLabel${counter}">
-              </div>
-            </td>
-          `;
-          cols += `
-            <td scope="row">
-              <input type="button" class="ibtnDel btn btn-outline-danger" value="Delete"/>
-            </td>
-          `;
+              <select required class="custom-select attrLogic" name="attrLogic${counter - 1}" id="attrLogic${counter - 1}">
+                <option selected>Choose...</option>
+                <option value="AND">AND</option>
+                <option value="OR">OR</option>
+              </select>
+            </div>
+          </td>
+        `;
+        logicCols += '<td scope="row"></td>';
 
-          newRow.append(cols);
-          $("table.order-list").append(newRow);
-          counter++;
+        attrCols += '<th scope="row">' + counter + '</th>';
+        attrCols += `
+          <td scope="row">
+            <div class="input-group">
+              <div class="input-group-prepend">
+                <label class="input-group-text" for="attrType${counter}">Type</label>
+              </div>
+              <select required class="custom-select attrType" name="attrType${counter}" id="attrType${counter}">
+                <option selected>Choose...</option>
+                {% for type in global_attrs %}
+                  <option value="{{ type|title }}">{{ type|title }}</option>
+                {% endfor %}
+              </select>
+            </div>
+          </td>
+        `;
+        attrCols += `
+          <td scope="row">
+            <div class="input-group">
+              <div class="input-group-prepend">
+                <label class="input-group-text" for="attrName${counter}">Name</label>
+              </div>
+              <select required disabled class="custom-select attrName" name="attrName${counter}" id="attrName${counter}">
+                <option selected>Choose...</option>
+              </select>
+            </div>
+          </td>
+        `;
+        attrCols += `
+          <td scope="row">
+            <div class="input-group">
+              <div class="input-group-prepend">
+                <label class="input-group-text " for="logicOperator${counter}">Operator</label>
+              </div>
+              <select required disabled class="custom-select logicOperator" name="logicOperator${counter}" id="logicOperator${counter}">
+                <option selected value="=">=</option>
+                <option value=">">></option>
+                <option value="<"><</option>
+                <option value=">=">>=</option>
+                <option value="<="><=</option>
+              </select>
+            </div>
+          </td>
+        `;
+        attrCols += `
+          <td scope="row">
+            <div class="input-group">
+              <div class="input-group-prepend">
+                <span class="input-group-text attrValueLabel" name="attrValueLabel${counter}" id="attrValueLabel${counter}">Value</span>
+              </div>
+              <input required readonly type="text" class="form-control attrValue" placeholder="John Doe" aria-label="Value" aria-describedby="attrValueLabel${counter}">
+            </div>
+          </td>
+        `;
+        attrCols += `
+          <td scope="row">
+            <button type="button" class="ibtnDel btn btn-outline-danger">Delete</button>
+          </td>
+        `;
+
+        newLogic.append(logicCols);
+        newLogic.append("</tr>");
+        newAttr.append(attrCols);
+        newAttr.append("</tr>")
+        $("table.order-list").append(newLogic);
+        $("table.order-list").append(newAttr);
+        counter++;
       });
 
 
 
       $("table.order-list").on("click", ".ibtnDel", function (event) {
+          $(this).closest("tr").prev().remove();
           $(this).closest("tr").remove();
           counter -= 1
       });
@@ -164,24 +218,32 @@
           attrName.prop('disabled', true);
           attrName.val("Choose...");
         }
-        $(this).closest('td').next().next().find("input.attrValue").prop('readonly', true);
+        $(this).closest('td').next().next().find("select.logicOperator").prop('disabled', true);
+        $(this).closest('td').next().next().next().find("input.attrValue").prop('readonly', true);
         attrName.html(attrOptions);
       });
 
       $("table.order-list").on("change", ".attrName", function (event) {
         var val = $(this).val();
-        var attrValueCell = $(this).closest('td').next();
+        var logicOperatorCell = $(this).closest('td').next();
+        var attrValueCell = $(this).closest('td').next().next();
+        var logicOperator = logicOperatorCell.find("select.logicOperator");
         var attrValue = attrValueCell.find("input.attrValue");
         if (val != "Choose...") {
           var attrValueLabel = attrValueCell.find(".attrValueLabel");
-          console.log(attrValueLabel);
           attrType = $(this).closest('td').prev().find("select.attrType").val();
           attrValue.attr('type', attrTypeToInputType[attrType]);
           attrValueLabel.html(attrTypeToToolTip[attrType][0]);
           attrValue.attr('placeholder', attrTypeToToolTip[attrType][1]);
-          if (attrType != "Flags") {
+          logicOperator.val('=');
+          if (["Arrays", "Strings"].includes(attrType)) {
+            logicOperator.prop('disabled', true);
+            attrValue.prop('readonly', false);
+          } else if (attrType != "Flags") {
+            logicOperator.prop('disabled', false);
             attrValue.prop('readonly', false);
           } else {
+            logicOperator.prop('disabled', true);
             attrValue.prop('readonly', true);
           }
         } else {
