@@ -3,23 +3,30 @@
     <thead>
       <tr>
         <th scope="col">#</th>
+        <th scope="col">Bracket</th>
         <th scope="col">Attribute Type</th>
         <th scope="col">Attribute Name</th>
         <th scope="col">Logic</th>
         <th scope="col">Attribute Value</th>
+        <th scope="col">Bracket</th>
         <th></th>
       </tr>
     </thead>
     <tbody>
       <tr>
         <th scope="row">1</th>
+        <td scope="row" style="width: 10px;">
+          <div class="input-group">
+            <select class="custom-select parenO" name="parenO1" id="parenO1">
+              <option selected value="">-</option>
+              <option value="(">(</option>
+            </select>
+          </div>
+        </td>
         <td scope="row">
           <div class="input-group">
-            <div class="input-group-prepend">
-              <label class="input-group-text" for="attrType1">Type</label>
-            </div>
             <select required class="custom-select attrType" name="attrType1" id="attrType1">
-              <option selected>Choose...</option>
+              <option selected value="">Choose...</option>
               {% for type in global_attrs %}
                 <option value="{{ type|title }}">{{ type|title }}</option>
               {% endfor %}
@@ -28,19 +35,13 @@
         </td>
         <td scope="row">
           <div class="input-group">
-            <div class="input-group-prepend">
-              <label class="input-group-text " for="attrName1">Name</label>
-            </div>
             <select required disabled class="custom-select attrName" name="attrName1" id="attrName1">
-              <option selected>Choose...</option>
+              <option selected value="">Choose...</option>
             </select>
           </div>
         </td>
         <td scope="row">
           <div class="input-group">
-            <div class="input-group-prepend">
-              <label class="input-group-text " for="logicOperator1">Operator</label>
-            </div>
             <select required disabled class="custom-select logicOperator" name="logicOperator1" id="logicOperator1">
               <option selected value="=">=</option>
               <option value=">">></option>
@@ -55,23 +56,42 @@
             <div class="input-group-prepend">
               <span class="input-group-text attrValueLabel" name="attrValueLabel1" id="attrValueLabel1">Value</span>
             </div>
-            <input required readonly type="text" class="form-control attrValue" placeholder="John Doe" aria-label="Value" aria-describedby="attrValueLabel1">
+            <input required readonly type="text" class="form-control attrValue" placeholder="John Doe" aria-label="Value" aria-describedby="attrValueLabel1" value="">
           </div>
         </td>
-        <td colspan="1" scope="row"><button type="button" class="ibtnDel btn btn-outline-danger deleteRow" style="display: none;">Delete</button></td>
+        <td scope="row"  style="width: 10px;">
+          <div class="input-group">
+            <select class="custom-select parenC" name="parenC1" id="parenC1">
+              <option selected value="">-</option>
+              <option value=")">)</option>
+            </select>
+          </div>
+        </td>
+        <td colspan="1" scope="row"><button disabled type="button" class="ibtnDel btn btn-outline-danger deleteRow" style="opacity: 0;">Delete</button></td>
       </tr>
     </tbody>
     <tfoot>
       <tr>
-        <th scope="row"></th>
-        <td colspan="4" scope="row" style="text-align: center;">
-            <button type="button" class="btn btn-outline-success" id="addrow" style="width: 40%;">Add Row</button>
+        <td colspan="8" scope="row" style="text-align: center;">
+            <button type="button" class="btn btn-outline-success" id="addrow" style="width: 50%;">Add Row</button>
         </td>
       </tr>
       <tr>
       </tr>
     </tfoot>
   </table>
+
+  <br />
+  <button type="button" class="btn btn-outline-info" id="calcPolicy">Calculate Policy</button>
+  <br />
+
+  <div class="form-group calc-policy-div" style="display: none;">
+    <br /><br />
+    <label for="policy">Generated Policy:</label>
+    <textarea readonly type="text" class="form-control" name="policy" id="calc-policy-ta" rows="6"></textarea>
+  </div>
+
+  <br />
 
   <script type="text/javascript">
     var attrs_dict = {};
@@ -110,6 +130,8 @@
 
         logicCols += '<th scope="row"></th>';
         logicCols += '<td scope="row"></td>';
+        logicCols += '<td scope="row"></td>';
+        logicCols += '<td scope="row"></td>';
         logicCols += `
           <td scope="row">
             <div class="input-group">
@@ -117,7 +139,7 @@
                 <label class="input-group-text" for="attrLogic${counter - 1}">Logic</label>
               </div>
               <select required class="custom-select attrLogic" name="attrLogic${counter - 1}" id="attrLogic${counter - 1}">
-                <option selected>Choose...</option>
+                <option selected value="">Choose...</option>
                 <option value="AND">AND</option>
                 <option value="OR">OR</option>
               </select>
@@ -125,16 +147,24 @@
           </td>
         `;
         logicCols += '<td scope="row"></td>';
+        logicCols += '<td scope="row"></td>';
 
         attrCols += '<th scope="row">' + counter + '</th>';
         attrCols += `
+          <td scope="row" style="width: 15px;">
+            <div class="input-group">
+              <select class="custom-select parenO" name="parenO$(counter)" id="parenO$(counter)">
+                <option selected value="">-</option>
+                <option value="(">(</option>
+              </select>
+            </div>
+          </td>
+        `;
+        attrCols += `
           <td scope="row">
             <div class="input-group">
-              <div class="input-group-prepend">
-                <label class="input-group-text" for="attrType${counter}">Type</label>
-              </div>
               <select required class="custom-select attrType" name="attrType${counter}" id="attrType${counter}">
-                <option selected>Choose...</option>
+                <option selected value="">Choose...</option>
                 {% for type in global_attrs %}
                   <option value="{{ type|title }}">{{ type|title }}</option>
                 {% endfor %}
@@ -145,11 +175,8 @@
         attrCols += `
           <td scope="row">
             <div class="input-group">
-              <div class="input-group-prepend">
-                <label class="input-group-text" for="attrName${counter}">Name</label>
-              </div>
               <select required disabled class="custom-select attrName" name="attrName${counter}" id="attrName${counter}">
-                <option selected>Choose...</option>
+                <option selected value="">Choose...</option>
               </select>
             </div>
           </td>
@@ -157,9 +184,6 @@
         attrCols += `
           <td scope="row">
             <div class="input-group">
-              <div class="input-group-prepend">
-                <label class="input-group-text " for="logicOperator${counter}">Operator</label>
-              </div>
               <select required disabled class="custom-select logicOperator" name="logicOperator${counter}" id="logicOperator${counter}">
                 <option selected value="=">=</option>
                 <option value=">">></option>
@@ -176,7 +200,17 @@
               <div class="input-group-prepend">
                 <span class="input-group-text attrValueLabel" name="attrValueLabel${counter}" id="attrValueLabel${counter}">Value</span>
               </div>
-              <input required readonly type="text" class="form-control attrValue" placeholder="John Doe" aria-label="Value" aria-describedby="attrValueLabel${counter}">
+              <input required readonly type="text" class="form-control attrValue" placeholder="John Doe" aria-label="Value" aria-describedby="attrValueLabel${counter}" value="">
+            </div>
+          </td>
+        `;
+        attrCols += `
+          <td scope="row" style="width: 15px;">
+            <div class="input-group">
+              <select class="custom-select parenC" name="parenC$(counter)" id="parenC$(counter)">
+                <option selected value="">-</option>
+                <option value=")">)</option>
+              </select>
             </div>
           </td>
         `;
@@ -249,6 +283,75 @@
         } else {
           attrValue.prop('readonly', true);
         }
+      });
+
+      $("#calcPolicy").on("click", function () {
+        var validForm = true;
+        $('input,select').filter('[required]:visible').each(function() {
+          var valid = $(this)[0].checkValidity();
+          if (!valid) {
+            $(this)[0].reportValidity();
+            validForm = false;
+            return;
+          }
+        });
+        if (!validForm) {
+          $(".calc-policy-div").css("display", "none");
+          return;
+        }
+        var tableRows = $('#policyBuilderTable tbody tr');
+        var tableLen = tableRows.length;
+        var policy = "";
+        var extracted;
+        for (var i = 0; i < tableLen; i+=2) {
+          extracted = [];
+          var attrRow = tableRows[i];
+          var logicRow = tableRows[i+1];
+          extracted.push($(attrRow).find(".parenO").val());
+          extracted.push($(attrRow).find(".attrType").val());
+          extracted.push($(attrRow).find(".attrName").val());
+          extracted.push($(attrRow).find(".logicOperator").val());
+          extracted.push($(attrRow).find(".attrValue").val());
+          extracted.push($(attrRow).find(".parenC").val());
+          if (i < tableLen) {
+            extracted.push($(logicRow).find(".attrLogic").val());
+          } else {
+            extracted.push("");
+          }
+          policy += extracted[0];
+          if (extracted[1] == "Arrays") {
+            policy += "(";
+            var attrArray = extracted[4].replace(/ /g,'').split(",");
+            if (attrArray.length > 0) {
+              for (var j = 0; j < attrArray.length; j++) {
+                policy += extracted[2] + ":" + attrArray[j];
+                if (j < attrArray.length - 1) {
+                  policy += " and ";
+                }
+              }
+            } else {
+              $(attrRow).find(".attrValue")[0].reportValidity();
+            }
+            policy += ")";
+          } else if (extracted[1] == "Flags") {
+            policy += extracted[2];
+          } else if (extracted[1] == "Strings") {
+            policy += extracted[2] + ":" + extracted[4];
+          } else if (extracted[1] == "Dates") {
+            var attrDate = new Date(extracted[4]);
+            var options = { year: 'numeric', month: 'long', day: 'numeric' };
+            var attrDateStr = attrDate.toLocaleDateString("en-US", options);
+            policy += extracted[2] + " " + extracted[3] + " " + attrDateStr;
+          } else {
+            policy += extracted[2] + " " + extracted[3] + " " + extracted[4];
+          }
+          policy += extracted[5];
+          if (extracted[6]) {
+            policy += " " + extracted[6].toLowerCase() + " ";
+          }
+        }
+        $("#calc-policy-ta").html(policy);
+        $(".calc-policy-div").css("display", "block");
       });
 
 
