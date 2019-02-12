@@ -128,6 +128,7 @@ def update_gaa_file(mk_server, gaa_file_path):
     if gaa_res.status_code == 200:
         gaa_res_dict = json.loads(gaa_res.content)
         gaa = gaa_res_dict['attributes']
+        LOG.info("DEV: Collected attributes from MSK server.\nNew Attributes:%s", gaa)
         gaa_j = json.dumps(gaa)
         with open(gaa_file_path, 'w') as gaa_f:
             gaa_f.write(gaa_j)
@@ -523,6 +524,9 @@ def get_latest_attributes():
         Generates flask Response object by converting dict to JSON.
 
     """
+    #pylint: disable=W0603
+    global MK_SERVER, GLOBAL_ABE_ATTRS_FILE
+    update_gaa_file(MK_SERVER, GLOBAL_ABE_ATTRS_FILE)
     attributes_payload = {
         'generated_at': GLOBAL_ABE_ATTRS_UPDATED,
         'updated_at': datetime.now(),
