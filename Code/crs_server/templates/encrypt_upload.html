@@ -3,10 +3,10 @@
   <h1>Encrypt & Upload new File</h1><br />
   <form method="post" enctype="multipart/form-data">
     <div class="form-group">
-      <label for="enc_file_label">Select an Encrypted file (<em>.cpabe</em>):</label><br />
+      <label for="enc_file_label">Select a file to encrypt (<em>.jp2, .jpg, .png, .svg, .ics, .ppt, .pptx, .xls, .xlsx, .doc, .docx, .txt, .pdf, .zip</em>):</label><br />
       <label class="btn btn-outline-info" id="enc_file_label">
         <input type="file" class="form-control-file" name="enc_file" id="enc_file" style="display: none;"/>
-        Choose Encrypted File
+        Choose File
       </label>
       <span id="file-selected"></span>
     </div>
@@ -14,19 +14,52 @@
       <label for="author">Author:</label>
       <input type="text" class="form-control" name="author" placeholder="John Doe" style="width: 40%;"><br />
     </div>
-    <div class="form-group">
-      <label for="policy">Policy:</label>
-      <textarea type="text" class="form-control" name="policy" id="policy" rows="6" placeholder="((enrolled_course:2001 and enrolled_course:2005 and male) or (enrolled_course:2003 and enrolled_course:2007 and enrolled_course:2013 and female)) and student"></textarea>
-    </div><br />
+    <br />
+    <ul class="nav nav-tabs" id="builderTab" role="tablist">
+      <li class="nav-item">
+        <a class="nav-link active" id="builder-tab" data-toggle="tab" href="#builder" role="tab" aria-controls="builder" aria-selected="true">Build Policy</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" id="manual-tab" data-toggle="tab" href="#manual" role="tab" aria-controls="manual" aria-selected="false">Type Policy</a>
+      </li>
+    </ul>
+    <br />
+    <div class="tab-content" id="builderTabContent">
+      <div class="tab-pane fade show active" id="builder" role="tabpanel" aria-labelledby="builder-tab">
+        {% include 'policy_builder.html' %}
+      </div>
+      <div class="tab-pane fade" id="manual" role="tabpanel" aria-labelledby="manual-tab">
+        <div class="form-group">
+          <label for="policy">Policy:</label>
+          <textarea type="text" class="form-control" name="policy" id="policy" rows="6" placeholder="((enrolled_course:2001 and enrolled_course:2005 and male) or (enrolled_course:2003 and enrolled_course:2007 and enrolled_course:2013 and female)) and student"></textarea>
+        </div>
+      </div>
+    </div>
+    <br />
     <button type="submit" class="btn btn-outline-primary">Encrypt & Upload</button>
   </form>
   <script type="text/javascript">
-    $('#enc_file').bind('change',
-      function() {
-        var filePath, fileName = '';
-        filePath = $(this).val().split("\\");
-        fileName = filePath[filePath.length -1];
-        $('#file-selected').html(fileName);
+    $('#enc_file').bind('change', function() {
+      var filePath, fileName = '';
+      filePath = $(this).val().split("\\");
+      fileName = filePath[filePath.length -1];
+      $('#file-selected').html(fileName);
+    });
+    $("#builder-tab").on("click", function () {
+      $('#policyBuilderTable select,input').each(function() {
+        if ($(this).hasClass("disabledByJS")) {
+          $(this).removeClass("disabledByJS");
+          $(this).prop("disabled", false);
+        }
       });
+    });
+    $("#manual-tab").on("click", function () {
+      $('#policyBuilderTable select,input').each(function() {
+        if ($(this).prop("disabled") == false) {
+          $(this).prop("disabled", true);
+          $(this).addClass("disabledByJS");
+        }
+      });
+    });
   </script>
 {% endblock %}
