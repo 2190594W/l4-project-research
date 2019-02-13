@@ -1046,7 +1046,7 @@ def extract_policy_view():
         try:
             extr_policy = extract_policy(file.read())
             if extr_policy != "Unknown":
-                flash('Policy extraction successful.', 'info')
+                flash('Policy extraction successful.', 'success')
             return render_template('extract_policy.html', extr_policy=extr_policy)
         except IndexError as err:
             flash('Policy extraction failed.', 'warning')
