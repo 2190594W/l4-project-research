@@ -621,13 +621,13 @@ def encrypt_file():
     """
     if request.method == 'POST':
         # check if the post request has the file part
-        if 'file' not in request.files:
+        if 'enc_file' not in request.files:
             flash('No file part', 'info')
             return redirect(request.url)
         if 'policy' not in request.form:
             flash('No policy provided!', 'info')
             return redirect(request.url)
-        file = request.files['file']
+        file = request.files['enc_file']
         policy = request.form['policy']
         # if user does not select file, browser also
         # submit an empty part without filename
@@ -674,7 +674,7 @@ def encrypt_upload_file():
     """
     if request.method == 'POST':
         # check if the post request has the file part
-        if 'file' not in request.files:
+        if 'enc_file' not in request.files:
             flash('No file uploaded!', 'info')
             return redirect(request.url)
         if 'policy' not in request.form:
@@ -685,7 +685,7 @@ def encrypt_upload_file():
             author = "Anonymous"
         else:
             author = request.form["author"]
-        file = request.files['file']
+        file = request.files['enc_file']
         policy = request.form['policy']
         # if user does not select file, browser also
         # submit an empty part without filename
@@ -700,7 +700,7 @@ def encrypt_upload_file():
             except pyopenabe.PyOpenABEError as err:
                 del openabe, cpabe
                 flash(f"PyOpenABEError: {err}", 'danger')
-                return render_template('encrypt_upload.html')
+                return render_template('encrypt_upload.html', global_attrs=GLOBAL_ABE_ATTRS)
             del openabe, cpabe
             file.filename += '.cpabe'
             files = {'file': (file.filename, ct_file, file.content_type)}
@@ -710,7 +710,7 @@ def encrypt_upload_file():
                 flash('successfully uploaded!', 'info')
                 return redirect(url_for('get_all_filenames'), code=303)
         flash('Error with upload!', 'danger')
-    return render_template('encrypt_upload.html')
+    return render_template('encrypt_upload.html', global_attrs=GLOBAL_ABE_ATTRS)
 
 
 @APP.route('/download/<string:file_id>')
