@@ -88,7 +88,7 @@
   <div class="form-group calc-policy-div" style="display: none;">
     <br /><br />
     <label for="policy">Generated Policy:</label>
-    <textarea readonly type="text" class="form-control" name="policy" id="calc-policy-ta" rows="6"></textarea>
+    <textarea required readonly type="text" class="form-control" name="policy" id="calc-policy-ta" rows="6"></textarea>
   </div>
 
   <br />
@@ -354,12 +354,14 @@
         $(".calc-policy-div").css("display", "block");
       });
 
-
     });
   </script>
 {% else %}
+  <h5>Global ABE Attributes unavailable | Builder unavailable as well</h5>
   <div class="form-group">
-    <label for="policy">Policy:</label>
-    <textarea type="text" class="form-control" name="policy" id="policy" rows="6" placeholder="((enrolled_course:2001 and enrolled_course:2005 and male) or (enrolled_course:2003 and enrolled_course:2007 and enrolled_course:2013 and female)) and student"></textarea>
+    <div id="policyBuilderTable">
+      <label for="policy">Policy:</label>
+      <textarea required type="text" class="form-control" name="policy" id="policy" rows="6" placeholder="((enrolled_course:2001 and enrolled_course:2005 and male) or (enrolled_course:2003 and enrolled_course:2007 and enrolled_course:2013 and female)) and student"></textarea>
+    </div>
   </div><br />
 {% endif %}
