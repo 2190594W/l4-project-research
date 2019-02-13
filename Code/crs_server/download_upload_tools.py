@@ -54,7 +54,10 @@ def extract_policy(file_bytes):
         br"(?:policy\W+ +)(.+\w+ [\:\w]+.)(?:[^ \s]{2,})",
         br"(?:policy\w\W\w)(.+\w+ [\:\w]+)(?:[^\x00-\x7F \s]{2,})",
         br"(?:policy\w\W\w)(.+\w+ [\:\w]+)(?:[\s]{1,})",
-        br"(?:policy\w\W\w\s+)(.+\w+ [\:\w]+)(?:[\s]{1,})"
+        br"(?:policy\w\W\w\s+)(.+\w+ [\:\w]+)(?:[\s]{1,})",
+        br"(?:policy\W)([\x1F-\x7F]+)",
+        br"(?:policy\W+)([\x1F-\x7F]+)",
+        br"(?:policy)([\x1F-\x7F]+)"
     ]
     policy = ""
     file_contents = base64.b64decode(file_bytes)
