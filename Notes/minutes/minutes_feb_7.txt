@@ -22,7 +22,6 @@ we have reg/login, it’s just for local use
 built functionality for CLI encrypting and decrypting
 	but haven’t finished it yet due compatibly issues
 
-
 upload page shouldn’t have policy box ✅
 
 Implement a metadata/header to encrypted binaries to identify them as being encrypted by this toolset
@@ -31,14 +30,14 @@ Implement a metadata/header to encrypted binaries to identify them as being encr
 encrypt page should say ‘encrypt’ not ‘upload’ for submit button ✅
 encrypt_upload should say ‘encrypt & upload’ ✅
 
-consider a policy building tool
+consider a policy building tool ✅
 	how to communicate the policy language to the end user
-	the scope/universe of the attributes
-	constructing form would limit client so parsing not so needed
+	the scope/universe of the attributes ✅ (disseminated using Global Attributes list)
+	constructing form would limit client so parsing not so needed ✅
+	could still parse using ANTLR for added security, since a user can type out a policy if they wish
+		ANTLR for parsing policy as type checking
 
 Master Key Server should perhaps push data to Res Server, rather than pulling from MK Server
-
-ANTLR for parsing policy as type checking
 
 Dissemination of info from MK Server through Res Server to CRS Server
 
