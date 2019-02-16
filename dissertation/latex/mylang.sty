@@ -1,0 +1,37 @@
+\ProvidesPackage{mylang}
+
+\RequirePackage{jfdm-plt}
+\RequirePackage{bbm}
+\RequirePackage{amsmath}
+\RequirePackage{textcomp}
+\RequirePackage{newtxmath}
+
+% It is a good idea to macro names that may change.
+
+\newcommand{\mylang}{\textsc{MyLang}}
+
+% Help us make constructions in our language
+\newcommand{\newExpr}[2]{\ensuremath{#1\,(#2)}}
+
+% ------------------------------------------------------------------ [ Boolean ]
+
+\MkEnum{\ExprGT}{greaterThan}
+\MkEnum{\ExprLT}{lessThan}
+\MkEnum{\ExprEQ}{equal}
+\MkEnum{\ExprGTE}{greaterThanEqual}
+\MkEnum{\ExprLTE}{lessThanEqual}
+
+\newcommand{\exprGT}[2]{\newExpr{\ExprGT}{#1,#2}}
+\newcommand{\exprLT}[2]{\newExpr{\ExprLT}{#1,#2}}
+\newcommand{\exprEQ}[2]{\newExpr{\ExprEQ}{#1,#2}}
+\newcommand{\exprGTE}[2]{\newExpr{\ExprGTE}{#1,#2}}
+\newcommand{\exprLTE}[2]{\newExpr{\ExprLTE}{#1,#2}}
+
+
+\MkEnum{\ExprOr}{or}
+\MkEnum{\ExprAnd}{and}
+
+\newcommand{\exprOr}[2]{\newExpr{\ExprOr}{#1,#2}}
+\newcommand{\exprAnd}[2]{\newExpr{\ExprAnd}{#1,#2}}
+
+\endinput

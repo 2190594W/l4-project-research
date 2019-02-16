@@ -2,10 +2,19 @@
 
 \documentclass[british]{l4proj}
 
-
 %
 % put any additional packages here
 %
+\usepackage{csquotes}
+
+\usepackage{lmodern}
+\usepackage{isodate}
+\usepackage{inconsolata}
+
+\usepackage{jfdm-plt}
+\usepackage{mylang}
+\usepackage{url}
+\usepackage{cleveref}
 
 \begin{document}
 
@@ -178,6 +187,8 @@ Make it clear how you derived the constrained form of your problem via a clear a
 How is this problem to be approached, without reference to specific implementation details?
 \section{Guidance}
 Design should cover the abstract design in such a way that someone else might be able to do what you did, but with a different language or library or tool.
+
+\input{sections/formal_lang/syntax_types_contexts}
 
 %==================================================================================================================================
 \chapter{Implementation}
