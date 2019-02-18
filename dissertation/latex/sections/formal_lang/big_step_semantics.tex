@@ -1,0 +1,129 @@
+\section{Big Step Semantics}\label{sec:semantics}
+
+\begin{figure}[ht]
+  \centering
+\begin{mathpar}
+  \infer*[left=Nat]
+  {
+    \\
+  }
+  {
+    n\Downarrow{}n
+  }
+  \and
+  \infer*[left=$\mathbb{B}$]
+  {
+    \\
+  }
+  {
+    b\Downarrow{}b
+  }
+  \and
+  \infer*[left=$\mathbb{D}$]
+  {
+    \\
+  }
+  {
+    d\Downarrow{}d
+  }
+  \and
+  \infer*[left=$\mathbb{S}$]
+  {
+    \\
+  }
+  {
+    s\Downarrow{}s
+  }
+  \and
+  \infer*[left=$\mathbb{L}$]
+  {
+    \\
+  }
+  {
+    l\Downarrow{}l
+  }
+  \and
+  \infer*[left=OR]
+  {
+    a\Downarrow{}\primed{a}\\
+    b\Downarrow{}\primed{b}
+  }
+  {
+    \exprOr{a}{b}\Downarrow\primed{a}\vee\primed{b}
+  }
+  \and
+  \infer*[left=AND]
+  {
+    a\Downarrow{}\primed{a}\\
+    b\Downarrow{}\primed{b}
+  }
+  {
+    \exprAnd{a}{b}\Downarrow\primed{a}\wedge\primed{b}
+  }
+  \and
+  \infer*[left=GT]
+  {
+    a\Downarrow{}\primed{a}\\
+    b\Downarrow{}\primed{b}
+  }
+  {
+    \exprGT{a}{b}\Downarrow\primed{a}>\primed{b}
+  }
+  \and
+  \infer*[left=LT]
+  {
+    a\Downarrow{}\primed{a}\\
+    b\Downarrow{}\primed{b}
+  }
+  {
+    \exprLT{a}{b}\Downarrow\primed{a}<\primed{b}
+  }
+  \and
+  \infer*[left=EQ]
+  {
+    a\Downarrow{}\primed{a}\\
+    b\Downarrow{}\primed{b}
+  }
+  {
+    \exprEQ{a}{b}\Downarrow\primed{a}\equiv\primed{b}
+  }
+  \and
+  \infer*[left=GTE]
+  {
+    a\Downarrow{}\primed{a}\\
+    b\Downarrow{}\primed{b}
+  }
+  {
+    \exprGTE{a}{b}\Downarrow\primed{a}\geqq\primed{b}
+  }
+  \and
+  \infer*[left=LTE]
+  {
+    a\Downarrow{}\primed{a}\\
+    b\Downarrow{}\primed{b}
+  }
+  {
+    \exprLTE{a}{b}\Downarrow\primed{a}\leqq\primed{b}
+  }
+  \and
+  \infer*[left=Let]
+  {
+    e_1\Downarrow\primed{e_1}\\
+    \subst{e_2}{\mu}{\primed{e_1}}\Downarrow\primed{e_2}
+  }
+  {
+    \stmtLet{\mu}{{e}_{1}}{e_{2}}\Downarrow\primed{e_2}
+  }\end{mathpar}
+  \caption{\label{fig:semantics}Big Step Semantics}
+\end{figure}
+
+Operational semantics describe how we evaluate our programs.
+This describes how we can \emph{reduce}/evaluate our language expressions and statements to a single value.
+There are generally two common styles of operational semantics: Big-Step, and Small-Step.
+There are more formal names given but we generally refer to the styles using these names.
+
+Big-Step semantics are concerned with what the final result is; we can skip description of intermediate computations.
+Small-Step semantics are concerned with how we get to the final result; we cannot skip intermediate computations.
+Both have pros and cons.
+
+\Cref{fig:semantics} presents Big-Step style semantics, here we use \emph{real} operations to show how an expression is reduced using \emph{real} integer and boolean operators.
