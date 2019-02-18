@@ -1,0 +1,16 @@
+February 14th Meeting Minutes
+
+ANTLR parsing of policy language would be a very good exercise for dissertation
+
+Implement checking a file’s policy against the user’s attributes (if manageable)
+
+Discussed formal language and general rules for typing.
+
+Went over the differences between constants and values.
+
+Determined that a longer, 2 hour meeting would be helpful next week, Feb 21st.
+
+Further work on LaTeX and markdown formats for the formal language definition by next week.
+Decided to start converting markdown to LaTeX for the definition.
+
+Need to flesh out outline further.
