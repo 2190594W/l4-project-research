@@ -1,0 +1,29 @@
+\section{Substitution}\label{sec:substitution}
+
+\begin{figure}[ht]
+  \centering
+\begin{align*}
+  \subst{\mu}{e}{x}
+  &
+    \Coloneqq
+    \begin{cases}
+      e&x\equiv\mu\\
+      x&x\not\equiv\mu\\
+    \end{cases}
+  \\
+  \subst{\exprOr{a}{b}}{e}{x}&\Coloneqq\exprOr{\subst{a}{e}{x}}{\subst{b}{e}{x}}\\
+  \subst{\exprAnd{a}{b}}{e}{x}&\Coloneqq\exprAnd{\subst{a}{e}{x}}{\subst{b}{e}{x}}\\
+  \subst{\exprGT{a}{b}}{e}{x}&\Coloneqq\exprGT{\subst{a}{e}{x}}{\subst{b}{e}{x}}\\
+  \subst{\exprLT{a}{b}}{e}{x}&\Coloneqq\exprLT{\subst{a}{e}{x}}{\subst{b}{e}{x}}\\
+  \subst{\exprEQ{a}{b}}{e}{x}&\Coloneqq\exprEQ{\subst{a}{e}{x}}{\subst{b}{e}{x}}\\
+  \subst{\exprGTE{a}{b}}{e}{x}&\Coloneqq\exprGTE{\subst{a}{e}{x}}{\subst{b}{e}{x}}\\
+  \subst{\exprLTE{a}{b}}{e}{x}&\Coloneqq\exprLTE{\subst{a}{e}{x}}{\subst{b}{e}{x}}\\
+  \subst{\stmtLet{\mu}{e_1}{e_2}}{e}{x}&\Coloneqq\stmtLet{\mu}{\subst{e_1}{e}{x}}{\subst{e_2}{e}{x}}
+\end{align*}
+  \caption{\label{fig:subst}Substitution Rules}
+\end{figure}
+
+\Cref{fig:subst} presents a standard set of substitution rules for our language.
+These rules describe how we can interate over our expressions/statements and swap variables for values.
+Note how they form a recursive call.
+We will use these rules to help us describe how we can transform our program instances.
