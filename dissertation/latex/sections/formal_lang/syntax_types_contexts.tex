@@ -16,6 +16,7 @@
   d
   & \Coloneqq
     \text{Dates} \; \mathbb{D}
+  & \text{Values}
   \\
   s
   & \Coloneqq
@@ -66,9 +67,9 @@
     \firstAlt
     \stmtLet{\mu}{e}{e}
     \alt
-    {\lambda \mu \bullet e }
+    \left( \lambda \mu \bullet e \right)
     \alt
-    e \$ e
+    e \; \$ \; e
   &
     \text{Statements}
   \\
@@ -85,7 +86,7 @@
     \alt
     \mathbb{L}
     \alt
-    {\mathcal{T}\longrightarrow \mathcal{T}}
+    {\mathcal{T} \rightarrow{} \mathcal{T}}
   &
     \text{Types}
   \\
@@ -98,15 +99,14 @@
     &
       \text{Context}
 \end{align*}
-  \caption{\label{fig:syntax}Our language's abstract systanx, types, and context.}
+  \caption{\label{fig:syntax}The policy language's abstract syntax, types, and context.}
 \end{figure}
 
 \Cref{fig:syntax} presents the syntactical structure, and types for our language.
-Our language contains Integers and Boolean values, we leave abstract how integers are written.
-Variables ($\mu$) are constructed using Let-bindings, and conditional statements take the well-known form of \texttt{if-then-else}.
+Our language contains Integers, Boolean, Date, String and List values, we leave abstract how integers and dates are written.
+Variables ($\mu$) are constructed using Let-bindings.
 
-Core expressions allow for addition, substraction, division, multiplication, and negation of integers.
-Integers can also be compared using standard comparison operations of: greater-than, less-than, and equals-to.
-Boolean operators provide logical negation, conjunction, disjunction, and, exclusive disjunction.
+Integers \& Dates can be compared using standard comparison operations of: \texttt{greater-than}, \texttt{less-than} and \texttt{equals-to}, as well as \texttt{greater-than-or-equal-to} and \texttt{less-than-or-equal-to}.
+Boolean operators provide logical conjunction and disjunction.
 
 A context ($\Gamma$) keeps track of well-typed expressions, and our context can be expanded.
