@@ -1,0 +1,143 @@
+\section{Typing Rules}\label{sec:typing-rules}
+
+\begin{figure}[ht]
+  \centering
+\begin{mathpar}
+  \infer*[left=Intro-Nat]
+  {
+    \\
+  }
+  {
+    \ty{n}{\TyInt}
+  }
+  \and
+  \infer*[left=Intro-Boolean]
+  {
+    \\
+  }
+  {
+    \ty{b}{\mathbb{B}}
+  }
+  \and
+  \infer*[left=Intro-Date]
+  {
+    \\
+  }
+  {
+    \ty{d}{\mathbb{D}}
+  }
+  \and
+  \infer*[left=Intro-String]
+  {
+    \\
+  }
+  {
+    \ty{s}{\mathbb{S}}
+  }
+  \and
+  \infer*[left=Intro-List]
+  {
+    \\
+  }
+  {
+    \ty{l}{\mathbb{L}}
+  }
+  \and
+  \infer*[left=VAR]
+  {
+    \ty{\mu}{T}\in\Gamma
+  }
+  {
+    \ty{\mu}{T}
+  }
+  \and
+  \infer*[left=OR]
+  {
+    \env{\ty{a}{\mathbb{B}}}\\
+    \env{\ty{b}{\mathbb{B}}}
+  }
+  {
+    \env{\ty{\exprOr{a}{b}}{\mathbb{B}}}
+  }
+  \and
+  \infer*[left=AND]
+  {
+    \env{\ty{a}{\mathbb{B}}}\\
+    \env{\ty{b}{\mathbb{B}}}
+  }
+  {
+    \env{\ty{\exprAnd{a}{b}}{\mathbb{B}}}
+  }
+  \and
+  \infer*[left=GT]
+  {
+    \env{\ty{a}{T_1}}\\
+    \env{\ty{b}{T_1}}\\
+    \left[ T_1 \in \{ \mathbb{N}, \mathbb{B} \} \right]
+  }
+  {
+    \env{\ty{\exprGT{a}{b}}{\mathbb{B}}}
+  }
+  \and
+  \infer*[left=LT]
+  {
+    \env{\ty{a}{T_1}}\\
+    \env{\ty{b}{T_1}}\\
+    \left[ T_1 \in \{ \mathbb{N}, \mathbb{B} \} \right]
+  }
+  {
+    \env{\ty{\exprLT{a}{b}}{\mathbb{B}}}
+  }
+  \and
+  \infer*[left=EQ]
+  {
+    \env{\ty{a}{T_1}}\\
+    \env{\ty{b}{T_1}}\\
+    \left[ T_1 \in \{ \mathbb{N}, \mathbb{B}, \mathbb{D}, \mathbb{S} \} \right]
+  }
+  {
+    \env{\ty{\exprEQ{a}{b}}{\mathbb{B}}}
+  }
+  \and
+  \infer*[left=GTE]
+  {
+    \env{\ty{a}{T_1}}\\
+    \env{\ty{b}{T_1}}\\
+    \left[ T_1 \in \{ \mathbb{N}, \mathbb{B} \} \right]
+  }
+  {
+    \env{\ty{\exprGTE{a}{b}}{\mathbb{B}}}
+  }
+  \and
+  \infer*[left=LTE]
+  {
+    \env{\ty{a}{T_1}}\\
+    \env{\ty{b}{T_1}}\\
+    \left[ T_1 \in \{ \mathbb{N}, \mathbb{B} \} \right]
+  }
+  {
+    \env{\ty{\exprLTE{a}{b}}{\mathbb{B}}}
+  }
+  \and
+  \infer*[left=Let]
+  {
+    \ty{\mu}{T_{1}}\\
+    \env{\ty{e_1}{T_1}}\\
+    \env[\envAdd{(\ty{\mu}{T_{1}})}]{\ty{e_{2}}{T_{2}}}
+  }
+  {
+    \env{\ty{\stmtLet{\mu}{{e}_{1}}{e_{2}}}{T_{2}}}
+  }
+\end{mathpar}
+  \caption{\label{fig:rules}Typing Rules}
+\end{figure}
+
+\Cref{fig:rules} present's the policy language's typing rules.
+These rules dictate what it means for an expression/statement to be well-formed.
+We do this by assigning types to expressions/statements.
+We read typing rules as follows: Things above the lines are premises such that if all premises are true then the judgement (below the line) will also be true.
+When given any expression/statement in our language we can use the typing rules to construct a derivation that provides proof that the expression/statement is well-typed, that is we can apply each rule and form a derivation tree.
+If we cannot construct this tree then the expression is ill-typed and syntactically not valid.
+Typing rules are a compile time static check.
+
+We can only proceed to computation/evaluation of our language if it is well-typed.
