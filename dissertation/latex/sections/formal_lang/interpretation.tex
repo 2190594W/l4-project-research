@@ -1,0 +1,33 @@
+\section{Interpretation}\label{sec:interpretation}
+
+\begin{figure}[ht]
+  \centering
+\begin{align*}
+  \textsc{PolicyLang}&\rightarrow\textsc{Python (PyOpenABE)}\\
+  \interpB{\TyInt}&\Coloneqq\text{\ttfamily int}\\
+  \interpB{\mathbb{B}}&\Coloneqq\text{\ttfamily bool}\\
+  \interpB{\mathbb{D}}&\Coloneqq\text{\ttfamily datetime.date}\\
+  \interpB{\mathbb{S}}&\Coloneqq\text{\ttfamily str}\\
+  \interpB{\mathbb{L}}&\Coloneqq\text{\ttfamily list}\\
+  \interpB{n}&\Coloneqq\text{\ttfamily int(}n\text{\ttfamily)}\\
+  \interpB{\EnumFalse}&\Coloneqq\text{\ttfamily False}\\
+  \interpB{\EnumTrue} &\Coloneqq\text{\ttfamily True}\\
+  \interpB{d}&\Coloneqq\text{\ttfamily datetime.date(}d\text{\ttfamily)}\\
+  \interpB{s}&\Coloneqq\text{\ttfamily str(}s\text{\ttfamily)}\\
+  \interpB{l}&\Coloneqq\text{\ttfamily [}l\text{\ttfamily]}\\
+  \interpB{\exprOr{a}{b}}  &\Coloneqq\interpB{a}\,\text{\ttfamily or}\,\interpB{b}\\
+  \interpB{\exprAnd{a}{b}} &\Coloneqq\interpB{a}\,\text{\ttfamily and}\,\interpB{b}\\
+  \interpB{\exprGT{a}{b}}  &\Coloneqq\interpB{a}\,\text{\ttfamily \textgreater}\,\interpB{b}\\
+  \interpB{\exprLT{a}{b}}  &\Coloneqq\interpB{a}\,\text{\ttfamily \textless}\,\interpB{b}\\
+  \interpB{\exprEQ{a}{b}}  &\Coloneqq\interpB{a}\,\text{\ttfamily ==}\,\interpB{b}\\
+  \interpB{\exprGTE{a}{b}}  &\Coloneqq\interpB{a}\,\text{\ttfamily \textgreater =}\,\interpB{b}\\
+  \interpB{\exprLTE{a}{b}}  &\Coloneqq\interpB{a}\,\text{\ttfamily \textless =}\,\interpB{b}\\
+  \interpB{\stmtLet{\mu}{e_1}{e_2}}&\Coloneqq\interpB{\subst{e_{2}}{\mu}{e_{1}}}
+\end{align*}
+  \caption{\label{fig:interp}Interpretation Rules}
+\end{figure}
+
+In this final section we describe how we can interpret our language to another form, in this case concrete Java expressions.
+Like substitution, interpretation recursively operates over each language statement and expression.
+At each step if replaces the expression from our language with it's equivalent Java form.
+If we interpret a language we do not need to provide operational semantics, the target language provides this.
