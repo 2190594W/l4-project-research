@@ -1,12 +1,12 @@
 @startuml
 autonumber
 actor User
-control "OpenABE CLI"
+control "Client Resource Server"
 entity "Resource Server"
 User -> User: creates policy for resource\ne.g. "((Staff and Date > March 17, 2019) or Admin)"
-User -> "OpenABE CLI": requests encryption of resource;\nprovides policy, private key & resource
-"OpenABE CLI" -> "OpenABE CLI": processes encryption of resource
-"OpenABE CLI" -> User: returns encrypted file
+User -> "Client Resource Server": requests encryption of resource;\nprovides policy & resource
+"Client Resource Server" -> "Client Resource Server": processes encryption of resource;\nwith Master Public Key
+"Client Resource Server" -> User: returns encrypted file
 User -> "Resource Server": sends encrypted file for upload
 "Resource Server" -> "Resource Server": processes incoming file and stores
 "Resource Server" -> User: returns confirmation of successful upload

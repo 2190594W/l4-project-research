@@ -12,5 +12,5 @@ Staff -> "Teaching Assistant": requests enrollment;\nprovides staffID
 "Teaching Assistant" -> "Master Key Server": requests new key;\nsends staff attributes
 "Master Key Server" -> "Master Key Server": generates key from attributes
 "Master Key Server" -> "Teaching Assistant": returns generated key for staff
-"Teaching Assistant" -> Staff: sends staff's new key
+"Teaching Assistant" -> Staff: provides staff's new key
 @enduml
