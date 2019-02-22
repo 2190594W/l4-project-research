@@ -1,69 +1,68 @@
 @startuml
 'define deployment entities
-database auth_db #PaleTurquoise
-storage resources #Moccasin
+folder "encrypted resource store" {
+  storage resource_store #Moccasin
+  database resource_db #LightBlue
+}
 
-'define components
-component [Resource Server] as rs #Aquamarine
-component [Web Server] as ws #PaleVioletRed
-component [Master Key Server] as mks #LightSeaGreen
-component [Client Resource Server] as crs #LightGreen
+node "Authentication (e.g. SSO)" {
+  component [Authentication Service] as a_s #PaleVioletRed
+  database auth_db #PaleTurquoise
+  login -up- a_s
+  logout -up- a_s
+  register -up- a_s
+}
 
 package "OpenABE Library" {
   component [ABE Client Library] as abecl #LightCoral
+  generate_params -- abecl
   import_public_params -- abecl
   decrypt -- abecl
   encrypt -- abecl
   import_user_key -- abecl
-  generate_params -right- abecl
 }
 
+'define components
+component [Resource Server] as rs #Aquamarine
+component [Master Key Server] as mks #LightSeaGreen
+component [Client Resource Server] as crs #LightGreen
+
 'define links to deployment entities
-rs <-left-> resources: "stores & retrieves\nencrypted resources"
-ws <-right-> auth_db: "user management"
+resource_db <-right-> rs: "encrypted resources"
+resource_db <-down-> resource_store: "manages\nresource storage"
+a_s <-> auth_db: "user records"
+crs <-> a_s: "authenticates user(s)"
 
 'define interfaces for mks, rs & abecl
-abac_model -- mks
-enrollment -- mks
+attributes -- mks
+enrolment -right- mks
 master_public_key -- mks
 upload -- rs
 download -- rs
-stats -- rs
-all_filenames -- rs
-all_metadata -- rs
+all_resource_names -- rs
 latest_mpk -- rs
-latest_abac_model -- rs
+latest_attributes -- rs
 
 'define use of interfaces for crs, mks & rs
-mks -right-( generate_params
+mks -down-( generate_params
 crs -down-( upload
 crs -down-( download
-crs -down-( stats
-crs -down-( all_filenames
-crs -down-( all_metadata
+crs -down-( all_resource_names
 crs -down-( latest_mpk
+crs -down-( latest_attributes
 crs -down-( decrypt
 crs -down-( encrypt
 crs -down-( import_user_key
 crs -down-( import_public_params
-rs ..( abac_model: "offline/manual update"
-rs ..( master_public_key: "offline/manual update"
+rs .down.( attributes: "offline/manual update"
+rs .down.( master_public_key
 
 'define interfaces for crs & ws
-obtain_file_list -left- crs
-upload_file -- crs
-encrypt_upload_file -- crs
-encrypt_file -- crs
-obtain_file -- crs
-obtain_decrypt_file -- crs
-decrypt_file -- crs
-search_files -- ws
-login -- ws
-logout -- ws
-
-'define web server interface use
-ws -down-( obtain_file_list
-ws -down-( obtain_file
-ws -down-( latest_abac_model
+resource_list -- crs
+upload_resource -- crs
+download_resource -- crs
+encrypt_resource -- crs
+decrypt_resource -- crs
+search_resources -- crs
 
 @enduml

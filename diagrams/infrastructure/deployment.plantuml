@@ -1,0 +1,141 @@
+@startuml
+
+node "Physical Room" {
+  node "Locked Room" {
+    node "Master Key Server" {
+      node "assets" {
+        artifact "Private Key"
+        artifact "Public Key"
+      }
+      artifact mk_server [
+        <b>MK Server Software</b>
+        ====
+        Flask webserver
+        ----
+        PyOpenABE client
+        ----
+        Python 3 Library
+      ]
+      package "ABE Client Library [MKS]" {
+        folder mk_cc [
+          <b>PyOpenABE Client Contents</b>
+          ====
+          PyOpenABE bindings
+          ----
+          Python 3 Library
+          ----
+          OpenABE C Library
+          ----
+          C Library
+        ]
+      }
+    }
+  }
+  actor admin_staff
+}
+
+cloud "Resource Server" {
+  database db_rs [
+    <b>MongoDB Resources Table</b>
+    ====
+    resource_id
+    ----
+    resource_name
+    ----
+    resource_policy
+    ----
+    author
+    ----
+    uploader
+    ----
+    filesize
+    ----
+    upload_date
+  ]
+  folder "<b>Encrypted Resource Blocks</b>" {
+    artifact resource_f325d23d82 as res1
+    artifact resource_7dhjsn2389 as res2
+    artifact resource_723sbwkne7 as res3
+    artifact resource_247hd328hd as res4
+    artifact resource_nvwiu39223 as res5
+  }
+  artifact rs_server [
+    <b>RS Server Software</b>
+    ====
+    Flask webserver
+    ----
+    PyMongo client
+    ----
+    Python 3 Library
+    ----
+    MongoDB connection
+  ]
+  artifact "Master Public Key"
+  artifact "Latest Deployed Attributes"
+}
+
+node "User Device" {
+  node "Client Resource Server" {
+    artifact "User Private Key"
+    artifact "Master Public Key Copy"
+    artifact crs_server [
+      <b>CRS Server Software</b>
+      ====
+      Flask webserver
+      ----
+      PyMongo client
+      ----
+      PyOpenABE client
+      ----
+      Python 3 Library
+      ----
+      MongoDB connection
+    ]
+    package "ABE Client Library [CRS]" {
+      folder crs_cc [
+        <b>PyOpenABE Client Contents</b>
+        ====
+        PyOpenABE bindings
+        ----
+        Python 3 Library
+        ----
+        OpenABE C Library
+        ----
+        C Library
+      ]
+    }
+    database db_crs [
+      <b>MongoDB User Table</b>
+      ====
+      username
+      ----
+      hashed_password
+      ----
+      user_attributes
+      ----
+      user_key
+    ]
+  }
+}
+actor end_user
+
+admin_staff <..> mk_server: "restricted physical access"
+admin_staff ..> rs_server
+mk_server - mk_cc
+
+db_rs -down-> res1
+db_rs -down-> res2
+db_rs -down-> res3
+db_rs -down-> res4
+db_rs -down-> res5
+
+rs_server <-> db_rs
+
+crs_server <--> rs_server
+crs_server <-left-> db_crs
+crs_server - crs_cc
+
+end_user <--> crs_server
+
+
+@enduml
