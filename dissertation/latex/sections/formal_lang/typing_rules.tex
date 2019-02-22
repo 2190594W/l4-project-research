@@ -40,15 +40,7 @@
     \\
   }
   {
-    \ty{l}{\mathbb{L}}
-  }
-  \and
-  \infer*[left=VAR]
-  {
-    \ty{\mu}{T}\in\Gamma
-  }
-  {
-    \ty{\mu}{T}
+    \ty{l}{\mathbb{L}_T}
   }
   \and
   \infer*[left=OR]
@@ -71,9 +63,9 @@
   \and
   \infer*[left=GT]
   {
-    \env{\ty{a}{T_1}}\\
-    \env{\ty{b}{T_1}}\\
-    \left[ T_1 \in \{ \mathbb{N}, \mathbb{B} \} \right]
+    \env{\ty{a}{T}}\\
+    \env{\ty{b}{T}}\\
+    \left[ T \in \{ \mathbb{N}, \mathbb{D} \} \right]
   }
   {
     \env{\ty{\exprGT{a}{b}}{\mathbb{B}}}
@@ -81,9 +73,9 @@
   \and
   \infer*[left=LT]
   {
-    \env{\ty{a}{T_1}}\\
-    \env{\ty{b}{T_1}}\\
-    \left[ T_1 \in \{ \mathbb{N}, \mathbb{B} \} \right]
+    \env{\ty{a}{T}}\\
+    \env{\ty{b}{T}}\\
+    \left[ T \in \{ \mathbb{N}, \mathbb{D} \} \right]
   }
   {
     \env{\ty{\exprLT{a}{b}}{\mathbb{B}}}
@@ -91,9 +83,9 @@
   \and
   \infer*[left=EQ]
   {
-    \env{\ty{a}{T_1}}\\
-    \env{\ty{b}{T_1}}\\
-    \left[ T_1 \in \{ \mathbb{N}, \mathbb{B}, \mathbb{D}, \mathbb{S} \} \right]
+    \env{\ty{a}{T}}\\
+    \env{\ty{b}{T}}\\
+    \left[ T \in \{ \mathbb{N}, \mathbb{B}, \mathbb{D}, \mathbb{S} \} \right]
   }
   {
     \env{\ty{\exprEQ{a}{b}}{\mathbb{B}}}
@@ -101,9 +93,9 @@
   \and
   \infer*[left=GTE]
   {
-    \env{\ty{a}{T_1}}\\
-    \env{\ty{b}{T_1}}\\
-    \left[ T_1 \in \{ \mathbb{N}, \mathbb{B} \} \right]
+    \env{\ty{a}{T}}\\
+    \env{\ty{b}{T}}\\
+    \left[ T \in \{ \mathbb{N}, \mathbb{D} \} \right]
   }
   {
     \env{\ty{\exprGTE{a}{b}}{\mathbb{B}}}
@@ -111,22 +103,12 @@
   \and
   \infer*[left=LTE]
   {
-    \env{\ty{a}{T_1}}\\
-    \env{\ty{b}{T_1}}\\
-    \left[ T_1 \in \{ \mathbb{N}, \mathbb{B} \} \right]
+    \env{\ty{a}{T}}\\
+    \env{\ty{b}{T}}\\
+    \left[ T \in \{ \mathbb{N}, \mathbb{D} \} \right]
   }
   {
     \env{\ty{\exprLTE{a}{b}}{\mathbb{B}}}
-  }
-  \and
-  \infer*[left=Let]
-  {
-    \ty{\mu}{T_{1}}\\
-    \env{\ty{e_1}{T_1}}\\
-    \env[\envAdd{(\ty{\mu}{T_{1}})}]{\ty{e_{2}}{T_{2}}}
-  }
-  {
-    \env{\ty{\stmtLet{\mu}{{e}_{1}}{e_{2}}}{T_{2}}}
   }
 \end{mathpar}
   \caption{\label{fig:rules}Typing Rules}
