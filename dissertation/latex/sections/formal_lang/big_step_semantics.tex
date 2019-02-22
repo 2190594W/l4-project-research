@@ -8,7 +8,7 @@
     \\
   }
   {
-    n\Downarrow{}n
+    n\Downarrow{}\primed{n}
   }
   \and
   \infer*[left=$\mathbb{B}$]
@@ -16,7 +16,7 @@
     \\
   }
   {
-    b\Downarrow{}b
+    b\Downarrow{}\primed{b}
   }
   \and
   \infer*[left=$\mathbb{D}$]
@@ -24,7 +24,7 @@
     \\
   }
   {
-    d\Downarrow{}d
+    d\Downarrow{}\primed{d}
   }
   \and
   \infer*[left=$\mathbb{S}$]
@@ -32,7 +32,7 @@
     \\
   }
   {
-    s\Downarrow{}s
+    s\Downarrow{}\primed{s}
   }
   \and
   \infer*[left=$\mathbb{L}$]
@@ -40,7 +40,7 @@
     \\
   }
   {
-    l\Downarrow{}l
+    l\Downarrow{}\primed{l}
   }
   \and
   \infer*[left=OR]
@@ -105,15 +105,7 @@
   {
     \exprLTE{a}{b}\Downarrow\primed{a}\leqq\primed{b}
   }
-  \and
-  \infer*[left=Let]
-  {
-    e_1\Downarrow\primed{e_1}\\
-    \subst{e_2}{\mu}{\primed{e_1}}\Downarrow\primed{e_2}
-  }
-  {
-    \stmtLet{\mu}{{e}_{1}}{e_{2}}\Downarrow\primed{e_2}
-  }\end{mathpar}
+  \end{mathpar}
   \caption{\label{fig:semantics}Big Step Semantics}
 \end{figure}
 

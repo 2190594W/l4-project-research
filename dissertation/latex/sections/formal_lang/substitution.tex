@@ -17,8 +17,7 @@
   \subst{\exprLT{a}{b}}{e}{x}&\Coloneqq\exprLT{\subst{a}{e}{x}}{\subst{b}{e}{x}}\\
   \subst{\exprEQ{a}{b}}{e}{x}&\Coloneqq\exprEQ{\subst{a}{e}{x}}{\subst{b}{e}{x}}\\
   \subst{\exprGTE{a}{b}}{e}{x}&\Coloneqq\exprGTE{\subst{a}{e}{x}}{\subst{b}{e}{x}}\\
-  \subst{\exprLTE{a}{b}}{e}{x}&\Coloneqq\exprLTE{\subst{a}{e}{x}}{\subst{b}{e}{x}}\\
-  \subst{\stmtLet{\mu}{e_1}{e_2}}{e}{x}&\Coloneqq\stmtLet{\mu}{\subst{e_1}{e}{x}}{\subst{e_2}{e}{x}}
+  \subst{\exprLTE{a}{b}}{e}{x}&\Coloneqq\exprLTE{\subst{a}{e}{x}}{\subst{b}{e}{x}}
 \end{align*}
   \caption{\label{fig:subst}Substitution Rules}
 \end{figure}
