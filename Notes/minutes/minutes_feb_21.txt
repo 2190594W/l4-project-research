@@ -1,0 +1,31 @@
+February 21st Meeting Minutes
+
+Spent majority of meeting going over typing rules as well as syntax.
+
+Need more test cases.
+
+Reproducible testing - look into.
+
+Design diagrams -
+	need more sequence diagrams for use cases:  generation, upload etc
+	Condensed Component diagram with condensed interfaces
+		extended one in appendix
+	Deployment Diagram needed (locked rooms etc)
+
+export plantuml diagrams to pdf or eps
+	quick regeneration task
+
+For typing rules remove _1 in T_1 and change Boolean type to Date
+
+integers to type Z not N
+
+remove curly T from typing rules
+
+prepare to explain/defend the implementation of functions in the formal language definition
+
+Fix list definition in syntax and typing rules
+
+Need to remove let statement and replace with (lambda x dot e)
+	add typing rule for this
+
+risk assessment needs to get done
