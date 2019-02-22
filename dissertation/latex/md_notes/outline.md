@@ -2,6 +2,13 @@
 
 ## Intro
 	motivation/problem
+		- sharing resources across organisations is complex and difficult
+		- security is extremely important
+		- access is vital as well
+		- granularity is necessary for long-term support
+		- role-based too hard to configure
+		- granularity also resists accidental access grants
+		- hence, attribute-based
 	hypothesis/aims
 		primary/secondary/tertiary aims
 		mention johns hopkins medical records achievement
