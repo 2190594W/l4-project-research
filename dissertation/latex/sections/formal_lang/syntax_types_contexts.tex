@@ -3,34 +3,27 @@
 \begin{figure}[ht]
   \centering
 \begin{align*}
-  n
+  \ty{n}{\mathbb{Z}}
   &
     \Coloneqq
-    \text{Integers} \; \mathbb{N}
-  & \text{Constants}
-  \\
-  b
-  & \Coloneqq
-    \EnumFalse \alt \EnumTrue \; \mathbb{B}
-  \\
-  d
-  & \Coloneqq
-    \text{Dates} \; \mathbb{D}
+    \text{Integers}
   & \text{Values}
   \\
-  s
+  \ty{b}{\mathbb{B}}
   & \Coloneqq
-    \text{Strings} \; \mathbb{S}
+    \mathsf{False}\alt\mathsf{True}
   \\
-  l
+  \ty{d}{\mathbb{D}}
   & \Coloneqq
-    \varnothing \alt v \Cons \mathbb{L}
+    \text{Dates}
   \\
-  e
+  \ty{s}{\mathbb{S}}
+  & \Coloneqq
+    \text{Strings}
+  \\
+  v
   &
     \Coloneqq
-    \mu
-    \alt
     n
     \alt
     b
@@ -38,18 +31,26 @@
     d
     \alt
     s
+  \\
+  \ty{l}{\mathbb{L}_T}
+  & \Coloneqq
+    \emptyset_T\alt{}v\Cons_T{}l
+  \\
+  e
+  &
+    \Coloneqq
+    v
     \alt
     l
-  & \text{Variables/Constants}
+  & \text{Expressions}
   \\
   &
     \firstAlt
+    \exprEQ{e}{e}
+    \alt
     \exprGT{e}{e}
     \alt
     \exprLT{e}{e}
-    \alt
-    \exprEQ{e}{e}
-  & \text{Expressions}
   \\
   & \firstAlt
     \exprGTE{e}{e}
@@ -65,18 +66,16 @@
   \\
   &
     \firstAlt
-    \stmtLet{\mu}{e}{e}
-    \alt
     \left( \lambda \mu \bullet e \right)
     \alt
     e \; \$ \; e
   &
     \text{Statements}
   \\
-  \ty{T}{\mathcal{T}}
+  T
   &
     \Coloneqq
-    \mathbb{N}
+    \mathbb{Z}
     \alt
     \mathbb{B}
     \alt
@@ -86,7 +85,7 @@
     \alt
     \mathbb{L}
     \alt
-    {\mathcal{T} \rightarrow{} \mathcal{T}}
+    {T \rightarrow{} T}
   &
     \text{Types}
   \\
@@ -104,7 +103,6 @@
 
 \Cref{fig:syntax} presents the syntactical structure, and types for our language.
 Our language contains Integers, Boolean, Date, String and List values, we leave abstract how integers and dates are written.
-Variables ($\mu$) are constructed using Let-bindings.
 
 Integers \& Dates can be compared using standard comparison operations of: \texttt{greater-than}, \texttt{less-than} and \texttt{equals-to}, as well as \texttt{greater-than-or-equal-to} and \texttt{less-than-or-equal-to}.
 Boolean operators provide logical conjunction and disjunction.
