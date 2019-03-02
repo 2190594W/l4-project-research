@@ -1,0 +1,49 @@
+February 28th Meeting Minutes
+
+Talked about presentation, need to produce MVP in presentation.
+	4-5 slides for 5-7 minutes of talking
+		skip over encryption etc
+		just sell the product
+	practice intro well
+		rest of presentation can flow freely off of speaker notes
+	slides for myself not for audience
+		should be there to support me telling a story
+		could go with minimal text, more diagrams
+
+Annex C & D of ISO 27005:2008
+	Go through list of the vulnerabilities and threats and validate if they are plausible for each asset
+
+We can make assumptions for risk assessment:
+	we may assume devices are up to date and secure
+	buildings are secure
+		rooms are secure
+	servers are secure and up to date
+		we are not considering the security of the devices or servers themselves
+		only potential attacks or leaks
+Make the scope of the project VERY clear
+	reducing scope allows for 
+	a more comprehensive study would be needed for production deployment
+
+Update risk assessment to more clearly discuss:
+	 Information/Data 
+		Matric Numbers, Financial data, Password Hashes, Logs. . . 
+		During enrolment these details need to be protected
+			could be attributes in the user key
+		Would enrolment staff have been properly trained
+	
+
+22/42 of slides
+
+SSO login is out of scope for risk assessment
+	in the assessment we don’t consider the process of authentication
+		this would be deferred to a later point with SSO login
+Define our scope for what an asset actually is
+
+HTTPS is an absolute requirement for production deployment
+	SSL certs
+	SSL authority
+
+risk of downloading from a malicious resource server
+	
+
+Need to look at user processes for asset identification
