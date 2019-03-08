@@ -1,8 +1,7 @@
 \begin{abstract}
-    Sharing resources securely across organisations or departments is a difficult and daunting task. Common methods rely on forms of Role-based access control (RBAC), however these cannot provide a fine-grained system for precise or modular access.\\
-    This problem can be solved with the use of Attribute-based access control (ABAC) instead. Wherein, users are granted specific attributes instead of roles, allowing for any user to be given a precise and even unique set of attributes.\\
-    Use of an Attribute-based encryption (ABE) system further improves security by handling the secure storage and transmission of resources through advanced encryption. Like ABAC, the ABE system utilises policies of attributes for users to determine if a resource should be decrypted by a given user.
-    \vskip 0.5em
-    This project aimed to develop a full resource server product that meets the definition of "cryptographically secure". The product was built from 2 servers: an online 'dumb' resource server to store the ABE encrypted resources and an offline 'cold storage' master key server.\\
-    An end user can run a local web client for communication with the resource server, allowing for downloading \& decryption of files, along with encryption \& uploading of their own files though a basic GUI.
+  Development of a cryptographically secure resource server for staff \& students of the Department of Computing Science to distribute encrypted resources internally.\\
+  Resources can be encrypted with unique, fine-grained policies of attributes that must then be resolved by an end user's private key in order to complete decryption.
+  \vskip 0.5em
+  Required the implementation and deployment of an Attribute-Based Encryption system built from a cryptographically-proven external library and designed with a complete enrolment process for generating \& signing user private keys securely.\\
+  Requirements are proven by cryptographic mathematics, use-case based testing and a risk assessment of the system's deployment according to ISO 27005.
 \end{abstract}
