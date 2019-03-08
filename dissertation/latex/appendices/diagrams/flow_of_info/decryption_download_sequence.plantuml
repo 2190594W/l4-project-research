@@ -1,0 +1,24 @@
+@startuml
+autonumber
+actor User
+control "Client Resource Server"
+entity "Resource Server"
+User -> "Resource Server": requests available files
+"Resource Server" -> "Resource Server": determines files to return;\nemploys ABAC system for this process
+"Resource Server" -> User: returns list of available files for user
+User -> User: determines which file(s) to download
+User -> "Resource Server": requests encrypted file for download
+"Resource Server" -> "Resource Server": processes request;\nvalidates access against ABAC system
+alt access denied
+  "Resource Server" -> User: returns access denied response
+else access granted
+  "Resource Server" -> User: returns requested encrypted file to user
+  User -> "Client Resource Server": requests decryption of resource;\nprovides private key & encrypted resource
+  "Client Resource Server" -> "Client Resource Server": attempts decryption of resource
+  alt decryption failed
+    "Client Resource Server" -> User: returns error code
+  else successful decryption
+    "Client Resource Server" -> User: returns decrypted file
+  end
+end
+@enduml

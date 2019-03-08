@@ -1,0 +1,16 @@
+@startuml
+autonumber
+actor Student
+actor "Teaching Assistant"
+database "Student Centre"
+entity "Master Key Server"
+Student -> "Teaching Assistant": requests enrollment;\nprovides studentID
+"Teaching Assistant" -> "Student Centre": requests data on student
+"Student Centre" -> "Student Centre": collates and processes data
+"Student Centre" -> "Teaching Assistant": returns student attributes\ne.g. Level, Classes, matricDate
+"Teaching Assistant" -> "Teaching Assistant": processes attributes for student
+"Teaching Assistant" -> "Master Key Server": requests new key;\nsends student attributes
+"Master Key Server" -> "Master Key Server": generates key from attributes
+"Master Key Server" -> "Teaching Assistant": returns generated key for student
+"Teaching Assistant" -> Student: provides student's new key
+@enduml
