@@ -4,6 +4,7 @@ These problems can be solved with the use of an Attribute-Based Encryption (ABE)
 Unlike RBAC, an ABE system utilises a policy language to create bespoke, per-resource attribute policies that define specific access restrictions for the resource they are embedded into. This means that a user can only decrypt a resource if they can cryptographically prove assignment of the required attributes in their private keys - generated \& signed by a central master key server.
 
 \section{Overview}
+\label{sec:intro_overview}
 
 This project aimed to develop a full resource server product that meets the definition of "cryptographically secure"; where resources are encrypted at rest and only transmitted \& stored in a secure, unreadable ciphertext format. Thus, the system would never be aware of the contents of the resources stored and implicitly, the resources will remain secure even in the event of the system becoming compromised. The product as a whole was determined to need 2 servers:
 \begin{enumerate}
