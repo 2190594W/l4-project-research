@@ -1,0 +1,23 @@
+\subsection{Deployment}
+
+The resource server product was designed around the specific deployment scenario of the Department of Computing Science (DCS) and as such, aims to meet the requirements of users belonging to the DCS. Identified by an analysis of the DCS structure, considering students, teaching staff, technical staff \& admin staff and identifying both key roles and individuals within the organisation (see \ref{appendix:roles_users}).\\
+Subsequently, the resource server focuses on the secure distribution of resources between members of a department with particular emphasis on the sharing of course resources between members of staff and the students taking their course(s).
+\vskip 0.5em
+This scenario also lends itself well to proving the the extensibility of the product as students have varying and changing attributes that are assigned in their private user keys - the dynamic nature of which allows the product to maintain a high level of portability.\\
+This granularity in attributes, and thus policies, also provides long-term support for the product by allowing it to adapt to future changes in user structure and policy requirements.\\
+Further, allowing the system to be deployed to completely new environments as the attributes can be unique to an industry and do not require definition prior to deployment.
+\vskip 0.5em
+The product was thus determined to require one central master key server, tasked with maintaining the master private key, provisioning the corresponding master public key and using said private key to sign new user keys.\\
+A second server would handle the distribution of the master public key, storage of the encrypted resources and serving \& receiving encrypted resources.\\
+Further, it was determined that for the DCS deployment, the master key server would serve as an offline or 'cold' server with no internet connection; as this provides a strong level of base security against external threats. Such offline status is possible because the master key server is not required to distribute data automatically, but rather the master public key can be manually uploaded to the resource server.
+
+\subsection{ABE System}
+
+As described earlier, an ABE system requires a defined policy language in order to build policies for resources to be encrypted with. This policy language describes the syntax and types of policies and is tailored to the deployment above by allowing for attributes that are required for students and staff of the DCS.\\
+The ABE system required an ABE library for implementation, however since creating such a library was beyond the scope of the project, the \href{https://github.com/zeutro/openabe}{OpenABE library} from Zeutro LLC was selected instead. OpenABE was selected based upon the open source philosophy it adopts and the demonstration of its deployment as an electronic medical record system \cite{Akinyele2011}. A system that aligns well with that of a secure, departmental resource server but with even greater requirements for security.
+
+\subsection{Resources}
+
+Since uploaded resources have to be securely encrypted with ABE before transmission, the resource server is unaware of the contents of all resources and is in the disadvantaged position of being unable to help users identify which resources are which.\\
+As such, the server must utilise a different method for resource identification and instead relies on an internal database to store metadata of resources as provided when a user performs an upload. This metadata includes filename, extension, file size and author, but most importantly keeps a record of the resource's policy in order to determine if a user should even be able to download the resource.\\
+Importantly, any user \textit{could} download \textit{any} encrypted resource without risk of unauthorised decryption, however the user experience would be
