@@ -1,0 +1,30 @@
+March 7th Meeting Minutes
+
+Updated on Risk Assessment.
+
+Need to send in latest version of dissertation today.
+Priority #1 is producing content for dissertation this week.
+
+The risk assessment can be submitted in two parts:
+	1.	electronic appendix in code
+	2.	larger summary in appendix of dissertation linking to electronic appendix
+		1.	summarise the assets
+		2.	the risk(y) assets
+			- mention the Transfer, Fix, Treat of certain assets
+
+
+ISO 27005 for risk assessment
+
+Lack of formal procedure for ISMS documentation control
+	discuss lack of ISMS in system
+	future deployment would rely on integration with a pre-existing ISMS
+	would highlight more risks with deployment
+		standard procedure for deployment of small web apps
+
+Believe we have identified the important (at-risk) assets
+
+Continue looking to reschedule presentation
+
+Get presentation draft to Jan for Tuesday 19th!
+
+3-4 slides of content, 1 title slide
