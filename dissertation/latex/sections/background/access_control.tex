@@ -8,7 +8,10 @@ Access Control encompasses the authentication and authorization of users in a sy
 \vskip 0.5em
 Regardless, Access Control is vital to maintaining the security of online services as it allows users to be granted access to certain routes, documents and data, but denied access to others. This most often takes the form of Role Base Access Control (RBAC), where users are assigned a role such as "\textit{Customer}", "\textit{Staff}" or "\textit{Admin}" with each role having a different set of permissions.\\
 For example, a user with the "\textit{Customer}" role would not have access to the organisation's internal documents, whereas a user with the "\textit{Staff}" role would. Similarly, a user with the "\textit{Staff}" role would not necessarily have access to a service's user details, whereas a user with the "\textit{Admin}" role would.
-\vskip 0.5em
+
+\subsection{Models}
+\label{sec:acc_ctrl_models}
+
 \newcommand\todonote[1]{\textcolor{red}{#1}}
 Advanced RBAC systems can even grant a user multiple roles with different permissions, although a more common practice is to have each role grant a subset of the permissions granted by another role. For example, a  "\textit{Superadmin}" role would have all permissions, with a lower "\textit{Admin}" role having a subset of those permissions; such as not having permission to edit or delete other "\textit{Admin}" accounts.\\
 Other Access Contol models do exist and generally all models fall into one of two categories, \textbf{capability-based} models or \textbf{access control lists-based} (ACL-based) models; where RBAC represents a capability-based model and ABE represents a ACL-based model.
