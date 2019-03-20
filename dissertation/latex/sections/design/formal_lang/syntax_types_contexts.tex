@@ -85,8 +85,6 @@
     \mathbb{S}
     \alt
     \mathbb{L}
-    \alt
-    {T \rightarrow{} T}
   &
     \text{Types}
   \\
@@ -99,11 +97,11 @@
     &
       \text{Context}
 \end{align*}
-  \caption{\label{fig:syntax}The policy language's abstract syntax, types, and context.}
+  \caption{\label{fig:syntax}\thePolicyLang abstract syntax, types, and context.}
 \end{figure}
 
 \Cref{fig:syntax} presents the syntactical structure, and types for our language.
-Our language contains Integers, Boolean, Date, String and List values, we leave abstract how integers and dates are written.
+Our language contains Integers, Boolean, Date, String and List values, we leave abstract how integers and dates are written. Lists may either be empty or consist of any number of elements where each element is of the same type $T \in v$.
 
 Integers \& Dates can be compared using standard comparison operations of: \texttt{greater-than}, \texttt{less-than} and \texttt{equals-to}, as well as \texttt{greater-than-or-equal-to} and \texttt{less-than-or-equal-to}.
 Boolean operators provide logical conjunction and disjunction.

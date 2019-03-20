@@ -1,7 +1,7 @@
 \subsection{Deployment}
 \label{subsec:design_deployment}
 
-The resource server product was designed around the specific deployment scenario of the Department of Computing Science (DCS) and as such, aims to meet the requirements of users belonging to the DCS. Identified by an analysis of the DCS structure, considering students, teaching staff, technical staff \& admin staff and identifying both key roles and individuals within the organisation (see \ref{appendix:roles_users}).\\
+The resource server product was designed around the specific deployment scenario of the Department of Computing Science (DCS) and as such, aims to meet the requirements of users belonging to the DCS. Identified by an analysis of the DCS structure, considering students, teaching staff, technical staff \& admin staff and identifying both key roles and individuals within the organisation (see \cref{appendix:roles_users}).\\
 Subsequently, the resource server focuses on the secure distribution of resources between members of a department with particular emphasis on the sharing of course resources between members of staff and the students taking their course(s).
 \vskip 0.5em
 This scenario also lends itself well to proving the the extensibility of the product as students have varying and changing attributes that are assigned in their private user keys - the dynamic nature of which allows the product to maintain a high level of portability.\\
@@ -15,7 +15,7 @@ Further, it was determined that for the DCS deployment, the master key server wo
 \subsection{ABE System}
 \label{subsec:design_abe_sys}
 
-As described earlier, an ABE system requires a defined policy language in order to build policies for resources to be encrypted with. This policy language describes the syntax and types of policies and is tailored to the deployment above by allowing for attributes that are required for students and staff of the DCS.\\
+An ABE system requires a defined policy language in order to build policies for resources to be encrypted with. This policy language, \thePolicyLang, describes the syntax and types of policies and is tailored to the deployment above by allowing for attributes that are required for students and staff of the DCS.\\
 The ABE system required an ABE library for implementation, however since creating such a library was beyond the scope of the project, the \href{https://github.com/zeutro/openabe}{OpenABE library} from Zeutro LLC was selected instead. OpenABE was selected based upon the open source philosophy it adopts and the demonstration of its deployment as an electronic medical record system \citet{Akinyele2011}. A system that aligns well with that of a secure, departmental resource server but with even greater requirements for security.
 
 \subsection{Resources}
