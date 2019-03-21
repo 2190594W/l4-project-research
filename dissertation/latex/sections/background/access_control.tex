@@ -2,7 +2,7 @@
 \label{sec:bkgr_acc_ctrl}
 
 \subsection{Overview}
-\label{sec:acc_ctrl_over}
+\label{subsec:acc_ctrl_over}
 
 Access Control encompasses the authentication and authorization of users in a system, as well as the audit process for said system. In the scope of this project, we only consider the authorization part of Access Control, since the service does not authenticate users before permitting the upload or download of resources, because the encryption of resources protects against rogue access of data. The \nameref{ch:design} chapter discusses this decision further, but since users are not authenticated, it is also difficult to audit the service due to lack of information on users.
 \vskip 0.5em
@@ -10,7 +10,7 @@ Regardless, Access Control is vital to maintaining the security of online servic
 For example, a user with the `\textit{Customer}' role would not have access to the organisation's internal documents, whereas a user with the `\textit{Staff}' role would. Similarly, a user with the `\textit{Staff}' role would not necessarily have access to a service's user details, whereas a user with the `\textit{Admin}' role would.
 
 \subsection{Models}
-\label{sec:acc_ctrl_models}
+\label{subsec:acc_ctrl_models}
 
 \newcommand\todonote[1]{\textcolor{red}{#1}}
 Advanced RBAC systems can even grant a user multiple roles with different permissions, although a more common practice is to have each role grant a subset of the permissions granted by another role. For example, a  `\textit{Superadmin}' role would have all permissions, with a lower `\textit{Admin}' role having a subset of those permissions; such as not having permission to edit or delete other `\textit{Admin}' accounts.\\

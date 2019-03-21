@@ -2,7 +2,7 @@
 \label{sec:bkgr_encryption}
 
 \subsection{Overview}
-\label{sec:bkgr_enc_over}
+\label{subsec:bkgr_enc_over}
 
 Encryption is the process of encoding information in a manner such that only authorised parties can later decode and access the encoded information, known as decrypting. Non-authorised parties can complete decryption successfully and as such an encrypted piece of information stays secret in transit and storage, until decrypted by an authorised party.\\
 An encrypted resource, such as an encrypted PDF, is best understood as an unintelligble scramble of data which cannot be understood directly by either computer or user. Only upon a successful decryption operation can the information be retrieved again, where such an operation returns the original information now back in its decrypted form that can then be processed by any party again.
@@ -11,16 +11,16 @@ At the basic level, encryption can be categorised as \textit{symmetric} or \text
 The background for the project only considers \textit{asymmetric} setups due to the difficulty of securely distributing pre-shared keys and as such breaks down the differences in \textbf{1-to-1} \& \textbf{1-to-Many} asymmetric encryption implementations.
 
 \subsection{1-to-1 Encryption}
-\label{sec:bkgr_enc_1to1}
+\label{subsec:bkgr_enc_1to1}
 
 Classical encryption relates to a 1-to-1 relationship whereby one party encrypts information for a single other party, such that only that other party may decrypt the data. This scenario is perfect for when one party wishes to send a resource to only the other party, such as securely sending legal documents to a lawyer. This 1-to-1 method of encryption also remains the most prevalent form, in part due to its use in the TLS standard for web communication \citep{Rescorla2018}, where it helps to secure communication between a web browser and the web server a user is accessing.\\
 Implementations of 1-to-1 encryption rely on the provisioning of key pairs, where each party creates a private and public key for themselves. Each party then publishes their public key to the other party and keep their private key secret.
 \vskip 0.5em
-Communication can then take place between the two parties by a system where party A encrypts a message or document for party B by signing said message with party B's public key. This then allows only party B to decrypt the message \textemdash by using their secret private key \textemdash ensuring that only party B is able to interpret the sent message. In order for party B to then securely respond to party A, they must encrypt their response by signing the desired information with the public key of party A.\\
-This ensures secure information transmission between the two parties and also guarantees that any data sent between the two parties can be safely deposited on unprotected storage without risk of the information being extracted through decryption. Unfortunately, despite the high security, 1-to-1 encryption cannot work for a resource server since multiple users must be able to access a single resource and storing \textit{n} copies of a resource \textemdash individually encrypted for each user \textemdash is unmanageable.
+Communication can then take place between the two parties by a system where party A encrypts a message or document for party B by signing said message with party B's public key. This then allows only party B to decrypt the message \textemdash\ by using their secret private key \textemdash\ ensuring that only party B is able to interpret the sent message. In order for party B to then securely respond to party A, they must encrypt their response by signing the desired information with the public key of party A.\\
+This ensures secure information transmission between the two parties and also guarantees that any data sent between the two parties can be safely deposited on unprotected storage without risk of the information being extracted through decryption. Unfortunately, despite the high security, 1-to-1 encryption cannot work for a resource server since multiple users must be able to access a single resource and storing \textit{n} copies of a resource \textemdash\ individually encrypted for each user \textemdash\ is unmanageable.
 
 \subsection{1-to-Many Encryption}
-\label{sec:bkgr_enc_1toM}
+\label{subsec:bkgr_enc_1toM}
 
 A more modern approach to encryption is rapidly growing in adoption across the industry, as the need for secure communication between multiple parties continues to increase. Examples of such scenarios include secure messaging applications such as WhatsApp, conference video calls between multiple users and company-wide, internal memos or resources.\\
 Different scenarios achieve secure 1-to-Many encryption by different means, as the method must match the desired scenario properly. A balance must be struck between security, speed and efficiency in order for a product to offer the services its users require.
