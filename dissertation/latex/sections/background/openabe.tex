@@ -1,4 +1,16 @@
 \section{OpenABE}
 \label{sec:bkgr_openabe}
 
-OpenABE is an Attribute Based Encryption library from Zeutro LLC, implemented with the C language and provided with Python bindings, as described by \citet{Akinyele2011}.
+OpenABE is an Attribute Based Encryption library from Zeutro LLC, implemented with the C language that provides several ABE encryption schemes, as described by \citet{Akinyele2011}. The library also provides Python bindings for simple use with Python applications and scripts. Of particular interest are the key-policy and ciphertext-policy schemes, wherein the policy defining access to a resource is embedded in either the user's key or within the encrypted resource ciphertext.
+
+\subsection{ABE Schemes}
+\label{subsec:bkgr_openabe_schemes}
+
+Implementing the key-policy scheme requires defining a user's access to resources in their user key in the form of a policy such as ``access to all algorithmics course resources for the 2018-2019 academic year'' with attributes assigned to resources and embedded into their ciphertext. Access to the resource is then granted only if the resources meet the policy defined by the user's key. The ciphertext-policy scheme is the polar opposite in implementation, where a resource ciphertext has the embedded policy and the users' keys have attributes describing the user. A ciphertext in this scenario, might have a policy such as ``access if user is a student in the Networking course or user is a member of staff'' and access would be granted to a user if and only if their key has the required attributes.
+
+\subsection{PyOpenABE bindings}
+\label{subsec:bkgr_pyopenabe}
+
+OpenABE was designed and implemented by Zeutro LLC in the C language with dual support for a C++ API, with v1.0.0 released in April 2018, via the \href{https://github.com/zeutro/openabe/releases}{OpenABE library repository}. Python bindings (PyOpenABE) were initially added a month later at the request of users in May 2018, with a further update in November 2018.\\
+PyOpenABE provides functions in Python that bind to the OpenABE library, to achieve similar performance as the C library but fluidly from within Python applications. This also allows for seamless data processing between a Python application and the OpenABE library, allowing for a resource to be read with Python, sent to and then encrypted by OpenABE (via the PyOpenABE bindings) and then returned to Python for storing or sending the encrypted ciphertext.\\
+To offer this functionality, PyOpenABE uses the Cython programming language in order to generate a CPython extension module which acts as the compiled bridge between Python and the OpenABE library at runtime. As stated before, this allows for PyOpenABE functions to encrypt \& decrypt resources at a performance nearly equivalent to that of direct OpenABE use. It also allows for the OpenABE library to update in future without necessarily requiring updates to the PyOpenABE bindings \textemdash\ as long as the OpenABE API does not make any breaking changes to the functions PyOpenABE binds to.
