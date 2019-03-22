@@ -1,0 +1,53 @@
+\section{Deployment Considerations}
+\label{sec:analysis_deployment}
+
+A service can be designed from the ground up with security in mind, implementing the strongest encryption \& access control mechanisms possible, but if deployed incorrectly or with carelessness the functioning security of the service can be completely undermined. With that in mind, the Department of Computing Science represented a complex deployment scenario for a resource server.
+\vskip 0.5em
+The University of Glasgow does already provide Microsoft's SharePoint \& OneDrive services as resource-sharing solutions to staff and students, however neither service offers truly granular access control and nor does either service offer a per-department service that the DCS can implement for its users. The DCS is also large and complicated in structure, with over 500 users including both staff \& students with various roles, teams and groups.\\
+The resource server would have to cater to the needs of all users in the DCS and be accessible for all users with relative ease. The two major components to be considered for deployment were the public resource server, tasked with the digital storing, documenting \& distributing of all encrypted resources and the master key server, tasked with provisioning the system's master public \& private keys and subsequently creating private keys for all users.
+
+\subsection{Security of Public Resource Server}
+\label{subsec:analysis_deployment_prs}
+
+The public resource server would need to be accessible to all users in the DCS and able to process the uploading \& downloading of all encrypted resources. By design, the resource server would not be aware of the contents of any resources uploaded and would also be unable to perform any encryption or decryption tasks itself. The system would also reject uploads of any resources that are not encrypted, ensuring it is never aware of information contained in uploaded resources \textemdash\ hopefully helping to avoid the server becoming a target for attacks.\\
+Physical deployment of the public resource server should be simple, as the server must be publicly accessible to all users in the DCS and requires a limited level of security. The server does not necessarily require access to the master key server (see \cref{subsec:analysis_deployment_mks} and \cref{fig:deployment_diagram}) and can instead rely on manual updates completed via physical transfer by DCS Admin staff.
+\vskip 0.5em
+Depending on the desired use, the resource server may be deployed for internal-use only and kept within the DCS network or for public access could be deployed with external access via the university's Campus network. Either scenario can be considered safe as the resources on the server are implicitly secure due to the employed at-rest ABE.\\
+Regardless, once deployed the system should implement the university's SSO authentication system for basic access, this could help defend against denial-of-service attacks and other malicious attempts to disable or damage the system. Further consideration would need to be given to determining a suitable and effective method of completing backups of the encrypted resources but handling that issue is outwith the scope of the project.
+
+\subsection{Security of Master Key Server}
+\label{subsec:analysis_deployment_mks}
+
+Comparatively, the master key server represents the greatest risk to the resource server system, as the master \textbf{private} key stored within is capable of generating \& signing any private key desired. If the master key server becomes compromised, so does the entire system, since the master private key can then be maliciously used to generate any arbitrary decryption key as desired \textemdash\ eventually providing access to every encrypted resource.\\
+In order to combat this risk, the master key server is designed to be kept `offline' after initial setup is complete and the whole system has been successfully provisioned. This drastically reduces attack vectors to the server and eliminates the risk of an external party gaining unauthorised digital access to the underlying system.
+\vskip 0.5em
+Unfortunately, this still leaves physical access to the master key server as a concern, since the server will create any arbitrary user key it is instructed to. It was thus determined that physical access to the server must also be restricted, meaning the master key server would be deployed in a physically locked room with access only granted to DCS Admin staff, as shown in \cref{fig:deployment_diagram}.\\
+Furthermore, the server would be built on a UNIX OS allowing for user authentication and system logging of events. This would ensure that even in the event of a physical breach of security, a rogue party could not access the master key server to issue new keys and that a rogue member of staff could not misuse the server to generate false keys without leaving an auditable trail.
+
+\begin{figure}
+    \centering
+    \includegraphics[width=\linewidth,keepaspectratio]{images/infrastructure/deployment.pdf}
+
+    \caption{A deployment diagram of the DCS resource server product. Both servers can be seen in context, with the master key server in its `offline' state and with physical access restricted to Admin staff. The public resource server is also shown receiving physical updates from the master key server (handled by Admin Staff) and communicating with client software running on a user's local device.}
+
+    \label{fig:deployment_diagram}
+\end{figure}
+
+\subsection{Issuing User Keys}
+\label{subsec:analysis_deployment_iuk}
+
+From \cref{subsec:analysis_deployment_mks}, the master key server generates \& signs decryption keys for the resource server system, using the stored master \textbf{private} key. Further, as discussed in \cref{subsec:analysis_abe}, the decryption keys for the system are private user keys which contain embedded attributes that describe a user in terms that are defined by the organisation, which in this case is the DCS.\\
+For a user to start using the resource server, they must enrol in the system by having a member of the DCS Admin staff generate \& sign a new user key with their personal details from the master key server (see \cref{fig:enrolment_diagram} and appendix \ref{appendix:enrolment_diagram}). The key is created with attributes that should be retrieved from a department system such as MyCampus for students or the HR/Payroll system for staff. The master key server would be designed to \textit{validate} the attributes of a new user to ensure compatibility with encrypted resources and that all generated user keys are comparable.
+\vskip 0.5em
+However, the master key server would not be designed to \textit{verify} the attributes of a new user, since it is assumed that the Admin staff are responsible for verifying both the identity of a user and that the attributes about to be assigned to them are correct. The server would thus, implicitly trust that any inputs it receives have been verified and therefore, once validated would produce a new key; meaning both physical and login access to the server \textit{must only} be granted to trained members of staff.\\
+In order for a user key to be provided to a new user, the Admin staff member must physically transfer the newly created key from the master server key to the student via some form of hardware storage such as a USB flash drive. Care would have to be taken to ensure that the master key server does not become infected from malicious storage devices that might be provided by a student.
+
+\begin{figure}
+    \centering
+    \includegraphics[width=\linewidth,keepaspectratio]{images/flow_of_info/enrollment_stu_sequence.pdf}
+
+    \caption{A sequence diagram demonstrating the enrolment process for a student.
+    The student can be seen requesting a user key \#1 (and providing their student ID) from the DCS Teaching Assitant, whom verifies the student's identity and then retrieves their details \#2 from the Student Centre (or MyCampus) system. The Teaching Assistant then processes the returned attributes \#5 for the Master Key Server, and then requests a new key \#6 by providing the student's attributes. The Master Key Server can be seen processing \#7 and then returning the newly generated key \#8 to the Teaching Assistant, whom finally provides the key to the student.}
+
+    \label{fig:enrolment_diagram}
+\end{figure}
