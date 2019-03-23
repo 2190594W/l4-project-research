@@ -4,12 +4,12 @@
 \begin{figure}[ht]
   \centering
 \begin{mathpar}
-  \infer*[left=Nat]
+  \infer*[left=$\mathbb{Z}$]
   {
     \\
   }
   {
-    n\Downarrow{}\primed{n}
+    i\Downarrow{}\primed{i}
   }
   \and
   \infer*[left=$\mathbb{B}$]
@@ -107,16 +107,9 @@
     \exprLTE{a}{b}\Downarrow\primed{a}\leq\primed{b}
   }
   \end{mathpar}
-  \caption{\label{fig:semantics}Big Step Semantics}
+  \caption{\label{fig:semantics}The formal definiton of the Big Step Semantics for \thePolicyLang}
 \end{figure}
 
-Operational semantics describe how we evaluate our programs.
-This describes how we can \emph{reduce}/evaluate our language expressions and statements to a single value.
-There are generally two common styles of operational semantics: Big-Step, and Small-Step.
-There are more formal names given but we generally refer to the styles using these names.
-
-Big-Step semantics are concerned with what the final result is; we can skip description of intermediate computations.
-Small-Step semantics are concerned with how we get to the final result; we cannot skip intermediate computations.
-Both have pros and cons.
-
-\Cref{fig:semantics} presents Big-Step style semantics, here we use \emph{real} operations to show how an expression is reduced using \emph{real} integer and boolean operators.
+\Cref{fig:semantics} presents the Big-Step semantics for \thePolicyLang, here we use \emph{real} operations to show how an expression is reduced using \emph{real} integer and boolean operators.\\
+Operational semantics describe how we evaluate our programs, describing how we can \emph{reduce} the \thePolicyLang language expressions and statements to a single value. Here we present the Big-Step semantics of evaluating expressions to describe the transition from an expression to the final result, skipping over the intermediate computations (as described in \citet{Myers2007}).\\
+This intentionally abstracts away the finer details of the operations required to evaluate an individual expression, but still presents the syntactic process. This abstraction was considered beneficial since the expressions available in \thePolicyLang are frequently used across many languages and other resources are available that better describe the Small Step semantics of similar expressions (for example \citet{Sewell2009, Unknown2015}).

@@ -20,10 +20,10 @@
   \subst{\exprGTE{a}{b}}{e}{x}&\Coloneqq\exprGTE{\subst{a}{e}{x}}{\subst{b}{e}{x}}\\
   \subst{\exprLTE{a}{b}}{e}{x}&\Coloneqq\exprLTE{\subst{a}{e}{x}}{\subst{b}{e}{x}}
 \end{align*}
-  \caption{\label{fig:subst}Substitution Rules}
+  \caption{\label{fig:subst}The formal definiton of the Substitution Rules for \thePolicyLang}
 \end{figure}
 
-\Cref{fig:subst} presents a standard set of substitution rules for our language.
-These rules describe how we can interate over our expressions/statements and swap variables for values.
-Note how they form a recursive call.
-We will use these rules to help us describe how we can transform our program instances.
+\Cref{fig:subst} presents a standard set of substitution rules for \thePolicyLang.
+These rules describe how we can iterate over our expressions/statements in \thePolicyLang and through recursive calls, swap variables for values.\\
+Starting with expressions and variables, we describe when $\mu$ is an expression or variable. Next we describe the resolving of the \textbf{or} \& \textbf{and} logical operators' parameters to expressions and variables, followed by similar descriptions for the standard comparisons \textbf{greaterThan}, \textbf{lessThan}, \textbf{equal}, \textbf{greaterThanEqual} \& \textbf{lessThanEqual}.\\
+Through the recursive calls, we eventually reach a state where we have visited all expressions \& statements and we can swap in values in place of all variables by working backwards through the recursive calls.

@@ -4,15 +4,15 @@
 \begin{figure}[ht]
   \centering
 \begin{mathpar}
-  \infer*[left=Intro-Nat]
+  \infer*[left=Intro-Int]
   {
     \\
   }
   {
-    \ty{n}{\TyInt}
+    \ty{i}{\TyInt}
   }
   \and
-  \infer*[left=Intro-Boolean]
+  \infer*[left=Intro-Bool]
   {
     \\
   }
@@ -66,7 +66,7 @@
   {
     \env{\ty{a}{T}}\\
     \env{\ty{b}{T}}\\
-    \left[ T \in \{ \mathbb{N}, \mathbb{D} \} \right]
+    \left[ T \in \{ \mathbb{Z}, \mathbb{D} \} \right]
   }
   {
     \env{\ty{\exprGT{a}{b}}{\mathbb{B}}}
@@ -76,7 +76,7 @@
   {
     \env{\ty{a}{T}}\\
     \env{\ty{b}{T}}\\
-    \left[ T \in \{ \mathbb{N}, \mathbb{D} \} \right]
+    \left[ T \in \{ \mathbb{Z}, \mathbb{D} \} \right]
   }
   {
     \env{\ty{\exprLT{a}{b}}{\mathbb{B}}}
@@ -86,7 +86,7 @@
   {
     \env{\ty{a}{T}}\\
     \env{\ty{b}{T}}\\
-    \left[ T \in \{ \mathbb{N}, \mathbb{B}, \mathbb{D}, \mathbb{S} \} \right]
+    \left[ T \in \{ \mathbb{Z}, \mathbb{B}, \mathbb{D}, \mathbb{S}, \mathbb{L}_T \} \right]
   }
   {
     \env{\ty{\exprEQ{a}{b}}{\mathbb{B}}}
@@ -96,7 +96,7 @@
   {
     \env{\ty{a}{T}}\\
     \env{\ty{b}{T}}\\
-    \left[ T \in \{ \mathbb{N}, \mathbb{D} \} \right]
+    \left[ T \in \{ \mathbb{Z}, \mathbb{D} \} \right]
   }
   {
     \env{\ty{\exprGTE{a}{b}}{\mathbb{B}}}
@@ -106,21 +106,15 @@
   {
     \env{\ty{a}{T}}\\
     \env{\ty{b}{T}}\\
-    \left[ T \in \{ \mathbb{N}, \mathbb{D} \} \right]
+    \left[ T \in \{ \mathbb{Z}, \mathbb{D} \} \right]
   }
   {
     \env{\ty{\exprLTE{a}{b}}{\mathbb{B}}}
   }
 \end{mathpar}
-  \caption{\label{fig:rules}Typing Rules}
+  \caption{\label{fig:rules}The formal definiton of the Typing Rules for \thePolicyLang}
 \end{figure}
 
-\Cref{fig:rules} present's the \thePolicyLang typing rules.
-These rules dictate what it means for an expression/statement to be well-formed.
-We do this by assigning types to expressions/statements.
-We read typing rules as follows: Things above the lines are premises such that if all premises are true then the judgement (below the line) will also be true.
-When given any expression/statement in our language we can use the typing rules to construct a derivation that provides proof that the expression/statement is well-typed, that is we can apply each rule and form a derivation tree.
-If we cannot construct this tree then the expression is ill-typed and syntactically not valid.
-Typing rules are a compile time static check.
-
-We can only proceed to computation/evaluation of our language if it is well-typed.
+\Cref{fig:rules} presents the \thePolicyLang typing rules.
+These rules dictate what it means for an expression/statement to be well-formed within \thePolicyLang and for any expression/statement in \thePolicyLang, we use the typing rules to construct a derivation that provides proof that the expression/statement is well-typed, that is we can apply each rule and form a derivation tree. If we cannot construct this tree then the expression is ill-typed and syntactically not valid.\\
+The Typing Rules define 5 base cases for the 5 value types \thePolicyLang supports (as defined in \cref{fig:syntax}), meaning instances of the 5 types derive directly to their type. Next, the boolean logical operators OR \& AND are defined as requiring two Boolean parameters that also derive to a Boolean type return. The standard comparison operators \textbf{greaterThan}, \textbf{lessThan}, \textbf{greaterThanEqual} \& \textbf{lessThanEqual} all take two parameters of a matching type, where the type may be Integer or Date, and derives to a Boolean response. Lastly, the \textbf{equal} comparison similarly takes two paramters of a matching type, but where the type may be Integer, Boolean, Date, String or List, and also derives to a Boolean return.

@@ -5,7 +5,13 @@
 
 \section{Formal Language Definition}
 \label{sec:formal_lang}
-The formal language definition for the Attribute-Based Encryption policy language, \thePolicyLang.
+
+We offer the following formal language definition for the resource server's Attribute-Based Encryption policy language, \thePolicyLang. The language was designed around the Case Studies described in \cref{sec:analysis_case_studies} and follows an extensible design principle that aims to provide a complete policy solution for the Department of Computing Science.\\
+\thePolicyLang directly provides the tools for policies to be constructed for the \cref{sec:analysis_case_studies} Case Studies, which can then be interpreted to the policy format that the PyOpenABE python bindings (described in \cref{sec:bkgr_openabe}) require.
+\vskip 0.5em
+\thePolicyLang offers boolean comparisons for integer, string \& date attributes with further support for lists of multiple values. Additional comparison operations are provided for integer and date comparisons with `greater than', `less than' and `equivalent to' all supported, whereas booleans, strings and lists support `equivalent to' operations only.\\
+This allows for integer comparisons such as ``\textit{studentLevel(\textbf{s}) $\geq$ 4}'' (as found in Case Study \#2, \cref{fig:case_study_policy_2}) and date comparisons such as ``\textit{classRepFrom(\textbf{s}) $\geq$ 17 Sep 2019}'' (as found in Case Study \#5, \cref{fig:case_study_policy_5}). String equivalence operations allow for comparisons such as ``\textit{jobField(\textbf{s}) $\equiv$ `Research \& Teaching'}'' (as found in Case Study \#1, \cref{fig:case_study_policy_1}).\\
+List equivalence operations are also supported, allowing for comparisons such as ``\textit{enrolledCourses(\textbf{s}) $\equiv$ [1001, 1017]}'' (as found in Case Study \#2 \cref{fig:case_study_policy_2}) where the policy requires both that `\textit{enrolledCourses(\textbf{s})}' resolves to a list and that that list contains the elements in `\textit{[1001, 1017]}'.
 
 \input{sections/design/formal_lang/syntax_types_contexts}
 
@@ -16,3 +22,6 @@ The formal language definition for the Attribute-Based Encryption policy languag
 \input{sections/design/formal_lang/big_step_semantics}
 
 \input{sections/design/formal_lang/interpretation}
+
+\section{User Key Design}
+\label{sec:design_user_key}

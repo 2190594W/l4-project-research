@@ -4,7 +4,7 @@
 \begin{figure}[ht]
   \centering
 \begin{align*}
-  \textsc{PolicyLang}&\rightarrow\textsc{Python (PyOpenABE)}\\
+  \textsc{\thePolicyLang}&\rightarrow\textsc{Python (PyOpenABE)}\\
   \interpB{\TyInt}&\Coloneqq\text{\ttfamily int}\\
   \interpB{\mathbb{B}}&\Coloneqq\text{\ttfamily bool}\\
   \interpB{\mathbb{D}}&\Coloneqq\text{\ttfamily datetime.date}\\
@@ -24,10 +24,8 @@
   \interpB{\exprGTE{a}{b}}  &\Coloneqq\interpB{a}\,\text{\ttfamily \textgreater =}\,\interpB{b}\\
   \interpB{\exprLTE{a}{b}}  &\Coloneqq\interpB{a}\,\text{\ttfamily \textless =}\,\interpB{b}
 \end{align*}
-  \caption{\label{fig:interp}Interpretation Rules}
+  \caption{\label{fig:interp}The formal definiton of the Interpretation Rules for \thePolicyLang}
 \end{figure}
 
-In this final section we describe how we can interpret our language to another form, in this case concrete Java expressions.
-Like substitution, interpretation recursively operates over each language statement and expression.
-At each step if replaces the expression from our language with it's equivalent Java form.
-If we interpret a language we do not need to provide operational semantics, the target language provides this.
+In this final section we describe how we interpret \thePolicyLang to another form, in this case concrete Python expressions for the PyOpenABE bindings library (described in \cref{subsec:bkgr_pyopenabe}).\\
+\Cref{fig:interp} presents these Interpretation rules for \thePolicyLang and like substitution, interpretation recursively operates over each statement and expression in \thePolicyLang. At each step replacing the expression from \thePolicyLang with it's equivalent Python form. As we are interpreting \thePolicyLang we do not provide operational semantics, since Python provides this for us.

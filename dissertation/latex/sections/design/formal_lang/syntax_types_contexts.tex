@@ -4,7 +4,7 @@
 \begin{figure}[ht]
   \centering
 \begin{align*}
-  \ty{n}{\mathbb{Z}}
+  \ty{i}{\mathbb{Z}}
   &
     \Coloneqq
     \text{Integers}
@@ -25,7 +25,7 @@
   v
   &
     \Coloneqq
-    n
+    i
     \alt
     b
     \alt
@@ -97,13 +97,13 @@
     &
       \text{Context}
 \end{align*}
-  \caption{\label{fig:syntax}\thePolicyLang abstract syntax, types, and context.}
+  \caption{\label{fig:syntax}The formal definiton of the abstract syntax, types, and context for \thePolicyLang.}
 \end{figure}
 
-\Cref{fig:syntax} presents the syntactical structure, and types for our language.
-Our language contains Integers, Boolean, Date, String and List values, we leave abstract how integers and dates are written. Lists may either be empty or consist of any number of elements where each element is of the same type $T \in v$.
+\Cref{fig:syntax} presents the syntactical structure, and types for \thePolicyLang.
+\thePolicyLang contains Integer, Boolean, Date, String and List values, we leave abstract how integers and dates are written. Lists may either be empty or consist of any number of elements where each element is of the same type $T \in v$.
 
-Integers \& Dates can be compared using standard comparison operations of: \texttt{greater-than}, \texttt{less-than} and \texttt{equals-to}, as well as \texttt{greater-than-or-equal-to} and \texttt{less-than-or-equal-to}.
+Integers \& Dates can be compared using the standard comparison operations of: \texttt{greater-than}, \texttt{less-than} and \texttt{equals-to}, as well as \texttt{greater-than-or-equal-to} and \texttt{less-than-or-equal-to}. Whilst Strings, Lists \& Booleans only support the standard comparison operation of \texttt{equals-to}.
 Boolean operators provide logical conjunction and disjunction.
 
-A context ($\Gamma$) keeps track of well-typed expressions, and our context can be expanded.
+A context ($\Gamma$) keeps track of well-typed expressions, and the \thePolicyLang context can be expanded.
