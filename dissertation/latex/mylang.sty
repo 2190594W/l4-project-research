@@ -1,3 +1,5 @@
+% Copyright 2019 - Jan de Muijnck-Hughes
+
 \ProvidesPackage{mylang}
 
 \RequirePackage{jfdm-plt}
@@ -18,15 +20,18 @@
 \MkEnum{\ExprGT}{greaterThan}
 \MkEnum{\ExprLT}{lessThan}
 \MkEnum{\ExprEQ}{equal}
+% extended by Chris Watson
 \MkEnum{\ExprGTE}{greaterThanEqual}
 \MkEnum{\ExprLTE}{lessThanEqual}
+% end of extension
 
 \newcommand{\exprGT}[2]{\newExpr{\ExprGT}{#1,#2}}
 \newcommand{\exprLT}[2]{\newExpr{\ExprLT}{#1,#2}}
 \newcommand{\exprEQ}[2]{\newExpr{\ExprEQ}{#1,#2}}
+% extended by Chris Watson
 \newcommand{\exprGTE}[2]{\newExpr{\ExprGTE}{#1,#2}}
 \newcommand{\exprLTE}[2]{\newExpr{\ExprLTE}{#1,#2}}
-
+% end of extension
 
 \MkEnum{\ExprOr}{or}
 \MkEnum{\ExprAnd}{and}
