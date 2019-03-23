@@ -1,0 +1,188 @@
+\section{Case Studies}
+\label{sec:analysis_case_studies}
+
+From the work completed in \cref{ch:background} and sections \ref{sec:analysis_security}, \ref{sec:analysis_deployment} \& \ref{sec:analysis_enrolment}, the project had determined the users of the resource server as well as the features the service would need to provide. With this information, several Case Studies were designed to demonstrate the extensibility of the system in real-world scenarios. Of the 6 Case Studies presented here, \cref{subsec:analysis_case_studies_3} and \cref{subsec:analysis_case_studies_5} are examined and discussed at the most in-depth level.
+
+\subsection{\#1 - Course Lecture Slides}
+\label{subsec:analysis_case_studies_1}
+
+Case Study \#1 considers a set of Lecture Slides uploaded as an encrypted resource by the Lecturer of an arbitrary course. For the sake of the scenario however, the Java Programming 2 course was selected with Course Code 2001 in order to demonstrate the creation of a policy.
+\vskip 0.5em
+For this study it should be noted that:
+\begin{itemize}
+  \item
+    the lecture slides have been uploaded in advance of the lecture date
+  \item
+    the lecture date is scheduled for 23/10/19
+  \item
+    the solutions were encrypted and then uploaded by the Lecturer
+  \item
+    the Lecturer for 2001 is Jeremy Springer with username `jspringer'
+  \item
+    Course 2001 is a Level 2 course
+\end{itemize}
+\vskip 0.5em
+From the above information, the following attributes can be extracted for the policy, where we define \textbf{\textit{Subject} s} and \textbf{\textit{Environment} e} as:
+\begin{itemize}
+  \item[]
+    \textbf{s} $\Rightarrow$ role, jobField, studentLevel, enrolledCourses, accountActiveUntil, username
+  \item[]
+    \textbf{e} $\Rightarrow$ currentDate
+\end{itemize}
+
+Applying the above attributes for the scenario provides the policy in \cref{fig:case_study_policy_1} which would have been embedded in the encrypted lecture slides by the Lecturer prior to upload. The encrypted slides can then remain stored on the server but only accessible to Research \& Teaching staff members until 24 hours before the lecture date of 23/10/19, when students on the course will also be granted access.
+
+\begin{figure}[ht]
+  \centering
+\begin{align*}
+  \text{Policy(\textbf{s},\textbf{e})}
+  &
+    \leftarrow
+    \text{username(\textbf{s})} \equiv \text{jspringer}
+  \\
+  &
+    \vee
+    \text{( role(\textbf{s})} \equiv \text{Staff}
+  \\
+  &
+    \phantom{::}\phantom{::}\wedge
+    \text{jobField(\textbf{s})} \equiv \text{Research \& Teaching )}
+  \\
+  &
+    \vee
+    \text{( role(\textbf{s})} \equiv \text{Student}
+  \\
+  &
+    \phantom{::}\phantom{::}\wedge
+    \text{studentLevel(\textbf{s})} \equiv \text{2}
+  \\
+  &
+    \phantom{::}\phantom{::}\wedge
+    \text{enrolledCourses(\textbf{s})} \equiv \text{2001}
+  \\
+  &
+    \phantom{::}\phantom{::}\wedge
+    \text{currentDate(\textbf{e})} \geq \text{22 October 2019 )}
+  \\
+  &
+    \wedge
+    \text{accountActiveUntil(\textbf{s})} \geq \text{currentDate(\textbf{e})}
+\end{align*}
+  \caption{
+    \label{fig:case_study_policy_1}
+    Case Study \#1 policy dictating access to a set of course 2001 lecture slides.
+    Successful decryption would be possible for the author of the slides (with username `jspringer') \textbf{or} a member of staff in the Research \& Teaching field \textbf{or} a Level 2 student enrolled in the 2001 course if the lecture slides' release date has passed. In all cases an active account is also required.
+  }
+\end{figure}
+
+\subsection{\#2 - Course Lab Solutions}
+\label{subsec:analysis_case_studies_2}
+
+Case Study \#2 considers a lab solution uploaded as an encrypted resource by the Lecturer of an arbitrary course. For the sake of the scenario however, the 1P Programming course was selected with Course Code 1001 as it has the added complexity of tutors \& demonstrators, but it should be remembered that any course with labs could have been chosen.
+\vskip 0.5em
+For this study it should be noted that:
+\begin{itemize}
+  \item
+    the lab solutions have been uploaded in advance of the actual lab date
+  \item
+    the lab date is scheduled for 04/12/19
+  \item
+    the solutions were encrypted and then uploaded by the Lecturer
+  \item
+    the Lecturer for 1001 is John Williamson with username `jwilliamson'
+  \item
+    Course 1001 is a Level 1 course
+  \item
+    Course 1001 has a sister course, 1017
+  \item
+    the 1P course labs are assisted by tutors \& demonstrators from Level 4+
+\end{itemize}
+\vskip 0.5em
+From the above information, the following attributes can be extracted for the policy, where we define \textbf{\textit{Subject} s} and \textbf{\textit{Environment} e} as:
+\begin{itemize}
+  \item[]
+    \textbf{s} $\Rightarrow$ role, jobField, studentLevel, enrolledCourses, accountActiveUntil, startDate, endDate, username, studentRole, demonstratorCourses
+  \item[]
+    \textbf{e} $\Rightarrow$ currentDate
+\end{itemize}
+
+Applying the above attributes for the scenario provides the policy in \cref{fig:case_study_policy_2} which would have been embedded in the encrypted lab solution by the Lecturer prior to upload. The encrypted lab solution can then remain stored on the server but only accessible to Research \& Teaching staff members and valid tutors \& demonstrators until 3 days after the lab date of 04/12/19, when students on the course will also be granted access.
+
+\begin{figure}[ht]
+  \centering
+\begin{align*}
+  \text{Policy(\textbf{s},\textbf{e})}
+  &
+    \leftarrow
+    \text{username(\textbf{s})} \equiv \text{jwilliamson}
+  \\
+  &
+    \vee
+    \text{( role(\textbf{s})} \equiv \text{Staff}
+  \\
+  &
+    \phantom{::}\phantom{::}\wedge
+    \text{jobField(\textbf{s})} \equiv \text{Research \& Teaching )}
+  \\
+  &
+    \vee
+    \text{( role(\textbf{s})} \equiv \text{Student}
+  \\
+  &
+    \phantom{::}\phantom{::}\wedge
+    \text{studentLevel(\textbf{s})} \equiv \text{1}
+  \\
+  &
+    \phantom{::}\phantom{::}\wedge
+    \text{enrolledCourses(\textbf{s})} \equiv \text{1001, 1017}
+  \\
+  &
+    \phantom{::}\phantom{::}\wedge
+    \text{currentDate(\textbf{e})} \geq \text{7 December 2019 )}
+  \\
+  &
+    \vee
+    \text{( role(\textbf{s})} \equiv \text{Student}
+  \\
+  &
+    \phantom{::}\phantom{::}\wedge
+    \text{studentLevel(\textbf{s})} \equiv \text{4} \mid \text{M} \mid \text{PG}
+  \\
+  &
+    \phantom{::}\phantom{::}\wedge
+    \text{studentRole(\textbf{s})} \equiv \text{Demonstrator UG} \mid \text{Demonstrator PG} \mid \text{Tutor}
+  \\
+  &
+    \phantom{::}\phantom{::}\wedge
+    \text{demonstratorCourses(\textbf{s})} \equiv \text{1001, 1017}
+  \\
+  &
+    \phantom{::}\phantom{::}\wedge
+    \text{startDate(\textbf{e})} \leq \text{currentDate(\textbf{e})}
+  \\
+  &
+    \phantom{::}\phantom{::}\wedge
+    \text{endDate(\textbf{e})} \geq \text{currentDate(\textbf{e}) )}
+  \\
+  &
+    \wedge
+    \text{accountActiveUntil(\textbf{s})} \geq \text{currentDate(\textbf{e})}
+\end{align*}
+  \caption{
+    \label{fig:case_study_policy_2}
+    Case Study \#2 policy dictating access to a set of course 1001 lab solutions.
+    Successful decryption would be possible for the author of the solutions (with username `jwilliamson') \textbf{or} a member of staff in the Research \& Teaching field \textbf{or} a Level 2 student enrolled in the 1001 \& 1017 courses if the lab date has passed \textbf{or} a Level 4+ student employed as a demonstrator or tutor that has been assigned to 1001 \& 1017 and it is within their dates of employment. In all cases an active account is also required.
+  }
+\end{figure}
+
+\subsection{\#3 - In-progress Exam Script}
+\label{subsec:analysis_case_studies_3}
+
+\subsection{\#4 - Past Paper}
+\label{subsec:analysis_case_studies_4}
+
+\subsection{\#5 - Level 4 Student Project}
+\label{subsec:analysis_case_studies_5}
+
+\subsection{\#6 - Class Rep Meeting Minutes}
+\label{subsec:analysis_case_studies_6}
