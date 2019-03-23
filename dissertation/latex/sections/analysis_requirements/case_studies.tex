@@ -3,7 +3,7 @@
 
 From the work completed in \cref{ch:background} and sections \ref{sec:analysis_security}, \ref{sec:analysis_deployment} \& \ref{sec:analysis_enrolment}, the project had determined the users of the resource server (see \cref{appendix:roles_users}) as well as the features the service would need to provide. With this information, several Case Studies were designed to demonstrate the extensibility of the system in real-world scenarios. Of the 6 Case Studies presented here, \cref{subsec:analysis_case_studies_3} and \cref{subsec:analysis_case_studies_4} are examined and discussed at the most in-depth level.
 
-\subsection{\#0 - Past Exam Paper}
+\subsection{\#0 \textemdash\ Past Exam Paper}
 \label{subsec:analysis_case_studies_0}
 
 Case Study \#0 considers a past exam paper uploaded as an encrypted resource by a member of the Administration staff for an arbitrary course. The staff member would like the past paper to be shared with all members of staff and students in the Department of Computing Science.
@@ -32,11 +32,11 @@ Applying the above attributes for the scenario provides the policy in \cref{fig:
   \text{Policy(\textbf{s},\textbf{e})}
   &
     \leftarrow
-    \text{username(\textbf{s})} \equiv \text{tbonner}
+    \text{username(\textbf{s})} \equiv \text{`tbonner'}
   \\
   &
     \phantom{::}\vee
-    \text{role(\textbf{s})} \equiv \text{Staff} \mid \text{Student}
+    \text{role(\textbf{s})} \equiv \text{`Staff'} \mid \text{`Student'}
   \\
   &
     \phantom{::}\wedge
@@ -49,7 +49,7 @@ Applying the above attributes for the scenario provides the policy in \cref{fig:
   }
 \end{figure}
 
-\subsection{\#1 - Course Lecture Slides}
+\subsection{\#1 \textemdash\ Course Lecture Slides}
 \label{subsec:analysis_case_studies_1}
 
 Case Study \#1 considers a set of Lecture Slides uploaded as an encrypted resource by the Lecturer of an arbitrary course. The Lecturer would like the slides to be shared with other members of staff, to allow for suggestions and even collaboration, but only for Research \& Teaching staff. The Lecturer does not want the slides to be accessible to students until 24 hours before the scheduled lecture date, inline with university policy. For the sake of the scenario, the Java Programming 2 course was selected with Course Code 2001 in order to demonstrate the creation of a policy.
@@ -84,19 +84,19 @@ Applying the above attributes for the scenario provides the policy in \cref{fig:
   \text{Policy(\textbf{s},\textbf{e})}
   &
     \leftarrow
-    \text{username(\textbf{s})} \equiv \text{jspringer}
+    \text{username(\textbf{s})} \equiv \text{`jspringer'}
   \\
   &
     \phantom{::}\vee
-    \text{( role(\textbf{s})} \equiv \text{Staff}
+    \text{( role(\textbf{s})} \equiv \text{`Staff'}
   \\
   &
     \phantom{::::::::}\wedge
-    \text{jobField(\textbf{s})} \equiv \text{Research \& Teaching )}
+    \text{jobField(\textbf{s})} \equiv \text{`Research \& Teaching' )}
   \\
   &
     \phantom{::}\vee
-    \text{( role(\textbf{s})} \equiv \text{Student}
+    \text{( role(\textbf{s})} \equiv \text{`Student'}
   \\
   &
     \phantom{::::::::}\wedge
@@ -121,7 +121,7 @@ Applying the above attributes for the scenario provides the policy in \cref{fig:
   }
 \end{figure}
 
-\subsection{\#2 - Course Lab Solutions}
+\subsection{\#2 \textemdash\ Course Lab Solutions}
 \label{subsec:analysis_case_studies_2}
 
 Case Study \#2 considers a lab solution uploaded as an encrypted resource by the Lecturer of an arbitrary course. The Lecturer would like to upload the solutions in advance of the lab date, allowing for other members of staff to verify the solutions, but only for Research \& Teaching staff. The Lecturer does not want the solutions to be accessible to students until 3 days after the scheduled lab date, allowing the Lecturer to talk through the solutions in a lecture before release. The Lecturer would like the solutions to be available to tutors \& demonstrators that will be assisting in the lab, so that they can properly offer help to students.\\
@@ -161,19 +161,19 @@ Applying the above attributes for the scenario provides the policy in \cref{fig:
   \text{Policy(\textbf{s},\textbf{e})}
   &
     \leftarrow
-    \text{username(\textbf{s})} \equiv \text{jwilliamson}
+    \text{username(\textbf{s})} \equiv \text{`jwilliamson'}
   \\
   &
     \phantom{::}\vee
-    \text{( role(\textbf{s})} \equiv \text{Staff}
+    \text{( role(\textbf{s})} \equiv \text{`Staff'}
   \\
   &
     \phantom{::::::::}\wedge
-    \text{jobField(\textbf{s})} \equiv \text{Research \& Teaching )}
+    \text{jobField(\textbf{s})} \equiv \text{`Research \& Teaching' )}
   \\
   &
     \phantom{::}\vee
-    \text{( role(\textbf{s})} \equiv \text{Student}
+    \text{( role(\textbf{s})} \equiv \text{`Student'}
   \\
   &
     \phantom{::::::::}\wedge
@@ -189,15 +189,15 @@ Applying the above attributes for the scenario provides the policy in \cref{fig:
   \\
   &
     \phantom{::}\vee
-    \text{( role(\textbf{s})} \equiv \text{Student}
+    \text{( role(\textbf{s})} \equiv \text{`Student'}
   \\
   &
     \phantom{::::::::}\wedge
-    \text{studentLevel(\textbf{s})} \equiv \text{4} \mid \text{M} \mid \text{PG}
+    \text{studentLevel(\textbf{s})} \geq \text{4}
   \\
   &
     \phantom{::::::::}\wedge
-    \text{studentRole(\textbf{s})} \equiv \text{Demonstrator UG} \mid \text{Demonstrator PG} \mid \text{Tutor}
+    \text{studentRole(\textbf{s})} \equiv \text{`Demonstrator UG'} \mid \text{`Demonstrator PG'} \mid \text{`Tutor'}
   \\
   &
     \phantom{::::::::}\wedge
@@ -218,11 +218,11 @@ Applying the above attributes for the scenario provides the policy in \cref{fig:
   \caption{
     \label{fig:case_study_policy_2}
     Case Study \#2 policy dictating access to a set of course `1001' lab solutions.
-    Successful decryption would be possible for the author of the solutions (with username `jwilliamson') \textbf{or} a member of staff in the `Research \& Teaching' field \textbf{or} a Level 2 student enrolled in the `1001' \& `1017' courses if the lab date has passed \textbf{or} a Level 4+ student employed as a demonstrator or tutor that has been assigned to `1001' \& `1017' and it is within their dates of employment. In all cases an active account is also required.
+    Successful decryption would be possible for the author of the solutions (with username `jwilliamson') \textbf{or} a member of staff in the `Research \& Teaching' field \textbf{or} a Level 2 student enrolled in the `1001' \& `1017' courses if the lab date has passed \textbf{or} a Level 4+ student employed as a demonstrator or tutor that has been assigned to the `1001' \& `1017' course and it is within their dates of employment. In all cases an active account is also required.
   }
 \end{figure}
 
-\subsection{\#3 - In-progress Exam Script}
+\subsection{\#3 \textemdash\ In-progress Exam Script}
 \label{subsec:analysis_case_studies_3}
 
 Case Study \#3 considers an in-progress exam script uploaded as an encrypted resource by the Lecturer of an arbitrary course. The exam script is still a draft and is currently being worked on by one or more members of staff in preparation for the exam period. The Lecturer would like to upload the script in advance of the exam date, allowing for other members of staff to verify the script and offer feedback, but only for Research \& Teaching staff.\\
@@ -260,7 +260,7 @@ From the above information, we can identify attributes to be extracted for the p
 \end{itemize}
 
 Applying the above attributes for the scenario provides the policy in \cref{fig:case_study_policy_3} which would have been embedded in the encrypted exam script by the Lecturer prior to upload. The encrypted exam script can then remain stored on the server but would only be the Lecturer themselves, as well as the specified collaborators.\\
-Further access would be granted to staff members in the Professional, Administrative \& Support field that specifically have the Administration role, as well as Research \& Teaching staff members that belong to the FATA research group and the Programming Languages research theme. Lastly, access would be granted to markers that have been assigned to the 4016 course and will be actively marking during the marking period (12/05/20 - 10/06/20).
+Further access would be granted to staff members in the Professional, Administrative \& Support field that specifically have the Administration role, as well as Research \& Teaching staff members that belong to the FATA research group and the Programming Languages research theme. Lastly, access would be granted to markers that have been assigned to the 4016 course and will be actively marking during the marking period (12/05/20-10/06/20).
 
 \begin{figure}[ht]
   \centering
@@ -268,43 +268,43 @@ Further access would be granted to staff members in the Professional, Administra
   \text{Policy(\textbf{s},\textbf{e})}
   &
     \leftarrow
-    \text{username(\textbf{s})} \equiv \text{odardha} \mid \text{sgay} \mid \text{jodonnell}
+    \text{username(\textbf{s})} \equiv \text{`odardha'} \mid \text{`sgay'} \mid \text{`jodonnell'}
   \\
   &
     \phantom{::}\vee
-    \text{( role(\textbf{s})} \equiv \text{Staff}
+    \text{( role(\textbf{s})} \equiv \text{`Staff'}
   \\
   &
     \phantom{::::::::}\wedge
-    \text{jobField(\textbf{s})} \equiv \text{Professional, Administrative \& Support}
+    \text{jobField(\textbf{s})} \equiv \text{`Professional, Administrative \& Support'}
   \\
   &
     \phantom{::::::::}\wedge
-    \text{jobRole(\textbf{s})} \equiv \text{Administration )}
+    \text{jobRole(\textbf{s})} \equiv \text{`Administration' )}
   \\
   &
     \phantom{::}\vee
-    \text{( role(\textbf{s})} \equiv \text{Staff}
+    \text{( role(\textbf{s})} \equiv \text{`Staff'}
   \\
   &
     \phantom{::::::::}\wedge
-    \text{jobField(\textbf{s})} \equiv \text{Research \& Teaching}
+    \text{jobField(\textbf{s})} \equiv \text{`Research \& Teaching'}
   \\
   &
     \phantom{::::::::}\wedge
-    \text{researchGroup(\textbf{s})} \equiv \text{FATA}
+    \text{researchGroup(\textbf{s})} \equiv \text{`FATA'}
   \\
   &
     \phantom{::::::::}\wedge
-    \text{researchTheme(\textbf{s})} \equiv \text{Programming Languages )}
+    \text{researchTheme(\textbf{s})} \equiv \text{`Programming Languages' )}
   \\
   &
     \phantom{::}\vee
-    \text{( role(\textbf{s})} \equiv \text{Staff}
+    \text{( role(\textbf{s})} \equiv \text{`Staff'}
   \\
   &
     \phantom{::::::::}\wedge
-    \text{staffRole(\textbf{s})} \equiv \text{Marker}
+    \text{staffRole(\textbf{s})} \equiv \text{`Marker'}
   \\
   &
     \phantom{::::::::}\wedge
@@ -329,7 +329,7 @@ Further access would be granted to staff members in the Professional, Administra
   }
 \end{figure}
 
-\subsection{\#4 - Level 4 Honours Individual Project}
+\subsection{\#4 \textemdash\ Level 4 Honours Individual Project}
 \label{subsec:analysis_case_studies_4}
 
 Case Study \#4 considers a completed individual project from a Level 4 student, particularly the dissertation resource although the project source code could also be treated identically if submitted as a compressed .tar.gz or .zip file.\\
@@ -363,19 +363,19 @@ Applying the above attributes for the scenario provides the policy in \cref{fig:
   \text{Policy(\textbf{s},\textbf{e})}
   &
     \leftarrow
-    \text{( role(\textbf{s})} \equiv \text{Student}
+    \text{( role(\textbf{s})} \equiv \text{`Student'}
   \\
   &
     \phantom{::::::}\wedge
-    \text{username(\textbf{s})} \equiv \text{2123456z )}
+    \text{username(\textbf{s})} \equiv \text{`2123456z' )}
   \\
   &
     \phantom{::}\vee
-    \text{( role(\textbf{s})} \equiv \text{Staff}
+    \text{( role(\textbf{s})} \equiv \text{`Staff'}
   \\
   &
     \phantom{::::::}\wedge
-    \text{username(\textbf{s})} \equiv \text{qcutts} \mid \text{psiebert} \mid \text{jwilliamson )}
+    \text{username(\textbf{s})} \equiv \text{`qcutts'} \mid \text{`psiebert'} \mid \text{`jwilliamson' )}
   \\
   &
     \phantom{::}\wedge
@@ -389,7 +389,7 @@ Applying the above attributes for the scenario provides the policy in \cref{fig:
 \end{figure}
 
 
-\subsection{\#5 - Class Representative Meeting Minutes}
+\subsection{\#5 \textemdash\ Class Representative Meeting Minutes}
 \label{subsec:analysis_case_studies_5}
 
 Case Study \#5 considers the secure storage of the minutes from a Class Representative meeting, which would have been uploaded as an encrypted resource by a member of Admin staff after recording. The minutes should be accessible to all Research \& Teaching staff as well as the rest of the Administration team. Further, all active class reps should also have access to the minutes, as it is assumed that they will have attended the meeting. Lastly, the Head of the DCS (Head of School) should also have access to the minutes to see what was discussed \& decided.\\
@@ -419,35 +419,35 @@ Applying the above attributes for the scenario provides the policy in \cref{fig:
   \text{Policy(\textbf{s},\textbf{e})}
   &
     \leftarrow
-    \text{username(\textbf{s})} \equiv \text{tgalabova}
+    \text{username(\textbf{s})} \equiv \text{`tgalabova'}
   \\
   &
     \phantom{::}\vee
-    \text{( role(\textbf{s})} \equiv \text{Staff}
+    \text{( role(\textbf{s})} \equiv \text{`Staff'}
   \\
   &
     \phantom{::::::::}\wedge
-    \text{jobField(\textbf{s})} \equiv \text{Research \& Teaching )}
+    \text{jobField(\textbf{s})} \equiv \text{`Research \& Teaching' )}
   \\
   &
     \phantom{::}\vee
-    \text{( role(\textbf{s})} \equiv \text{Staff}
+    \text{( role(\textbf{s})} \equiv \text{`Staff'}
   \\
   &
     \phantom{::::::::}\wedge
-    \text{jobField(\textbf{s})} \equiv \text{Professional, Administrative \& Support}
+    \text{jobField(\textbf{s})} \equiv \text{`Professional, Administrative \& Support'}
   \\
   &
     \phantom{::::::::}\wedge
-    \text{jobRole(\textbf{s})} \equiv \text{Administration )}
+    \text{jobRole(\textbf{s})} \equiv \text{`Administration' )}
   \\
   &
     \phantom{::}\vee
-    \text{( role(\textbf{s})} \equiv \text{Staff}
+    \text{( role(\textbf{s})} \equiv \text{`Staff'}
   \\
   &
     \phantom{::::::::}\wedge
-    \text{staffRole(\textbf{s})} \equiv \text{Head of School}
+    \text{staffRole(\textbf{s})} \equiv \text{`Head of School'}
   \\
   &
     \phantom{::::::::}\wedge
@@ -459,11 +459,11 @@ Applying the above attributes for the scenario provides the policy in \cref{fig:
   \\
   &
     \phantom{::}\vee
-    \text{( role(\textbf{s})} \equiv \text{Student}
+    \text{( role(\textbf{s})} \equiv \text{`Student'}
   \\
   &
     \phantom{::::::::}\wedge
-    \text{studentRole(\textbf{s})} \equiv \text{Class Representative}
+    \text{studentRole(\textbf{s})} \equiv \text{`Class Representative'}
   \\
   &
     \phantom{::::::::}\wedge
