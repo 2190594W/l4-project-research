@@ -1,0 +1,21 @@
+\section{System Architecture}
+\label{sec:design_sys_arch}
+
+As described in \cref{sec:analysis_deployment}, the \theResServer system is composed of two servers, the \acrfull{mks} and \acrfull{prs} serving two distinct purposes. The \acrshort{mks} provisions the \theResServer system with master private \& public keys and creates private user keys with embedded attributes for all users. The \acrshort{prs} server stores and manages the distribution of the encrypted resources for the whole \theResServer system as well as distributing the master \textit{public} key to users.\\
+\Cref{sec:analysis_deployment} also describes the offline deployment of the \acrshort{mks} to provide implicit protection against external digital threats and the public availability of the \acrshort{prs}. Further, \cref{subsec:design_resources} describes the design decision to store metadata from resources on an internal database within the \acrshort{prs}, to offer details on the resources without exposing contents to the server. \Cref{sec:bkgr_openabe} describes the \OpenABE library and how it can be used to encrypt resources securely.
+\vskip 0.5em
+The remaining piece of software in the \theResServer system is a Client tool for users to easily communicate with the public resource server and aid in the creation of policies. This \acrfull{crs} runs as a local web server on a user's device, allowing a user to access a local address with their web browser and emulate a direct connection to the public resource server, wrapped in a simple \acrshort{html} user interface.\\
+The \acrshort{crs} has direct access to a local \OpenABE library, to process encryption \& decryption operations (as well as key and public parameter management) and uses some Authentication Service to authenticate a user. The \acrshort{crs} also interfaces with the \acrshort{prs} to handle uploading \& downloading resources for the user, as well as offering access to the \acrshort{prs}'s search functionality.
+\vskip 0.5em
+\Cref{fig:sys_arch_abbrv} represents the designed system architecture of the \theResServer system in a condensed form, with the full form presented in appendix \ref{appendix:architecture_diagram}. As stated, the Authentication Service is left abstract in the design so that any organisation may identify and implement their own service. It should also be noted that in both design and diagram, the \acrshort{prs} does \textbf{not} have access to a copy of the \OpenABE library, ensuring it is unable to perform encryption or decryption itself (as described in \cref{subsec:analysis_deployment_prs}).
+
+\begin{figure}
+    \centering
+    \includegraphics[width=\linewidth,keepaspectratio]{images/infrastructure/system_architecture_abbrv.pdf}
+
+    \caption{
+      \label{fig:sys_arch_abbrv}
+      A condensed architecture diagram describing the system architecture of the \theResServer system. The \acrfull{mks} is shown in an offline state with access to a local copy of the \OpenABE library for provisioning the system \& generating user keys. The \acrfull{prs} is shown receiving offline updates from the \acrshort{mks}, managing a local database with resource metadata \& the associated resource storage and providing search, config and upload \& download interfaces for clients. The \acrfull{crs} is shown with local access to an \OpenABE library for encryption \& decryption and access to an abstract Authentication Service (such as the university's SSO system). The \acrshort{crs} also implements the search, config and upload \& download interfaces provided by the \acrshort{prs} and provides its own upload \& download, encrypt \& decrypt and resource search interfaces for the user.
+    }
+
+\end{figure}
