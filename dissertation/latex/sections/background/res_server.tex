@@ -1,4 +1,4 @@
-\section{Resource Server}
+\section{Resource Servers}
 \label{sec:bkgr_res_srvr}
 
 Resource servers are a central operating component of any organisation and are often considered `mission critical' due to the reliance users have on accessing shared resources. More and more organisations are implementing cloud storage into their day-to-day operations through products such as OneDrive, Google Drive or Dropbox \citep{Thorpe2018}.\\
@@ -8,4 +8,4 @@ Given the organisational uses for resource servers or cloud storage, a resource 
 Resources must also be kept secure both in-transit and at-rest. For transmission of resources to a resource server, this is solved by TLS communication as described in \nameref{sec:bkgr_pub_key_infr} above. However, at-rest protection is more complex as it usually requires encryption of resources with a specification such as AES \citep{Daemen2003}, an implementation of \textit{symmetric} encryption that relies on a single key for encryption \& decryption.
 \vskip 0.5em
 Cloud storage providers do not offer the same level of security as that of a dedicated, ABE-encrypted resource server due to the \textit{symmetric} nature of AES. OneDrive, Google Drive and Dropbox all offer at least 128-bit AES encryption at-rest for \textbf{business} accounts \citet{Winder2018} yet each provider must store the key(s) used for encryption themselves.\\
-This represents a security risk as each provider is responsible for ensuring that an external attack is not able to acquire the encryption keys and that access control to said keys is sufficiently restricted. By comparison, an ABE-encryped resource server does not store the keys used for decryption and is implicitly secured against resource information breaches \textemdash\ since the server itself does not have access to any resource's information.
+This represents a security risk as each provider is responsible for ensuring that an external attacker is not able to acquire the encryption keys and that access control to said keys, is sufficiently restricted. By comparison, an ABE-encryped resource server does not store the keys used for decryption and is implicitly secured against resource information breaches \textemdash\ since the server itself does not have access to any resource's information.
