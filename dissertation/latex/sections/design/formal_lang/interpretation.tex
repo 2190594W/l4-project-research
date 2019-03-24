@@ -24,8 +24,8 @@
   \interpB{\exprGTE{a}{b}}  &\Coloneqq\interpB{a}\,\text{\ttfamily \textgreater =}\,\interpB{b}\\
   \interpB{\exprLTE{a}{b}}  &\Coloneqq\interpB{a}\,\text{\ttfamily \textless =}\,\interpB{b}
 \end{align*}
-  \caption{\label{fig:interp}The formal definiton of the Interpretation Rules for \thePolicyLang}
+  \caption{\label{fig:interp}The formal definition of the Interpretation Rules for \thePolicyLang}
 \end{figure}
 
-In this final section we describe how we interpret \thePolicyLang to another form, in this case concrete Python expressions for the PyOpenABE bindings library (described in \cref{subsec:bkgr_pyopenabe}).\\
+In this final section we describe how we interpret \thePolicyLang to another form, in this case concrete Python expressions for the \PyOpenABE bindings library (described in \cref{subsec:bkgr_pyopenabe}).\\
 \Cref{fig:interp} presents these Interpretation rules for \thePolicyLang and like substitution, interpretation recursively operates over each statement and expression in \thePolicyLang. At each step replacing the expression from \thePolicyLang with it's equivalent Python form. As we are interpreting \thePolicyLang we do not provide operational semantics, since Python provides this for us.

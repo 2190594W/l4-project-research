@@ -16,6 +16,17 @@
 \usepackage{url}
 \usepackage{cleveref}
 
+\usepackage[acronym]{glossaries}
+
+\makenoidxglossaries
+
+\newacronym{dcs}{DCS}{Department of Computing Science}
+\newacronym{abe}{ABE}{Attribute Based Encryption}
+\newacronym{mks}{MKS}{Master Key Server}
+\newacronym{prs}{PRS}{Public Resource Server}
+\newacronym{crs}{CRS}{Client Resource Server}
+\newacronym{html}{HTML}{Hypertext Markup Language}
+
 \begin{document}
 
 %==============================================================================
@@ -75,6 +86,12 @@
 % however.
 %
 %==================================================================================================================================
+
+\newcommand{\thePolicyLang}{\textsc{PolLang}\textsubscript{ABE}\xspace}
+\newcommand{\theResServer}{\textsc{ResSrvr}\textsubscript{ABE}\xspace}
+\newcommand{\OpenABE}{\textsc{OpenABE}\xspace}
+\newcommand{\PyOpenABE}{\textsc{PyOpenABE}\xspace}
+
 \chapter{Introduction}
 \label{ch:introduction}
 
@@ -87,8 +104,6 @@
 \input{sections/introduction/overview}
 
 \input{sections/introduction/aims}
-
-\newcommand{\thePolicyLang}{\textsc{PolLang}\textsubscript{ABE}\xspace}
 
 \input{sections/introduction/contributions}
 
@@ -129,6 +144,16 @@ A resource server must be designed to be secure and robust in case of external a
 \label{ch:design}
 
 \input{sections/design/intro}
+
+\input{sections/design/formal_lang}
+
+\input{sections/design/user_key}
+
+\input{sections/design/sys_arch}
+
+\input{sections/design/policy_building}
+
+\input{sections/design/filename_searching}
 
 %==================================================================================================================================
 \chapter{Implementation}
@@ -175,5 +200,9 @@ Summarise the whole project for a lazy reader who didn't read the rest (e.g. a p
 \bibliographystyle{abbrvnat}
 
 \bibliography{l4proj}
+
+\newpage
+
+\printnoidxglossaries
 
 \end{document}
