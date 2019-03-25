@@ -16,7 +16,7 @@ Due to these risks, a system must offer a last line of defence for such situatio
 Instead we must integrate a form of at-rest encryption to securely store resources as unintelligible binary blobs that cannot be interpreted by man or machine. Such encryption relies on the employment of a block cipher algorithm and the current NIST guidance offers two approved block cipher algorithms \citep{NIST2017}; \acrfull{aes} and Triple DES as described by \citet{Daemen2003} \& \citet{Barker2017}.\\
 Unfortunately, both block cipher algorithms are forms of \textit{symmetric}-key encryption which require the same key for encryption and decryption. This usually requires the service provider to store the key(s) separately from the resources and ultimately leaves a single party in control of both keys and encrypted resources, as with Google Drive \& OneDrive business accounts \citep{Winder2018}.
 
-\subsection{Choosing \acrshort{abe}}
+\subsection{Choosing ABE}
 \label{subsec:analysis_abe}
 
 \acrfull{abe} by comparison offers the possibility of storing encrypted resources with block cipher algorithms such as \acrshort{aes} 128-bit, yet without the requirement of storing keys. A \textit{ciphertext policy} \acrshort{abe} system for example binds an \acrshort{aes} ciphertext with a policy that describes who shall be able to decrypt it \citep{Akinyele2011} and employs Public Key cryptography (as described in \cref{sec:bkgr_pub_key_infr}) to enforce the policy.\\
@@ -25,7 +25,7 @@ In this context, decryption keys are private user keys that have been generated 
 Additionally, as an \acrshort{abe} system relies on Public Key cryptography, anyone may encrypt a resource with a policy using the distributed master public key, however only private user keys are capable of decrypting resources. These keys must be generated and then signed by a designated \acrfull{mks} (or private key generator) that remains the only entity with access to the master \textit{private} key. When a user key is created they can be created with a random seed, ensuring that two users with different levels of access cannot collude to form a new key with more access than they have individually \citep{Akinyele2011}, providing implicit \textit{collusion resistance}.\\
 Further, Access Control for a service is online only, meaning that if the service is taken offline there is no way for users to access theirs (or other's) resources. By comparison an \acrshort{abe} system requires that access can only be gained through decryption and that files must be decrypted locally \citep{Waters2011}. This means that in the event of the system being inaccessible, users can safely distribute encrypted resources by other means \textemdash\ such as physical transfers \textemdash\ without risking an information breach.
 
-\subsection{\acrshort{abe} Implementation}
+\subsection{ABE Implementation}
 \label{subsec:analysis_abe_impl}
 
 To work securely \& efficiently, an \acrshort{abe} system must implement Public Key cryptography as a layer \textit{on top of} a block cipher algorithm such as \acrshort{aes}. Although Public Key cryptography \textemdash\ for example the RSA algorithm \citep{Barker2016} \textemdash\ can encrypt whole resources without \acrshort{aes}, the process is much less efficient and consumes a greater quantity of compute resources in the process \citep{AlHasib2008}. As such, an \acrshort{abe} system should first use \acrshort{aes} to encrypt a resource's contents, producing an \acrshort{aes} \textit{symmetric} key and an encrypted binary blob of the resource.
