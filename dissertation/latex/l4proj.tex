@@ -16,7 +16,7 @@
 \usepackage{url}
 \usepackage{cleveref}
 
-\usepackage[acronym]{glossaries}
+\usepackage[acronym,toc]{glossaries}
 
 \makenoidxglossaries
 
@@ -26,6 +26,8 @@
 \newacronym{prs}{PRS}{Public Resource Server}
 \newacronym{crs}{CRS}{Client Resource Server}
 \newacronym{html}{HTML}{Hypertext Markup Language}
+\newacronym{gui}{GUI}{Graphical User Interface}
+\newacronym{cli}{CLI}{Command Line Interface}
 
 \begin{document}
 
@@ -143,6 +145,9 @@ A resource server must be designed to be secure and robust in case of external a
 \chapter{Design}
 \label{ch:design}
 
+With the Background (\Cref{ch:background}) and Analysis (\Cref{ch:analysis}) presented, we present the design of the \theResServer system and the design requirements for the different aspects of the system.\\
+This includes the formal language definition (\cref{sec:formal_lang}) for \theResServer system's policy language, \thePolicyLang, the design of the system's User Keys (\cref{sec:design_user_key}) and the System Architecture (\cref{sec:design_sys_arch}). Further, we present the design of the Policy Building (\cref{sec:design_pol_build}) \& Filename Searching (\cref{sec:design_file_search}) tools to be incorporated into the \acrfull{crs}.
+
 \input{sections/design/intro}
 
 \input{sections/design/formal_lang}
@@ -158,6 +163,18 @@ A resource server must be designed to be secure and robust in case of external a
 %==================================================================================================================================
 \chapter{Implementation}
 \label{ch:implementation}
+
+\input{sections/implementation/intro}
+
+\input{sections/implementation/building_web_servers}
+
+\input{sections/implementation/building_the_client}
+
+\input{sections/implementation/employing_openabe}
+
+\input{sections/implementation/mongodb_databases}
+
+\input{sections/implementation/fuzzy_finding_filenames}
 
 %==================================================================================================================================
 \chapter{Evaluation}
@@ -203,6 +220,6 @@ Summarise the whole project for a lazy reader who didn't read the rest (e.g. a p
 
 \newpage
 
-\printnoidxglossaries
+\printnoidxglossaries[type={\acronymtype}]
 
 \end{document}
