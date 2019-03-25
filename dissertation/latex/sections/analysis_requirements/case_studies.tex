@@ -1,7 +1,7 @@
 \section{Case Studies}
 \label{sec:analysis_case_studies}
 
-From the work completed in \cref{ch:background} and sections \ref{sec:analysis_security}, \ref{sec:analysis_deployment} \& \ref{sec:analysis_enrolment}, the project had determined the users of the \theResServer system (see \cref{appendix:roles_users}) as well as the features the service would need to provide. With this information, several Case Studies were designed to demonstrate the extensibility of the system in real-world scenarios. Of the 6 Case Studies presented here, \cref{subsec:analysis_case_studies_3} and \cref{subsec:analysis_case_studies_4} are examined and discussed at the most in-depth level.
+From the work completed in \cref{ch:background} and sections \ref{sec:analysis_security}, \ref{sec:analysis_deployment} \& \ref{sec:analysis_enrolment}, the project had determined the users of the \theResServer system (see \cref{appendix:roles_users}) as well as the features the service would need to provide. With this information, several Case Studies were designed to show the extensibility of the system in real-world scenarios. Of the six Case Studies presented here, \cref{subsec:analysis_case_studies_3} and \cref{subsec:analysis_case_studies_4} are examined and discussed at the most in-depth level.
 
 \subsection{\#0 \textemdash\ Past Exam Paper}
 \label{subsec:analysis_case_studies_0}
@@ -16,7 +16,7 @@ For this study the following details have been assumed:
     the staff member is Teresa Bonner with username `tbonner'
 \end{itemize}
 \vskip 0.5em
-From the above information, we can identify attributes to be extracted for the policy, where we define \textbf{\textit{Subject} s} and \textbf{\textit{Environment} e} as:
+With the details extracted, we can determine the attributes for the policy, where we define \textbf{\textit{Subject} s} and \textbf{\textit{Environment} e} as:
 \begin{itemize}
   \item[]
     \textbf{s} $\Rightarrow$ role, accountActiveUntil, username
@@ -24,7 +24,7 @@ From the above information, we can identify attributes to be extracted for the p
     \textbf{e} $\Rightarrow$ currentDate
 \end{itemize}
 
-Applying the above attributes for the scenario provides the policy in \cref{fig:case_study_policy_0} which would have been embedded in the encrypted lecture slides by the staff member prior to upload. The encrypted past paper can then remain stored on the server but only accessible to staff members and students.
+Applying the identified attributes for the scenario provides the policy in \cref{fig:case_study_policy_0} which would have been embedded in the encrypted lecture slides by the staff member before upload. The encrypted past paper can then remain stored on the server but only accessible to staff members and students.
 
 \begin{figure}[ht]
   \centering
@@ -52,7 +52,7 @@ Applying the above attributes for the scenario provides the policy in \cref{fig:
 \subsection{\#1 \textemdash\ Course Lecture Slides}
 \label{subsec:analysis_case_studies_1}
 
-Case Study \#1 considers a set of Lecture Slides uploaded as an encrypted resource by the Lecturer of an arbitrary course. The Lecturer would like the slides to be shared with other members of staff, to allow for suggestions and even collaboration, but only for Research \& Teaching staff. The Lecturer does not want the slides to be accessible to students until 24 hours before the scheduled lecture date, inline with university policy. For the sake of the scenario, the Java Programming 2 course was selected with Course Code 2001 in order to demonstrate the creation of a policy.
+Case Study \#1 considers a set of Lecture Slides uploaded as an encrypted resource by the Lecturer of an arbitrary course. The Lecturer would like the slides to be shared with other members of staff, to allow for suggestions and even collaboration, but only for Research \& Teaching staff. The Lecturer does not want the slides to be accessible to students until 24 hours before the scheduled lecture date, inline with university policy. For the sake of the scenario, the Java Programming 2 course was selected with Course Code 2001 to show the creation of a policy.
 \vskip 0.5em
 For this study the following details have been assumed:
 \begin{itemize}
@@ -68,7 +68,7 @@ For this study the following details have been assumed:
     Course 2001 is a Level 2 course
 \end{itemize}
 \vskip 0.5em
-From the above information, we can identify attributes to be extracted for the policy, where we define \textbf{\textit{Subject} s} and \textbf{\textit{Environment} e} as:
+With the details extracted, we can determine the attributes for the policy, where we define \textbf{\textit{Subject} s} and \textbf{\textit{Environment} e} as:
 \begin{itemize}
   \item[]
     \textbf{s} $\Rightarrow$ role, jobField, studentLevel, enrolledCourses, accountActiveUntil, username
@@ -76,7 +76,7 @@ From the above information, we can identify attributes to be extracted for the p
     \textbf{e} $\Rightarrow$ currentDate
 \end{itemize}
 
-Applying the above attributes for the scenario provides the policy in \cref{fig:case_study_policy_1} which would have been embedded in the encrypted lecture slides by the Lecturer prior to upload. The encrypted slides can then remain stored on the server but only accessible to Research \& Teaching staff members until 24 hours before the lecture date of 23/10/19, when students on the course will also be granted access.
+Applying the identified attributes for the scenario provides the policy in \cref{fig:case_study_policy_1} which would have been embedded in the encrypted lecture slides by the Lecturer before upload. The encrypted slides can then remain stored on the server but only accessible to Research \& Teaching staff members until 24 hours before the lecture date of 23/10/19, when students on the course will also be granted access.
 
 \begin{figure}[ht]
   \centering
@@ -145,7 +145,7 @@ For this study the following details have been assumed:
     the 1P course labs are assisted by tutors \& demonstrators from Level 4+
 \end{itemize}
 \vskip 0.5em
-From the above information, we can identify attributes to be extracted for the policy, where we define \textbf{\textit{Subject} s} and \textbf{\textit{Environment} e} as:
+With the details extracted, we can determine the attributes for the policy, where we define \textbf{\textit{Subject} s} and \textbf{\textit{Environment} e} as:
 \begin{itemize}
   \item[]
     \textbf{s} $\Rightarrow$ role, jobField, studentLevel, enrolledCourses, accountActiveUntil, startDate, endDate, username, studentRole, demonstratorCourses
@@ -153,7 +153,7 @@ From the above information, we can identify attributes to be extracted for the p
     \textbf{e} $\Rightarrow$ currentDate
 \end{itemize}
 
-Applying the above attributes for the scenario provides the policy in \cref{fig:case_study_policy_2} which would have been embedded in the encrypted lab solution by the Lecturer prior to upload. The encrypted lab solution can then remain stored on the server but only accessible to Research \& Teaching staff members and valid tutors \& demonstrators until 3 days after the lab date of 04/12/19, when students on the course will also be granted access.
+Applying the identified attributes for the scenario provides the policy in \cref{fig:case_study_policy_2} which would have been embedded in the encrypted lab solution by the Lecturer before upload. The encrypted lab solution can then remain stored on the server but only accessible to Research \& Teaching staff members and valid tutors \& demonstrators until 3 days after the lab date of 04/12/19, when students on the course will also be granted access.
 
 \begin{figure}[ht]
   \centering
@@ -225,9 +225,9 @@ Applying the above attributes for the scenario provides the policy in \cref{fig:
 \subsection{\#3 \textemdash\ In-progress Exam Script}
 \label{subsec:analysis_case_studies_3}
 
-Case Study \#3 considers an in-progress exam script uploaded as an encrypted resource by the Lecturer of an arbitrary course. The exam script is still a draft and is currently being worked on by one or more members of staff in preparation for the exam period. The Lecturer would like to upload the script in advance of the exam date, allowing for other members of staff to verify the script and offer feedback, but only for Research \& Teaching staff.\\
+Case Study \#3 considers an in-progress exam script uploaded as an encrypted resource by the Lecturer of an arbitrary course. The exam script is still a draft and is still being worked on by other members of staff in preparation for the exam period. The Lecturer would like to upload the script in advance of the exam date, allowing for other members of staff to verify the script and offer feedback, but only for Research \& Teaching staff.\\
 The script is considered confidential and should only accessible to staff within the Lecturer's Research Group (e.g. FATA, GLASS, IDA) and more specifically their Theme\slash Topic group (e.g. FDTST, MOG, HUSH), unless the Lecturer has specifically granted an individual access. The exam script must also be accessible to Admin staff so that it can be passed to the Exam board for final review. The exam has a scheduled date and a following marking period in which markers will also need access.\\
-For the sake of the scenario, the Programming Languages course was selected with Course Code 4016 in order to demonstrate the creation of a policy.
+For the sake of the scenario, the Programming Languages course was selected with Course Code 4016 to show the creation of a policy.
 \vskip 0.5em
 For this study the following details have been assumed:
 \begin{itemize}
@@ -251,7 +251,7 @@ For this study the following details have been assumed:
     collaborators include Simon Gay (`sgay'), John O'Donnell (`jodonnell')
 \end{itemize}
 \vskip 0.5em
-From the above information, we can identify attributes to be extracted for the policy, where we define \textbf{\textit{Subject} s} and \textbf{\textit{Environment} e} as:
+With the details extracted, we can determine the attributes for the policy, where we define \textbf{\textit{Subject} s} and \textbf{\textit{Environment} e} as:
 \begin{itemize}
   \item[]
     \textbf{s} $\Rightarrow$ role, jobField, jobRole, researchGroup, researchTheme, accountActiveUntil, staffRole, markerFrom, markerTo, markerCourses, username
@@ -259,8 +259,8 @@ From the above information, we can identify attributes to be extracted for the p
     \textbf{e} $\Rightarrow$ currentDate
 \end{itemize}
 
-Applying the above attributes for the scenario provides the policy in \cref{fig:case_study_policy_3} which would have been embedded in the encrypted exam script by the Lecturer prior to upload. The encrypted exam script can then remain stored on the server but would only be the Lecturer themselves, as well as the specified collaborators.\\
-Further access would be granted to staff members in the Professional, Administrative \& Support field that specifically have the Administration role, as well as Research \& Teaching staff members that belong to the FATA research group and the Programming Languages research theme. Lastly, access would be granted to markers that have been assigned to the 4016 course and will be actively marking during the marking period (12/05/20-10/06/20).
+Applying the identified attributes for the scenario provides the policy in \cref{fig:case_study_policy_3} which would have been embedded in the encrypted exam script by the Lecturer before upload. The encrypted exam script can then remain stored on the server but would only be the Lecturer themselves, as well as the specified collaborators.\\
+Further access would be granted to staff members in the Professional, Administrative \& Support field that specifically have the Administration role, as well as Research \& Teaching staff members that belong to the FATA research group and the Programming Languages research theme. Lastly, access would be granted to markers that have been assigned to the 4016 course and will be actively marking during the marking period (12/05/20\textemdash10/06/20).
 
 \begin{figure}[ht]
   \centering
@@ -347,7 +347,7 @@ For this study the following details have been assumed:
     the Project Coordinator is John Williamson with username `jwilliamson'
 \end{itemize}
 \vskip 0.5em
-From the above information, we can identify attributes to be extracted for the policy, where we define \textbf{\textit{Subject} s} and \textbf{\textit{Environment} e} as:
+With the details extracted, we can determine the attributes for the policy, where we define \textbf{\textit{Subject} s} and \textbf{\textit{Environment} e} as:
 \begin{itemize}
   \item[]
     \textbf{s} $\Rightarrow$ role, accountActiveUntil, username
@@ -355,7 +355,7 @@ From the above information, we can identify attributes to be extracted for the p
     \textbf{e} $\Rightarrow$ currentDate
 \end{itemize}
 
-Applying the above attributes for the scenario provides the policy in \cref{fig:case_study_policy_4} which would have been embedded in the encrypted dissertation by the student prior to upload. The encrypted dissertation can then remain stored on the server but only accessible to the student and required staff members.
+Applying the identified attributes for the scenario provides the policy in \cref{fig:case_study_policy_4} which would have been embedded in the encrypted dissertation by the student before upload. The encrypted dissertation can then remain stored on the server but only accessible to the student and required staff members.
 
 \begin{figure}[ht]
   \centering
@@ -384,7 +384,7 @@ Applying the above attributes for the scenario provides the policy in \cref{fig:
   \caption{
     \label{fig:case_study_policy_4}
     Case Study \#4 policy dictating access to a completed dissertation.
-    Successful decryption would be possible for the author of the dissertation (with username `2123456z') \textbf{or} for the 3 identified staff members (with usernames `qcutts', `psiebert', `jwilliamson'). In all cases an active account is also required.
+    Successful decryption would be possible for the author of the dissertation (with username `2123456z') \textbf{or} for the three identified staff members (with usernames `qcutts', `psiebert', `jwilliamson'). In all cases an active account is also required.
   }
 \end{figure}
 
@@ -403,7 +403,7 @@ For this study the following details have been assumed:
     the meeting occurred on 12/09/19
 \end{itemize}
 \vskip 0.5em
-From the above information, we can identify attributes to be extracted for the policy, where we define \textbf{\textit{Subject} s} and \textbf{\textit{Environment} e} as:
+With the details extracted, we can determine the attributes for the policy, where we define \textbf{\textit{Subject} s} and \textbf{\textit{Environment} e} as:
 \begin{itemize}
   \item[]
     \textbf{s} $\Rightarrow$ role, accountActiveUntil, username
@@ -411,7 +411,7 @@ From the above information, we can identify attributes to be extracted for the p
     \textbf{e} $\Rightarrow$ currentDate
 \end{itemize}
 
-Applying the above attributes for the scenario provides the policy in \cref{fig:case_study_policy_5} which would have been embedded in the encrypted minutes by the member of staff prior to upload. The encrypted minutes can then remain stored on the server but will only be accessible to Research \& Teaching staff members, Administration staff members and the current Head of School. Further access would also be granted to students currently serving as Class Representatives.
+Applying the identified attributes for the scenario provides the policy in \cref{fig:case_study_policy_5} which would have been embedded in the encrypted minutes by the member of staff before upload. The encrypted minutes can then remain stored on the server but will only be accessible to Research \& Teaching staff members, Administration staff members and the current Head of School. Further access would also be granted to all students presently serving as Class Representatives.
 
 \begin{figure}[ht]
   \centering

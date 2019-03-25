@@ -25,9 +25,15 @@
 \newacronym{mks}{MKS}{Master Key Server}
 \newacronym{prs}{PRS}{Public Resource Server}
 \newacronym{crs}{CRS}{Client Resource Server}
+\newacronym{aes}{AES}{Advanced Encryption Standard}
+\newacronym{rbac}{RBAC}{Role Base Access Control}
 \newacronym{html}{HTML}{Hypertext Markup Language}
+\newacronym{tls}{TLS}{Transport Layer Security}
+\newacronym{ssl}{SSL}{Secure Sockets Layer}
+\newacronym{ca}{CA}{Certificate Authority}
 \newacronym{gui}{GUI}{Graphical User Interface}
 \newacronym{cli}{CLI}{Command Line Interface}
+\newacronym{os}{OS}{Operating System}
 
 \begin{document}
 
@@ -115,7 +121,7 @@
 \chapter{Background}
 \label{ch:background}
 
-Progress on the project relied on background knowledge \& research into \nameref{sec:bkgr_acc_ctrl} systems and \nameref{sec:bkgr_encryption} methods to help design and build a secure system. For deployment requirements, research was completed on \nameref{sec:bkgr_pub_key_infr}s and the uses \& requirements of a \nameref{sec:bkgr_res_srvr}. Additionally, an ABE tool had to be identified for incorporation into the system and so research into the \nameref{sec:bkgr_openabe} library was also completed.
+Progress on the project relied on background knowledge \& research into \nameref{sec:bkgr_acc_ctrl} systems and \nameref{sec:bkgr_encryption} methods to help design and build a secure system. For deployment requirements, research was completed on \nameref{sec:bkgr_pub_key_infr}s and the uses \& requirements of a \nameref{sec:bkgr_res_srvr}. Additionally, an \acrshort{abe} tool had to be identified for incorporation into the system and so research into the \nameref{sec:bkgr_openabe} library was also completed.
 
 \input{sections/background/access_control}
 
@@ -131,7 +137,7 @@ Progress on the project relied on background knowledge \& research into \nameref
 \chapter{Analysis/Requirements}
 \label{ch:analysis}
 
-A resource server must be designed to be secure and robust in case of external attacks or information breaches, requiring analysis for the project to determine the \nameref{sec:analysis_security} of the system. Further \nameref{sec:analysis_deployment} were also identified to design the infrastructure of the system, as well designing the \nameref{sec:analysis_enrolment} of a real-world deployment. From the identified users in the Department of Computing Science and resulting use cases for a resource server, several \nameref{sec:analysis_case_studies} were also developed.
+A resource server must be designed to be secure and robust against external attacks or information breaches, requiring analysis for the project to determine the \nameref{sec:analysis_security} of the system. Further \nameref{sec:analysis_deployment} were also identified to design the infrastructure of the system, as well designing the \nameref{sec:analysis_enrolment} of a real-world deployment. From the identified users in the Department of Computing Science and resulting use cases for a resource server, several \nameref{sec:analysis_case_studies} were also developed.
 
 \input{sections/analysis_requirements/security}
 
