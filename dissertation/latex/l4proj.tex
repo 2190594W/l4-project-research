@@ -18,6 +18,14 @@
 
 \usepackage[acronym,toc]{glossaries}
 
+% let us define a definition for unnumbered chapters.
+\titleformat{name=\chapter,numberless}
+            [display]
+            {\normalfont\huge\bfseries\secfont}
+            {}
+            {0pt}
+            {}
+
 \makenoidxglossaries
 
 \newacronym{dcs}{DCS}{Department of Computing Science}
@@ -26,6 +34,7 @@
 \newacronym{prs}{PRS}{Public Resource Server}
 \newacronym{crs}{CRS}{Client Resource Server}
 \newacronym{aes}{AES}{Advanced Encryption Standard}
+\newacronym{uuid}{UUID}{Universally Unique IDentifier}
 \newacronym{rbac}{RBAC}{Role Base Access Control}
 \newacronym{html}{HTML}{Hypertext Markup Language}
 \newacronym{tls}{TLS}{Transport Layer Security}
