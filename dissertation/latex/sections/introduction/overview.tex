@@ -1,24 +1,22 @@
-Sharing resources securely across organisations or departments is a difficult task, with common methods relying on forms of \acrfull{rbac} \citep{Sandhu1996} to grant access to, often unencrypted, resource buckets. In practice, organisational hierarchies are complex in layout and depth, requiring an equivalent complexity in resulting access control models. Methods such as \acrshort{rbac} are unable to provide the necessary fine-grained system for either precise or modular access and further, cannot protect the resources should the system become compromised.\\
-A level of granularity is required to configure appropriate access restrictions to resources and provide long-term support for the system through dynamic access control. \acrshort{rbac} is also complex to configure properly and due to the nature of roles, can risk accidental access grants through roles that are too expansive in permissions.\\
-These problems can be solved with the use of an \acrfull{abe} system, as described by \citet{Sahai2005} \& \citet{Waters2011}. Which improves security by processing the advanced encryption of resources through a proprietary policy language which allows for unique, granular access to resources on a per-user basis.\\
+Sharing resources securely across organisations or departments is a difficult task, with common methods relying on forms of \acrfull{rbac} \citep{Sandhu1996} to grant access to, often unencrypted, resource buckets. In practice, organisational hierarchies are complex in layout and depth \citep{Dooley2002}, requiring an equivalent complexity in resulting access control models. Methods such as \acrshort{rbac} are unable to provide the necessary fine-grained system for either precise or modular access, and further cannot protect the resources should the system become compromised.
+\vskip 0.5em
+A level of granularity is required to configure appropriate access restrictions to resources and provide long-term support for the system through dynamic access control. \acrshort{rbac} is also complex to configure properly and due to the nature of roles, can risk accidental access grants through roles that are too expansive in permissions.
+\vskip 0.5em
+These problems can be solved with the use of an \acrfull{abe} system, as described by \citet{Sahai2005} \& \citet{Waters2011}. Which improves security by processing the advanced encryption of resources through a proprietary policy language which allows for unique, granular access to resources on a per-user basis.
+
 Unlike \acrshort{rbac}, an \acrshort{abe} system utilises this policy language to create bespoke, per-resource attribute policies that define specific access restrictions for the resource they are embedded into. This means that a user can only decrypt a resource if they can cryptographically prove assignment of the required attributes in their private keys \textemdash\ generated \& signed by a central \acrfull{mks}.
 
 \section{Overview}
 \label{sec:intro_overview}
 
-This project aimed to develop a full resource server system, named further as the \theResServer system, that meets the definition of ``cryptographically secure''; where resources are encrypted at rest and only transmitted \& stored in a secure, unreadable ciphertext format. Thus, the system would never be aware of the contents of the resources stored and implicitly, the resources will remain secure even in the event of the system becoming compromised. The product as a whole was determined to need 2 servers:
+This project has developed a complete resource server system, named further as the \theResServer system, which refers to the entire suite of tools developed for the system. The \theResServer system is considered complete as it encompasses all the software required to offer the secure upload \& download of shared resources to and between a set of users. Further the \theResServer system offers granular access to resources for configurable subsets of the userbase and even individuals.
+\vskip 0.5em
+The \theResServer system meets the definition of ``cryptographically secure''; where resources are encrypted at rest and only transmitted \& stored in a secure ciphertext format. Thus, the system would never be aware of the contents of the resources stored and implicitly, the resources will remain secure even in the event of the system becoming compromised. The product as a whole was determined to need two servers:
 \begin{enumerate}
-  \item an offline 'cold storage' master key server to generate user keys
-  \item an online 'dumb' resource server to store and manage the \acrshort{abe} encrypted resources
+  \item an offline \emph{cold storage} \acrfull{mks} to generate user keys
+  \item an online \emph{dumb} \acrfull{prs} to store and manage the \acrshort{abe} encrypted resources
 \end{enumerate}
-Due to the use of \acrshort{abe}, communication with the \acrfull{prs} is too complex and verbose for a standard user and as such, a tool is provided for users that simplifies interactions. A user can then choose to run a simple local web client for this communication with the server, providing the following services:
-\begin{enumerate}
-  \item downloading of encrypted resources
-  \item decryption of encrypted resources
-  \item encryption of unencrypted resources
-  \item uploading of encrypted resources
-  \item searching for uploaded resources
-  \item determining policies of uploaded resources
-  \item creating a policy for a new resource
-\end{enumerate}
-All these services are then accessible through a basic GUI that aims to obscure the complexity of \acrshort{abe} from the user; reducing the learning curve to use of the product.
+
+Due to the use of \acrshort{abe}, communication with the \acrshort{prs} is too complex and verbose for a standard user and so, a tool is provided for users that simplifies interactions. A user can then choose to run a simple local web client for this communication with the server, providing functionality for the download \& decryption of encrypted resources, the encryption \& upload of plaintext resources, the searching of uploaded resources and finally the management of policies \& keys for the user.
+
+All these services are then accessible through a basic \acrshort{gui} that aims to obscure the complexity of \acrshort{abe} from the user; reducing the learning curve to use of the product.

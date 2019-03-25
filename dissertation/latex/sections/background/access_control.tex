@@ -1,20 +1,88 @@
 \section{Access Control}
 \label{sec:bkgr_acc_ctrl}
 
-\subsection{Overview}
-\label{subsec:acc_ctrl_over}
+Access Control encompasses the authentication and authorisation of users in a system, as well as the audit process for said system. In the scope of this project, we only consider the authorisation part of Access Control, since the service does not authenticate users before permitting the upload or download of resources, because the encryption of resources protects against rogue access of data. The Design chapter (\cref{ch:design}) discusses this decision further, but since users are not authenticated by the \acrfull{prs}, it is also difficult to audit the service due to lack of information on users.
 
-Access Control encompasses the authentication and authorisation of users in a system, as well as the audit process for said system. In the scope of this project, we only consider the authorisation part of Access Control, since the service does not authenticate users before permitting the upload or download of resources, because the encryption of resources protects against rogue access of data. The \nameref{ch:design} chapter discusses this decision further, but since users are not authenticated, it is also difficult to audit the service due to lack of information on users.
-\vskip 0.5em
-Regardless, Access Control is vital to maintaining the security of online services as it allows users to be granted access to certain routes, documents and data, but denied access to others. This most often takes the form of \acrfull{rbac}, where users are assigned a role such as `\textit{Customer}', `\textit{Staff}' or `\textit{Admin}' with each role having a different set of permissions.\\
+\subsection{RBAC \& ABAC}
+\label{subsec:acc_ctrl_rbac_abac}
+
+Access Control is vital to maintaining the security of online services as it allows users to be granted access to certain routes, documents and data, but denied access to others. This most often takes the form of \acrfull{rbac} \citep{Sandhu1996}, where users are assigned a role such as `\textit{Customer}', `\textit{Staff}' or `\textit{Admin}' with each role having a different set of permissions.
+
 For example, a user with the `\textit{Customer}' role would not have access to the organisation's internal documents, whereas a user with the `\textit{Staff}' role would. Similarly, a user with the `\textit{Staff}' role would not necessarily have access to a service's user details, whereas a user with the `\textit{Admin}' role would.
+
+Some \acrshort{rbac} systems can grant a user multiple roles with different permissions, although it is also possible to have each role set up to grant a subset of the permissions granted by another role. For example, a `\textit{Superadmin}' role would have all permissions, with a lower `\textit{Admin}' role having a subset of those permissions; such as not having permission to edit or delete other `\textit{Admin}' accounts.
+\vskip 0.5em
+A more advanced form of Access Control exists in \acrfull{abac} \citep{Hu2014}, where users are assigned attributes that describe them as an individual. Policies can then be created that dictate the attributes required to access a resource or route for a system. The standard for \acrshort{abac} is the \acrfull{xacml} \citep{Parducci2010}.
+
+In \acrshort{abac}, a user might be granted attributes such as \texttt{`role:customer, dob:02/06/1992, username:johnsmith, email:john@example.com, city:Glasgow'} and attempt to access a resource with a policy such as \texttt{`role==customer and city==Edinburgh and dob<=01/01/2003'}. The user would not be granted access in this case, as they are from \textit{Glasgow} and not \textit{Edinburgh}, despite being a \textit{customer} born before \textit{January 1, 2003}. This offers a level of granularity that \acrshort{rbac} cannot match.
+\vskip 0.5em
+Both \acrshort{rbac} and \acrshort{abac} are implemented through assigning requirements to different routes or resources that are then enforced through interceptions of requests by users. When a user makes a request to the service, it is intercepted by a \acrfull{pep} that gathers the user's details from the request and submits an authorisation request to a \acrfull{pdp}.
+
+The \acrshort{pdp} then verifies if the user has the correct permissions to access the resource. If using a \acrshort{rbac} system, the \acrshort{pdp} checks if the role the user has is privileged enough to be granted access. If using an \acrshort{abac} system, the \acrshort{pdp} checks that the user's attributes can be resolved by the policy assigned to the resource, before then granting access if the policy has resolved to true.
+
+In both scenarios the \acrshort{pep} may have retrieved a session from the user's request and then the \acrshort{pdp} would have retrieved their details from an authentication system or session storage.
 
 \subsection{Models}
 \label{subsec:acc_ctrl_models}
 
-\newcommand\todonote[1]{\textcolor{red}{#1}}
-Advanced \acrshort{rbac} systems can even grant a user multiple roles with different permissions, although a more common practice is to have each role grant a subset of the permissions granted by another role. For example, a  `\textit{Superadmin}' role would have all permissions, with a lower `\textit{Admin}' role having a subset of those permissions; such as not having permission to edit or delete other `\textit{Admin}' accounts.\\
-Other Access Control models do exist and generally all models fall into one of two categories, \textbf{capability-based} models or \textbf{access control lists-based} (ACL-based) models; where \acrshort{rbac} represents a capability-based model and \acrshort{abe} represents an ACL-based model.
+Other Access Control models do exist and generally all models fall into one of two categories, \textbf{capability-based} models or \textbf{access control lists-based} (ACL-based) models; where \acrshort{rbac} represents a capability-based model and \acrshort{abac} represents an ACL-based model.
 \vskip 0.5em
-\textit{Capability-based models} are based on the ability of a user to prove possession of an unforgeable (\todonote{\textit{Reference Wikipedia?}}) reference or \textit{capability} that aligns with the references of the system they are authorising against. In the case of \acrshort{rbac}, the user proves that they have the \textit{role} required for access via some immutable piece of data such as a cookie or JSON Web Token.\\
-\textit{ACL-based models} are instead based around a user's identity appearing in a list assigned to or embedded within the object, data or route they are attempting to access. In the case of \acrshort{abe}, the policy embedded in an encrypted resource serves the role of the list and a user's private key contains their identity which must then be parsed by the policy.
+\textit{Capability-based models} are based on the ability of a user to prove possession of an unforgeable reference or \textit{capability} that aligns with the references of the system they are authorising against. In the case of \acrshort{rbac}, the user proves that they have the \textit{role} required for access via some immutable piece of data such as a cookie or \acrfull{jwt} (described in RFC 7519 \citep{Jones2015}).
+
+\textit{ACL-based models} are instead based around a user's identity appearing in a list assigned to or embedded within the object, data or route they are attempting to access. In the case of \acrshort{abac}, a policy is attached to a route or resource served by the service the user is attempting to access. The policy serves as the role of the list and a user's attributes are embedded in a cookie or \acrshort{jwt} which identity the user and must then be parsed by the policy.
+
+\subsection{Representing ABAC Policies}
+\label{subsec:acc_ctrl_abac_policies}
+
+Although \acrshort{xacml} is the standard for writing and enforcing \acrfull{abac} policies, the format is verbose and difficult to interpret. We therefore suggest an alternative format for describing policies within this report.
+
+We define two entities, \textbf{\textit{Subject} s} and \textbf{\textit{Environment} e}, such that \textbf{s} represents the subject attempting to access a resource (\textit{the user}) and has been assigned their respective attributes, and \textbf{\textit{Environment} e} represents the environment the subject is within and has implicit attributes that relate to said environment, such as locale, location \& datetime.
+\vskip 0.5em
+We then define the attributes that both \textbf{\textit{Subject} s} and \textbf{\textit{Environment} e} have in relation to the \acrshort{abac} policy:
+\begin{itemize}
+  \item[]
+    \textbf{s} $\Rightarrow$ role, jobField, studentLevel, enrolledCourses
+  \item[]
+    \textbf{e} $\Rightarrow$ currentDate, location
+\end{itemize}
+\vskip 0.5em
+From the fully defined \textbf{\textit{Subject} s} and \textbf{\textit{Environment} e} entities, we can then produce an example access policy as shown in \cref{fig:bkgr_abac_policy} using each entity's attributes and set values to restrict access. In this case, we define a policy for a resource that can only be accessed by a staff member in the \textit{Research \& Teaching} field. Alternatively, the policy also allows for a Level 2 student that has enrolled in the four courses, \textit{2001, 2005, 2011 \& 2018}, but only if the current date is beyond the arbitrary release date of \textit{27 March 2019} and the student is located in \textit{Glasgow, UK}.
+
+\begin{figure}[ht]
+  \centering
+\begin{align*}
+  \text{Policy(\textbf{s},\textbf{e})}
+  &
+    \leftarrow
+    \text{( role(\textbf{s})} \equiv \text{`Staff'}
+  \\
+  &
+    \phantom{::::::::}\wedge
+    \text{jobField(\textbf{s})} \equiv \text{`Research \& Teaching' )}
+  \\
+  &
+    \phantom{::}\vee
+    \text{( role(\textbf{s})} \equiv \text{`Student'}
+  \\
+  &
+    \phantom{::::::::}\wedge
+    \text{studentLevel(\textbf{s})} \equiv \text{2}
+  \\
+  &
+    \phantom{::::::::}\wedge
+    \text{enrolledCourses(\textbf{s})} \equiv \text{[2001, 2005, 2011, 2018]}
+  \\
+  &
+    \phantom{::::::::}\wedge
+    \text{currentDate(\textbf{e})} \geq \text{27 March 2019 }
+  \\
+  &
+    \phantom{::::::::}\wedge
+    \text{location(\textbf{e})} \geq \text{Glasgow, UK )}
+\end{align*}
+  \caption{
+    \label{fig:bkgr_abac_policy}
+    An example \acrshort{abac} policy dictating access to a resource.
+    Successful decryption would be possible for a member of staff in the Research \& Teaching field \textbf{or} a Level 2 student enrolled in the 2001, 2005, 2011 \& 2018 courses if the lecture slides' release date has passed and the location of the student is Glasgow, UK.
+  }
+\end{figure}

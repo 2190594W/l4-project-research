@@ -1,32 +1,47 @@
 \section{Encryption}
 \label{sec:bkgr_encryption}
 
-\subsection{Overview}
-\label{subsec:bkgr_enc_over}
+Encryption is the process of encoding information in a manner such that only authorised parties can later decode and access the encoded information, known as decrypting. Non-authorised parties can complete decryption successfully and as such an encrypted piece of information stays secret in transit and storage, until decrypted by an authorised party.
 
-Encryption is the process of encoding information in a manner such that only authorised parties can later decode and access the encoded information, known as decrypting. Non-authorised parties can complete decryption successfully and as such an encrypted piece of information stays secret in transit and storage, until decrypted by an authorised party.\\
-An encrypted resource, such as an encrypted PDF, is best understood as an unintelligible scramble of data which cannot be understood directly by either computer or user. Only upon a successful decryption operation can the information be retrieved again, where such an operation returns the original information now back in its decrypted form that can then be processed by any party again.
+An encrypted resource, such as an encrypted PDF, is best understood as an unintelligible scramble of data which cannot be understood directly by either computer or user \citep{Heys1994}. Only upon a successful decryption operation can the information be retrieved again, where such an operation returns the original information now back in its decrypted form that can then be processed by any party again.
 \vskip 0.5em
-At the basic level, encryption can be categorised as \textit{symmetric} or \textit{asymmetric}, referring to either having a single pre-shared key used for all encryption \& decryption or having per-party key-pairs with each party holding a public \& private key for communication. Thus the single pre-shared key setup is considered to be \textit{symmetric} and the alternative is considered \textit{asymmetric} due to the different keys for each party.\\
+At the basic level, encryption can be categorised as \textit{symmetric} or \textit{asymmetric}, referring to either having a single pre-shared key used for all encryption \& decryption \citep{Massey1988} or having per-party key-pairs with each party holding a public \& private key for communication \citep{Diffie1976}. Thus the single pre-shared key setup is considered to be \textit{symmetric} and the alternative is considered \textit{asymmetric} due to the different keys for each party.
+
 The background for the project only considers \textit{asymmetric} setups due to the difficulty of securely distributing pre-shared keys and as such breaks down the differences in \textbf{1-to-1} \& \textbf{1-to-Many} asymmetric encryption implementations.
 
 \subsection{1-to-1 Encryption}
 \label{subsec:bkgr_enc_1to1}
 
-Classical encryption relates to a 1-to-1 relationship whereby one party encrypts information for a single other party, such that only that other party may decrypt the data. This scenario is perfect for when one party wishes to send a resource to only the other party, such as securely sending legal documents to a lawyer. This 1-to-1 method of encryption also remains the most prevalent form, in part due to its use in the \acrfull{tls} standard for web communication \citep{Rescorla2018}, where it helps to secure communication between a web browser and the web server a user is accessing.\\
-Implementations of 1-to-1 encryption rely on the provisioning of key pairs, where each party creates a private and public key for themselves. Each party then publishes their public key to the other party and keep their private key secret.
+Classical encryption relates to a 1-to-1 relationship whereby one party encrypts information for a single other party, such that only that other party may decrypt the data. This scenario is perfect for when one party wishes to send a resource to only the other party, such as securely sending legal documents to a lawyer. This 1-to-1 method of encryption also remains the most prevalent form, in part due to its use in the \acrfull{tls} standard for web communication \citep{Rescorla2018}, where it helps to secure communication between a web browser and the web server a user is accessing.
+
+Implementations of 1-to-1 encryption rely on the provisioning of key pairs \citep{Diffie1976}, where each party creates a private and public key for themselves. Each party then publishes their public key to the other party and keep their private key secret.
 \vskip 0.5em
-Communication can then take place between the two parties by a system where party A encrypts a message or document for party B, by signing said message with party B's public key. This then allows only party B to decrypt the message \textemdash\ by using their secret private key \textemdash\ ensuring that only party B is able to interpret the sent message. In order for party B to then securely respond to party A, they must encrypt their response by signing the desired information with the public key of party A.\\
+Communication can then take place between the two parties by a system where party A encrypts a message or document for party B, by signing said message with party B's public key. \citet{Gaithuru2015} describes how this then allows only party B to decrypt the message \textemdash\ by using their secret private key \textemdash\ ensuring that only party B is able to interpret the sent message and that for party B to then securely respond to party A, they must encrypt their response by signing the desired information with the public key of party A.
+
 This ensures secure information transmission between the two parties and also guarantees that any data sent between the two parties can be safely deposited on unprotected storage without risk of the information being extracted through decryption. Unfortunately, despite the high security, 1-to-1 encryption cannot work for a resource server since multiple users must be able to access a single resource and storing \textit{n} copies of a resource \textemdash\ individually encrypted for each user \textemdash\ is unmanageable.
 
 \subsection{1-to-Many Encryption}
 \label{subsec:bkgr_enc_1toM}
 
-A more modern approach to encryption is rapidly growing in adoption across the industry, as the need for secure communication between multiple parties continues to increase. Examples of such scenarios include secure messaging applications such as WhatsApp, conference video calls between multiple users and company-wide, internal memos or resources.\\
+A more modern approach to encryption is rapidly growing in adoption across the industry, as the need for secure communication between multiple parties continues to increase \citep{Berger2016}. Examples of such scenarios include secure messaging applications such as WhatsApp, conference video calls between multiple users and company-wide, internal memos or resources.
+
 Different scenarios achieve secure 1-to-Many encryption by different means, as the method must match the desired scenario properly. A balance must be struck between security, speed and efficiency in order for a product to offer the services its users require.
 \vskip 0.5em
-Implementations of 1-to-Many encryption cannot rely on simple, per-party key pairs in the same manner that 1-to-1 manages. This is because in order for many parties to communicate together, each party must store the public key of \textbf{every} other party and then encrypt any information they wish to send \textit{many} times; encrypting the information with each other party's public key in turn.\\
+Implementations of 1-to-Many encryption cannot rely on simple, per-party key pairs in the same manner that 1-to-1 manages. This is because in order for many parties to communicate together, each party must store the public key of \textbf{every} other party and then encrypt any information they wish to send \textit{many} times; encrypting the information with each other party's public key in turn.
+
 When the number of parties is limited, this is both fast and manageable for most systems, however issues arise when \textit{1000s} or even \textit{10000s} of parties wish to communicate. Further, adding and removing parties from the communication results in updates for all other parties, whilst revocation of access can be complex and inefficient.
 \vskip 0.5em
-Products such as WhatsApp and other chatrooms or messaging services, often implement a method wherein a single key is required for both encrypting \& decrypting messages. This is a form of \textit{symmetric} encryption however the pre-shared key is first shared between all parties by using \textit{asymmetric} public keys for each party from a central server or original party.\\
+Products such as WhatsApp and other chatrooms or messaging services, often implement a method wherein a single key is required for both encrypting \& decrypting messages \citep{Rosler2018}. This is a form of \textit{symmetric} encryption, however the pre-shared key is first shared between all parties by using \textit{asymmetric} public keys for each party from a central server or original party.
+
 Solutions such as \acrfull{abe} provide an alternative that does not require participating parties to know other party keys or for the sending party to know all parties that they are communicating with. This also limits the effects of removing parties from communication and offers seamless adding of new parties, since in both cases an update need not be provided to the other parties.
+
+\subsection{Attribute Based Encryption}
+\label{subsec:bkgr_enc_abe}
+
+\acrfull{abe} is an encryption method which aims to offer the same capabilities as \acrshort{abac} (\Cref{subsec:acc_ctrl_rbac_abac}) but applied directly to the encryption \& decryption of resources. This allows attributes and policies to directly be embedded into encrypted resources and \acrshort{abe} implements two schemes of encryption, the key-policy scheme and the ciphertext-policy scheme \citep{Waters2011}.
+\vskip 0.5em
+Using the key-policy scheme requires defining a user's access to resources in their user key in the form of a policy such as \textit{`access to all algorithmics course resources for the 2018\textemdash2019 academic year'}, with attributes assigned to resources and embedded into their ciphertexts. Access to the resource is then granted only if the resources meet the policy defined by the user's key.
+
+The ciphertext-policy scheme is the polar opposite in implementation, where instead a resource ciphertext has the embedded policy and the users' keys have attributes describing the user. A ciphertext in this scenario, might have a policy such as \textit{`access if user is a student in the Networking course or user is a member of staff'} and access would be granted to a user if and only if their key has the required attributes.
+\vskip 0.5em
+The process \acrshort{abe} requires to encrypt \& decrypt resources is analysed and described in \Cref{subsec:analysis_abe}, including its use of both \textit{symmetric} and \textit{asymmetric} encryption.

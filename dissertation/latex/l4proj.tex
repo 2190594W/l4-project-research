@@ -28,14 +28,19 @@
 
 \makenoidxglossaries
 
-\newacronym{dcs}{DCS}{Department of Computing Science}
+\newacronym{dcs}{SCS}{School of Computing Science}
 \newacronym{abe}{ABE}{Attribute Based Encryption}
 \newacronym{mks}{MKS}{Master Key Server}
 \newacronym{prs}{PRS}{Public Resource Server}
 \newacronym{crs}{CRS}{Client Resource Server}
 \newacronym{aes}{AES}{Advanced Encryption Standard}
 \newacronym{uuid}{UUID}{Universally Unique IDentifier}
-\newacronym{rbac}{RBAC}{Role Base Access Control}
+\newacronym{rbac}{RBAC}{Role Based Access Control}
+\newacronym{abac}{ABAC}{Attribute Based Access Control}
+\newacronym{xacml}{XACML}{eXtensible Access Control Markup Language}
+\newacronym{pep}{PEP}{Policy Enforcement Point}
+\newacronym{pdp}{PDP}{Policy Decision Point}
+\newacronym{jwt}{JWT}{JSON Web Token}
 \newacronym{html}{HTML}{Hypertext Markup Language}
 \newacronym{tls}{TLS}{Transport Layer Security}
 \newacronym{ssl}{SSL}{Secure Sockets Layer}
@@ -130,7 +135,7 @@
 \chapter{Background}
 \label{ch:background}
 
-Progress on the project relied on background knowledge \& research into \nameref{sec:bkgr_acc_ctrl} systems and \nameref{sec:bkgr_encryption} methods to help design and build a secure system. For deployment requirements, research was completed on \nameref{sec:bkgr_pub_key_infr}s and the uses \& requirements of a \nameref{sec:bkgr_res_srvr}. Additionally, an \acrshort{abe} tool had to be identified for incorporation into the system and so research into the \nameref{sec:bkgr_openabe} library was also completed.
+Research into Access Control systems and Encryption methods, as well as the concept of a Public Key Infrastructure. Determining the uses \& requirements of Resource Servers, along with identifying an \acrshort{abe} tool for the system; the \OpenABE library.
 
 \input{sections/background/access_control}
 
@@ -146,7 +151,9 @@ Progress on the project relied on background knowledge \& research into \nameref
 \chapter{Analysis/Requirements}
 \label{ch:analysis}
 
-A resource server must be designed to be secure and robust against external attacks or information breaches, requiring analysis for the project to determine the \nameref{sec:analysis_security} of the system. Further \nameref{sec:analysis_deployment} were also identified to design the infrastructure of the system, as well designing the \nameref{sec:analysis_enrolment} of a real-world deployment. From the identified users in the Department of Computing Science and resulting use cases for a resource server, several \nameref{sec:analysis_case_studies} were also developed.
+The \theResServer system would require the defining of two servers: an offline \acrfull{mks} that would be tasked with provisioning the master private key for the entire service and a separate \acrfull{prs} for storing all encrypted resources. An end user product would also be required, to run locally on a user's device and then connect to the \acrshort{prs} to provide the services on offer through a simple \acrshort{gui}\@.
+
+We present the analysis of the deployment scenario and the identified requirements of the \theResServer system along with the enrolment process for new users. From analysis of the \acrfull{dcs} we also present a set of Case Studies, considered by thr project throughout design, implementation \& evaluation.
 
 \input{sections/analysis_requirements/security}
 
@@ -160,18 +167,20 @@ A resource server must be designed to be secure and robust against external atta
 \chapter{Design}
 \label{ch:design}
 
-With the Background (\Cref{ch:background}) and Analysis (\Cref{ch:analysis}) presented, we present the design of the \theResServer system and the design requirements for the different aspects of the system.\\
-This includes the formal language definition (\cref{sec:formal_lang}) for \theResServer system's policy language, \thePolicyLang, the design of the system's User Keys (\cref{sec:design_user_key}) and the System Architecture (\cref{sec:design_sys_arch}). Further, we present the design of the Policy Building (\cref{sec:design_pol_build}) \& Filename Searching (\cref{sec:design_file_search}) tools to be incorporated into the \acrfull{crs}.
+With Background (\Cref{ch:background}) and Analysis (\Cref{ch:analysis}) presented, we present the design of the \theResServer system and the design requirements for the different aspects of the system.\\
+This includes the formal language definition (\Cref{sec:formal_lang}) for \theResServer system's policy language, \thePolicyLang, the design of the system's User Keys (\Cref{sec:design_user_key}) and the System Architecture (\Cref{sec:design_sys_arch}). Further, we present the design of the Policy Building (\Cref{sec:design_pol_build}) \& Filename Searching (\Cref{sec:design_file_search}) tools to be incorporated into the \acrfull{crs}.
 
 \input{sections/design/intro}
 
 \input{sections/design/formal_lang}
 
+\input{sections/design/using_the_lang}
+
+\input{sections/design/policy_building}
+
 \input{sections/design/user_key}
 
 \input{sections/design/sys_arch}
-
-\input{sections/design/policy_building}
 
 \input{sections/design/filename_searching}
 

@@ -1,0 +1,70 @@
+Applying the identified attributes for Case Study \#3 (\Cref{subsec:analysis_case_studies_3}) provides the policy in \cref{fig:case_study_policy_3} which would have been embedded in the encrypted exam script by the Lecturer before upload. The encrypted exam script can then remain stored on the server but would only be the Lecturer themselves, as well as the specified collaborators.
+
+Further access would be granted to staff members in the Professional, Administrative \& Support field that specifically have the Administration role, as well as Research \& Teaching staff members that belong to the FATA research group and the Programming Languages research theme. Lastly, access would be granted to markers that have been assigned to the 4016 course and will be actively marking during the marking period (12/05/20\textemdash10/06/20).
+
+\begin{figure}[ht]
+  \centering
+\begin{align*}
+  \text{Policy(\textbf{s},\textbf{e})}
+  &
+    \leftarrow
+    \text{username(\textbf{s})} \equiv \text{`odardha'} \mid \text{`sgay'} \mid \text{`jodonnell'}
+  \\
+  &
+    \phantom{::}\vee
+    \text{( role(\textbf{s})} \equiv \text{`Staff'}
+  \\
+  &
+    \phantom{::::::::}\wedge
+    \text{jobField(\textbf{s})} \equiv \text{`Professional, Administrative \& Support'}
+  \\
+  &
+    \phantom{::::::::}\wedge
+    \text{jobRole(\textbf{s})} \equiv \text{`Administration' )}
+  \\
+  &
+    \phantom{::}\vee
+    \text{( role(\textbf{s})} \equiv \text{`Staff'}
+  \\
+  &
+    \phantom{::::::::}\wedge
+    \text{jobField(\textbf{s})} \equiv \text{`Research \& Teaching'}
+  \\
+  &
+    \phantom{::::::::}\wedge
+    \text{researchGroup(\textbf{s})} \equiv \text{`FATA'}
+  \\
+  &
+    \phantom{::::::::}\wedge
+    \text{researchTheme(\textbf{s})} \equiv \text{`Programming Languages' )}
+  \\
+  &
+    \phantom{::}\vee
+    \text{( role(\textbf{s})} \equiv \text{`Staff'}
+  \\
+  &
+    \phantom{::::::::}\wedge
+    \text{staffRole(\textbf{s})} \equiv \text{`Marker'}
+  \\
+  &
+    \phantom{::::::::}\wedge
+    \text{markerFrom(\textbf{s})} \geq \text{12 May 2020}
+  \\
+  &
+    \phantom{::::::::}\wedge
+    \text{markerTo(\textbf{s})} \leq \text{10 June 2020}
+  \\
+  &
+    \phantom{::::::::}\wedge
+    \text{markerCourses(\textbf{s})} \equiv \text{4016}
+  \\
+  &
+    \phantom{::}\wedge
+    \text{accountActiveUntil(\textbf{s})} \geq \text{currentDate(\textbf{e})}
+\end{align*}
+  \caption{
+    \label{fig:case_study_policy_3}
+    Case Study \#3 policy dictating access to a work-in-progress exam script for course `4016'.
+    Successful decryption would be possible for the author of the solutions (with username `odardha') as well as the named collaborators (with usernames `sgay' \& `jodonnell') \textbf{or} for a member of staff in the `Professional, Administrative \& Support' field with the `Administration' role \textbf{or} for a member of staff in the `Research \& Teaching' field that is also in the `FATA' research group and the `Programming Languages' research theme \textbf{or} for a member of staff with the `Marker' role that is assigned to marking duties within the marking period and has been assigned to the `4016' course. In all cases an active account is also required.
+  }
+\end{figure}

@@ -1,0 +1,72 @@
+Applying the identified attributes for Case Study \#5 (\Cref{subsec:analysis_case_studies_5}) provides the policy in \cref{fig:case_study_policy_5} which would have been embedded in the encrypted minutes by the member of staff before upload. The encrypted minutes can then remain stored on the server but will only be accessible to Research \& Teaching staff members, Administration staff members and the current Head of School. Further access would also be granted to all students presently serving as Class Representatives.
+
+\begin{figure}[ht]
+  \centering
+\begin{align*}
+  \text{Policy(\textbf{s},\textbf{e})}
+  &
+    \leftarrow
+    \text{username(\textbf{s})} \equiv \text{`tgalabova'}
+  \\
+  &
+    \phantom{::}\vee
+    \text{( role(\textbf{s})} \equiv \text{`Staff'}
+  \\
+  &
+    \phantom{::::::::}\wedge
+    \text{jobField(\textbf{s})} \equiv \text{`Research \& Teaching' )}
+  \\
+  &
+    \phantom{::}\vee
+    \text{( role(\textbf{s})} \equiv \text{`Staff'}
+  \\
+  &
+    \phantom{::::::::}\wedge
+    \text{jobField(\textbf{s})} \equiv \text{`Professional, Administrative \& Support'}
+  \\
+  &
+    \phantom{::::::::}\wedge
+    \text{jobRole(\textbf{s})} \equiv \text{`Administration' )}
+  \\
+  &
+    \phantom{::}\vee
+    \text{( role(\textbf{s})} \equiv \text{`Staff'}
+  \\
+  &
+    \phantom{::::::::}\wedge
+    \text{staffRole(\textbf{s})} \equiv \text{`Head of School'}
+  \\
+  &
+    \phantom{::::::::}\wedge
+    \text{headSchoolFrom(\textbf{s})} \geq \text{17 Sep 2019}
+  \\
+  &
+    \phantom{::::::::}\wedge
+    \text{headSchoolTo(\textbf{s})} \leq \text{16 Sep 2020 )}
+  \\
+  &
+    \phantom{::}\vee
+    \text{( role(\textbf{s})} \equiv \text{`Student'}
+  \\
+  &
+    \phantom{::::::::}\wedge
+    \text{studentRole(\textbf{s})} \equiv \text{`Class Representative'}
+  \\
+  &
+    \phantom{::::::::}\wedge
+    \text{classRepFrom(\textbf{s})} \geq \text{17 Sep 2019}
+  \\
+  &
+    \phantom{::::::::}\wedge
+    \text{classRepTo(\textbf{s})} \leq \text{16 Sep 2020 )}
+  \\
+  &
+    \phantom{::}\wedge
+    \text{accountActiveUntil(\textbf{s})} \geq \text{currentDate(\textbf{e})}
+\end{align*}
+  \caption{
+    \label{fig:case_study_policy_5}
+    Case Study \#5 policy dictating access to a Class Rep meeting minutes.
+    Successful decryption would be possible for the author of the minutes (with username `tgalabova') \textbf{or} for any `Research \& Teaching' staff members \textbf{or} for any `Administration' staff members \textbf{or} for the `Head of School', if their serving term matches the academic year of the minutes \textbf{or} for any students serving as a `Class Representative' in the academic year of the minutes. In all cases an active account is also required.
+  }
+\end{figure}

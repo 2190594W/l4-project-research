@@ -3,11 +3,6 @@
 
 \OpenABE is an Attribute Based Encryption library from Zeutro LLC, implemented with the C language that provides several \acrshort{abe} encryption schemes, as described by \citet{Akinyele2011}. The library also provides Python bindings for simple use with Python applications and scripts. Of particular interest are the key-policy and ciphertext-policy schemes, wherein the policy defining access to a resource is embedded in either the user's key or within the encrypted resource ciphertext.
 
-\subsection{ABE Schemes}
-\label{subsec:bkgr_openabe_schemes}
-
-Implementing the key-policy scheme requires defining a user's access to resources in their user key in the form of a policy such as ``access to all algorithmics course resources for the 2018\textemdash2019 academic year'' with attributes assigned to resources and embedded into their ciphertext. Access to the resource is then granted only if the resources meet the policy defined by the user's key. The ciphertext-policy scheme is the polar opposite in implementation, where instead a resource ciphertext has the embedded policy and the users' keys have attributes describing the user. A ciphertext in this scenario, might have a policy such as ``access if user is a student in the Networking course or user is a member of staff'' and access would be granted to a user if and only if their key has the required attributes.
-
 \subsection{PyOpenABE Bindings}
 \label{subsec:bkgr_pyopenabe}
 

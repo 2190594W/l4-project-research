@@ -33,9 +33,9 @@
     \alt
     s
   \\
-  \ty{l}{\mathbb{L}_T}
+  \ty{l}{\mathbb{L}_t}
   & \Coloneqq
-    \emptyset_T\alt{}v\Cons_T{}l
+    \emptyset_t\alt{}v\Cons_t{}l
   \\
   e
   &
@@ -101,7 +101,7 @@
 \end{figure}
 
 \Cref{fig:syntax} presents the syntactical structure, and types for \thePolicyLang.
-\thePolicyLang contains Integer, Boolean, Date, String and List values, we leave abstract how integers and dates are written. Lists may either be empty or consist of any number of elements where each element is of the same type $T \in v$.
+\thePolicyLang contains Integer, Boolean, Date, String and List values, we leave abstract how integers and dates are written. Lists may either be empty or consist of any number of elements where each element is of the same type $T \in \{ \mathbb{Z}, \mathbb{B}, \mathbb{D}, \mathbb{S} \}$.
 
 Integers \& Dates can be compared using the standard comparison operations of: \texttt{greater-than}, \texttt{less-than} and \texttt{equals-to}, as well as \texttt{greater-than-or-equal-to} and \texttt{less-than-or-equal-to}. Whilst Strings, Lists \& Booleans only support the standard comparison operation of \texttt{equals-to}.
 Boolean operators provide logical conjunction and disjunction.

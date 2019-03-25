@@ -1,0 +1,54 @@
+In this case, the student has encrypted and uploaded their dissertation to the \theResServer system with access to be granted for their supervisor, the assigned reader and additionally, the Project Coordinator.
+\vskip 0.5em
+For this study the following details have been assumed:
+\begin{itemize}
+  \item
+    the student has the ID and username `2123456z'
+  \item
+    their supervisor is Quintin Cutts with username `qcutts'
+  \item
+    their assigned reader is Paul Siebert with username `psiebert'
+  \item
+    the Project Coordinator is John Williamson with username `jwilliamson'
+\end{itemize}
+\vskip 0.5em
+With the details extracted, we can determine the attributes for the policy, where we define \textbf{\textit{Subject} s} and \textbf{\textit{Environment} e} as:
+\begin{itemize}
+  \item[]
+    \textbf{s} $\Rightarrow$ role, accountActiveUntil, username
+  \item[]
+    \textbf{e} $\Rightarrow$ currentDate
+\end{itemize}
+
+Applying the identified attributes for Case Study \#4 (\Cref{subsec:analysis_case_studies_4}) provides the policy in \cref{fig:case_study_policy_4} which would have been embedded in the encrypted dissertation by the student before upload. The encrypted dissertation can then remain stored on the server but only accessible to the student and required staff members.
+
+\begin{figure}[ht]
+  \centering
+\begin{align*}
+  \text{Policy(\textbf{s},\textbf{e})}
+  &
+    \leftarrow
+    \text{( role(\textbf{s})} \equiv \text{`Student'}
+  \\
+  &
+    \phantom{::::::}\wedge
+    \text{username(\textbf{s})} \equiv \text{`2123456z' )}
+  \\
+  &
+    \phantom{::}\vee
+    \text{( role(\textbf{s})} \equiv \text{`Staff'}
+  \\
+  &
+    \phantom{::::::}\wedge
+    \text{username(\textbf{s})} \equiv \text{`qcutts'} \mid \text{`psiebert'} \mid \text{`jwilliamson' )}
+  \\
+  &
+    \phantom{::}\wedge
+    \text{accountActiveUntil(\textbf{s})} \geq \text{currentDate(\textbf{e})}
+\end{align*}
+  \caption{
+    \label{fig:case_study_policy_4}
+    Case Study \#4 policy dictating access to a completed dissertation.
+    Successful decryption would be possible for the author of the dissertation (with username `2123456z') \textbf{or} for the three identified staff members (with usernames `qcutts', `psiebert', `jwilliamson'). In all cases an active account is also required.
+  }
+\end{figure}

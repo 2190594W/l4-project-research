@@ -1,52 +1,46 @@
-\section{Outline (SUPER ROUGH)}
+\section{Outline}
 \label{sec:intro_outline}
 
-\textbf{Background}\\
-	Discusses access control \& encryption.\\
-		\textit{Focuses on classical (1-to-1) vs. modern (1-to-many)}\\
-	Discusses public key infrastructure \& the resource server.\\
-  Looks at the openabe library.\\
-    \textit{ Focusing on the pyopenabe bindings}\\
-\vskip 0.5em
-\textbf{Analysis/Requirements}\\
-  Discusses security considerations.\\
-    \textit{Focuses on why resources need secured, why \acrshort{abe} is best for this \& what the \acrshort{abe} implementation must be able to do}\\
-  Discusses deployment considerations/conditions.\\
-    \textit{Focusing on assumed physical security of MK server \& issuing of user keys}
-  Discusses enrolment requirements \& case studies.
-\vskip 0.5em
-\textbf{Design}\\
-  Discusses design of the policy language.\\
-    \textit{Focuses on how does it meet the case studies \& formal definition}\\
-  Discusses user key design.\\
-    \textit{Focuses on SSO login to provide attributes \& signed manually by 'cold' server - offline, then processed by admin staff}\\
-  Discusses deployment scenario \& architecture diagrams.\\
-    \textit{ Focuses how servers will communicate \& how user will interact}\\
-  Discusses tool for building policies \& filename searching.
-\vskip 0.5em
-\textbf{Implementation}\\
-  Discusses openabe library toolset.\\
-    \textit{Discusses translating policy language to openabe compliant \& use of bindings}\\
-  Discusses python flask to build servers.\\
-    \textit{Discusses use of flask to build web servers \& provide simple GUIs}\\
-  Discusses wraps the pyopenabe bindings for encryption/decryption \& python client server.\\
-    \textit{Discusses local only \& insecure by design (stores plaintext user key in local DB)}\\
-  Discusses mongoDB for storage.\\
-    \textit{Discusses file metadata storage on res server with providing basic search functionality \& user data (incl. key) on local client}\\
-  Discusses fuzzy finder for filename searching.
-\vskip 0.5em
-\textbf{Evaluation}\\
-  Discusses security evaluation.\\
-    \textit{Discusses risk assessment with assets \& risks \& measures \& analysis}\\
-  Discusses successfully achieved.\\
-    \textit{Discusses encrypt/decrypt resources \& issue user keys properly (JSON request to MK server) \& store on a resource server \& retrieve from server by search \& client tool to handle all above by GUI \& store issued \& attributes and types globally as a record \& local, proof-of-concept authentication system \& extraction from .cpabe, .key files with extract policy from .cpabe files \& extract user attributes from .key files}\\
-  Discusses failed to achieve.\\
-    \textit{Discusses CLI tool for encrypt/decrypt with pyopenabe bindings \& full compatibility with openabe library \& metadata header for files encrypted with toolset}
-\vskip 0.5em
-\textbf{Conclusion}\\
-  Summarise.\\
-  Confirm solution to original problem.\\
-  Discuss future work.\\
-  Discuss problems (compatibility with openabe lib).\\
-    \textit{Discusses extraction by regex issues}\\
-  Discuss deployment.
+\begin{enumerate}
+  \item \textbf{Background}
+  \begin{enumerate}
+    \item Access control \& encryption
+		\item Public key infrastructure \& resource servers
+		\item \OpenABE library and \PyOpenABE bindings
+  \end{enumerate}
+  \item \textbf{Analysis/Requirements}
+  \begin{enumerate}
+    \item Security considerations
+    \item Deployment requirements
+    \item Requirements for enrolling
+		\item Case Studies for deployment scenario
+  \end{enumerate}
+	\item \textbf{Design}
+  \begin{enumerate}
+    \item Design of the \thePolicyLang language
+    \item Signing \& using user keys
+    \item Deployment scenario \& system architecture
+		\item Building policies \& searching across filenames
+  \end{enumerate}
+	\item \textbf{Implementation}
+  \begin{enumerate}
+    \item Working with the \OpenABE toolset
+    \item Choosing Python's Flask for web servers
+    \item Client server security
+		\item Storing data with mongoDB
+		\item Fuzzy string matching for filenames
+  \end{enumerate}
+	\item \textbf{Evaluation}
+  \begin{enumerate}
+    \item Security evaluation \& risk assessment
+    \item Successfully achieved
+    \item Failed to achieve
+  \end{enumerate}
+	\item \textbf{Conclusion}
+  \begin{enumerate}
+    \item Summary of project
+    \item Future work
+    \item Problems tackled during project
+		\item Real-world deployment
+  \end{enumerate}
+\end{enumerate}
