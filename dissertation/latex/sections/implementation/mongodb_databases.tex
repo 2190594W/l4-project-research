@@ -1,4 +1,12 @@
 \section{Using MongoDB for Data Storage}
 \label{sec:impl_mongodb}
 
-\Cref{sec:impl_web_srvrs} describes the \acrfull{prs} requirement that metadata for uploaded resources be stored in a local database, ensuring the \acrshort{prs} remains 
+\Cref{sec:impl_web_srvrs} describes the \acrfull{prs} requirement that metadata for uploaded resources be stored in a local database, ensuring that the \acrshort{prs} can remain unaware of the contents of any uploaded resource. Instead the local database will store the orginal filename (in place of the generated \acrshort{uuid} filename the resources are stored under), the policy the resource was encrypted with and other metadata for the resource such as the resource size, file extension, author etc.
+\vskip 0.5em
+Although performance comparisons between relational databases and non relational databases are fairly contested \citep{Gyorodi2015, Wang2017}, a relational database (i.e. SQL) \citep{Codd1969} was identified as verbose and complicated for the requirements of the \acrshort{prs}; a single table database was deemed adequate for the purposes. Further, it seems that \textit{at least} read operations on non-relational (i.e. NoSQL) databases complete faster than equivalent operations on relational databases \citep{Fraczek2017}.
+
+Since the bulk of operations on the \acrshort{prs} would be from filename searching requests, the local database would be processing read operations considerably more than write operations, with simple write operations only occurring once for each resource upload. Suggesting that any `speed gain' from a NoSQL database vs a SQL database, would be beneficial to the system.
+\vskip 0.5em
+For the project, the decision for a database system was between MySQL and MongoDB, due to previous experience with both systems. Since there appear to be speed \& efficiency benefits to integrating MongoDB over MySQL \citep{Gyorodi2015a}, MongoDB was selected for the \acrshort{prs} database. As the \acrshort{prs} would need to store metadata on many resources once deployed and be able to perform short queries across all the resource data stored.
+
+MongoDB also provides a Python package named `PyMongo' for seamless integration with the \acrshort{prs}. Additionally, with the \acrshort{prs} running a MongoDB database, the decision was made to use MongoDB for the pseudo-Authentication Service built in to the \acrfull{crs} as well. This offered the same code parity and reuse benefits as described in \Cref{sec:impl_client_srvr}.
