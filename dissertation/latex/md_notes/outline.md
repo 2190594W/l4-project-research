@@ -51,7 +51,6 @@
     SSO login to provide attributes
     signed manually by 'cold' server - offline
       processed by admin staff
-  deployment scenario
   architecture diagrams
     how servers will communicate
     how user will interact
@@ -65,7 +64,6 @@
   python flask to build servers
     use of flask to build web servers
     provide simple GUIs
-  wraps the pyopenabe bindings for encryption/decryption
   python client server
     local only
     insecure by design (stores plaintext user key in local DB)
