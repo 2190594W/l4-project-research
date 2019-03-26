@@ -1,17 +1,182 @@
 \section{Implementing Policies with \thePolicyLang}
 \label{sec:design_impl_pol_lang}
 
-We present three policies created with \thePolicyLang for three of the six Case Studies described in \Cref{sec:analysis_case_studies}. Case Studies \#1, \#3 \& \#5 are presented here, with the remaining Case Studies presenting as Appendices (\Cref{appendix:case_study_0_policy}, \Cref{appendix:case_study_2_policy} \& \Cref{appendix:case_study_4_policy}).
+From the definition of the $sub$, $env$ and $res$ records in \Cref{subsec:defs} we present three records in a comprehensive form for the Case Studies in \Cref{sec:analysis_case_studies}. This does not represent the full universe of attributes available to each record, in part because \OpenABE is flexible in defining attributes and because the attribute universe may be extended. The records should be considered incomplete in the form presented, but a more complete form is presented in the format of the mind map in Appendix \ref{appendix:roles_users}.
+
+\begin{figure}[ht]
+  \centering
+\begin{align*}
+  l_{i}
+  &
+    \Coloneqq
+    role \colon \mathbb{S}
+    \alt
+    jobField \colon \mathbb{S}
+    \alt
+    studentLevel \colon \mathbb{Z}
+  \\
+  &
+    \firstAlt
+    jobRole \colon \mathbb{S}
+    \alt
+    staffRole \colon \mathbb{S}
+    \alt
+    researchGroup \colon \mathbb{S}
+  \\
+  &
+    \firstAlt
+    researchTheme \colon \mathbb{S}
+    \alt
+    markerFrom \colon \mathbb{D}
+    \alt
+    markerTo \colon \mathbb{D}
+  \\
+  &
+    \firstAlt
+    accountActiveUntil \colon \mathbb{D}
+    \alt
+    markerCourses \colon \mathbb{L}_{\mathbb{Z}}
+  \\
+  &
+    \firstAlt
+    demonstratorCourses \colon \mathbb{L}_{\mathbb{Z}}
+    \alt
+    enrolledCourses \colon \mathbb{L}_{\mathbb{Z}}
+  \\
+  &
+    \firstAlt
+    studentRole \colon \mathbb{S}
+    \alt
+    username \colon \mathbb{S}
+    \alt
+    startDate \colon \mathbb{D}
+  \\
+  &
+    \firstAlt
+    endDate \colon \mathbb{D}
+    \alt
+    headSchoolFrom \colon \mathbb{D}
+    \alt
+    headSchoolTo \colon \mathbb{D}
+  \\
+  &
+    \firstAlt
+    classRepFrom \colon \mathbb{D}
+    \alt
+    classRepTo \colon \mathbb{D}
+  \\
+  \ty{sub}{Subject}
+  &
+    \Coloneqq
+    { l_{i} = v_{i}}^{i\in 1..n}
+  \\
+  proj_{sub}
+  &
+    \Coloneqq
+    l(sub)
+\end{align*}
+  \caption{
+    \label{fig:case_sub_record}
+    A Subject record for \thePolicyLang.
+  }
+\end{figure}
+
+\begin{figure}[ht]
+  \centering
+\begin{align*}
+  l_{i}
+  &
+    \Coloneqq
+    currentDate \colon \mathbb{D}
+    \alt
+    locale \colon \mathbb{S}
+    \alt
+    location \colon \mathbb{S}
+  \\
+  &
+    \firstAlt
+    connectionType \colon \mathbb{S}
+    \alt
+    networkIP \colon \mathbb{S}
+  \\
+  &
+    \firstAlt
+    internalNetwork \colon \mathbb{S}
+    \alt
+    deviceType \colon \mathbb{S}
+  \\
+  \ty{env}{Environment}
+  &
+    \Coloneqq
+    { l_{i} = v_{i}}^{i\in 1..n}
+  \\
+  proj_{env}
+  &
+    \Coloneqq
+    l(env)
+\end{align*}
+  \caption{
+    \label{fig:case_env_record}
+    An Environment record for \thePolicyLang.
+  }
+\end{figure}
+
+\begin{figure}[ht]
+  \centering
+\begin{align*}
+  l_{i}
+  &
+    \Coloneqq
+    author \colon \mathbb{S}
+    \alt
+    fileSize \colon \mathbb{Z}
+    \alt
+    fileName \colon \mathbb{S}
+  \\
+  &
+    \firstAlt
+    fileExtension \colon \mathbb{S}
+    \alt
+    fileCreated \colon \mathbb{D}
+  \\
+  &
+    \firstAlt
+    fileModified \colon \mathbb{D}
+    \alt
+    releaseDate \colon \mathbb{D}
+    \alt
+    collaborators \colon \mathbb{L}_{\mathbb{S}}
+  \\
+  \ty{res}{Resource}
+  &
+    \Coloneqq
+    { l_{i} = v_{i}}^{i\in 1..n}
+  \\
+  proj_{res}
+  &
+    \Coloneqq
+    l(res)
+\end{align*}
+  \caption{
+    \label{fig:case_res_record}
+    A Resource record for \thePolicyLang.
+  }
+\end{figure}
+
+We present Subject, Environment and Resource records in \Cref{fig:case_sub_record}, \Cref{fig:case_env_record} and \Cref{fig:case_res_record} for \thePolicyLang. Here, we define projection labels $l_{i}$ that describe the subject, environment and resource attributes for the \acrshort{dcs} and present them with their value types.
+
+The labels are each uniquely combined to form a Record Type to describe a subject, environment or resource. For brevity we use a type synonym `Subject', `Environment' or `Resource' to represent the complete
+record type. Projection syntax borrows from procedural languages, such that the projection $l_{i}(sub)$ forms a function of type: $Subject -> T_{i}$ where $l_{i} : T_{i}$.
+Typing rules follow standard conventions for records as described in \citet{DBLP:books/daglib/0005958}.
+\vskip 0.5em
+We present two policies created with \thePolicyLang, using the defined $sub$, $env$ and $res$ records, for two of the six Case Studies described in \Cref{sec:analysis_case_studies}. Case Studies \#1 \& \#5 are presented here, with the remaining Case Studies presented as Appendices (\Cref{appendix:case_study_0_policy}, \Cref{appendix:case_study_2_policy}, \Cref{appendix:case_study_3_policy} \& \Cref{appendix:case_study_4_policy}).
+
+Within the examples we use infix operators in place of the textual comparison operators defined in \thePolicyLang for both brevity and readability.
 
 \subsection{Implementing Case Study \#1 with \thePolicyLang}
 \label{subsec:design_impl_pol_1}
 
 \input{sections/case_studies/fig_case_1}
-
-\subsection{Implementing Case Study \#3 with \thePolicyLang}
-\label{subsec:design_impl_pol_3}
-
-\input{sections/case_studies/fig_case_3}
 
 \subsection{Implementing Case Study \#5 with \thePolicyLang}
 \label{subsec:design_impl_pol_5}
