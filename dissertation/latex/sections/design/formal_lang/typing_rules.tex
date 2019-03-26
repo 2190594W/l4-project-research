@@ -36,12 +36,24 @@
     \ty{s}{\mathbb{S}}
   }
   \and
-  \infer*[left=Intro-List]
+  \infer*[left=Intro-Empty]
   {
-    \\
+    \env{\ty{a}{T}}\\
+    \left[ T \in T_l \right]
   }
   {
-    \ty{l}{\mathbb{L}_t}
+    \env{\ty{\emptyset_a}{\mathbb{L}_a}}
+  }
+  \and
+  \infer*[left=Intro-Cons]
+  {
+    \env{\ty{v}{a}}\\
+    \env{\ty{l}{\mathbb{L}_a}}\\
+    \env{\ty{a}{T}}\\
+    \left[ T \in T_l \right]
+  }
+  {
+    \env{\ty{v\Cons_t{}l}{\mathbb{L}_a}}
   }
   \and
   \infer*[left=OR]
@@ -118,4 +130,4 @@
 \Cref{fig:rules} presents the \thePolicyLang typing rules.
 These rules dictate what it means for an expression/statement to be well-formed within \thePolicyLang and for any expression/statement in \thePolicyLang, we use the typing rules to construct a derivation that provides proof that the expression/statement is well-typed, that is we can apply each rule and form a derivation tree. If we cannot construct this tree then the expression is ill-typed and syntactically not valid.
 
-The Typing Rules define 5 base cases for the 5 value types \thePolicyLang supports (as defined in \cref{fig:syntax}), meaning instances of the 5 types derive directly to their type. Next, the boolean logical operators OR \& AND are defined as requiring two Boolean parameters that also derive to a Boolean type return. The standard comparison operators \textbf{greaterThan}, \textbf{lessThan}, \textbf{greaterThanEqual} \& \textbf{lessThanEqual} all take two parameters of a matching type, where the type may be Integer or Date, and derives to a Boolean response. Lastly, the \textbf{equal} comparison similarly takes two parameters of a matching type, but where the type may be Integer, Boolean, Date, String or List, and also derives to a Boolean return.
+The Typing Rules define 5 base cases for the 5 value types \thePolicyLang supports (as defined in \cref{fig:syntax}), meaning instances of the 5 types derive directly to their type. Next, the boolean logical operators OR \& AND are defined as requiring two Boolean parameters that also derive to a Boolean type return. The standard comparison operators \textbf{$>$}, \textbf{$<$}, \textbf{$>=$} \& \textbf{$<=$} all take two parameters of a matching type, where the type may be Integer or Date, and derives to a Boolean response. Lastly, the \textbf{$==$} comparison similarly takes two parameters of a matching type, but where the type may be Integer, Boolean, Date, String or List, and also derives to a Boolean return.
