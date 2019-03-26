@@ -1,4 +1,31 @@
 \section{Implementing a Fuzzy Finder for Filenames}
 \label{sec:impl_fuzzy_finder}
 
-Stuff
+\Cref{sec:design_file_search} describes the requirement of the \acrfull{prs} to offer a search utility to users and that it must offer two methods of searching. One method directly matches the query against slices of a filename and the other uses a fuzzy string matcher to generally score the similarities between a query and a filename. The second method is designed to help the user find resources they do not know much about and so may search with abstract query terms to find resources that might match.
+\vskip 0.5em
+The first method is designed to be used by users specifically trying to find a file by a filename that they are able to at least partially recall. This method is much more efficient than the second method and can be implemented with direct use of MongoDB's \textit{text index} search functionality (\cref{lst:pymongo_str_search}).
+\vskip 0.5em
+The second method is more complex and requires the integration of a 3rd party fuzzy string matching package, Python's \href{https://pypi.org/project/fuzzywuzzy/}{FuzzyWuzzy}. First, the \acrshort{prs} must retrieve the metadata of the resources in the database before passing the retrieved metadata to the fuzzy string matcher. The \acrshort{prs} then extracts the fuzzy scores from the matcher and returns an ordered list of the highest scoring resource filenames. The code required to process the fuzzy matching is provided (\cref{lst:pymongo_fuzzy_search}), however the MongoDB query that would precede this process is assumed to have taken place beforehand.
+
+\begin{lstlisting}[language=python, float, caption={Python code showing a PyMongo text search over the \textit{filename} text index. Where \texttt{search\_term} is a string representing the search query, \texttt{search\_limit} is an integer allowing the returned results to be limited and \texttt{all\_files} is a list that is filled with the resources collected by the search.}, label=lst:pymongo_str_search]
+    for resource in META_DB.find(
+            {"$text": {"$search": search_term}},
+            {"score": {"$meta": "textScore"}, "id": 1, "filename": 1}
+    ).sort([("score", {"$meta": "textScore"})]).limit(search_limit):
+        all_files.append({
+            "id": str(resource["id"]),
+            "filename": resource["filename"],
+            "search_score": resource["score"]
+        })
+\end{lstlisting}
+
+\begin{lstlisting}[language=python, float, caption={Python code showing a fuzzy string matching search over a collection of resources, using the \textit{fuzzywuzzy} package. The process interface is first imported from \textit{fuzzywuzzy}, then the \texttt{extract()} function performs the matching and extracts the calculated scores for each resource. Where \texttt{search\_term} is a string representing the search query, \texttt{all\_files} is a list of all resources collected by a MongoDB find query and \texttt{fuzzy\_limit} is an integer allowing the returned results to be limited.}, label=lst:pymongo_fuzzy_search]
+    from fuzzywuzzy import process
+    ......
+    searched_file_objs = process.extract(
+            search_term, all_files, limit=fuzzy_limit)
+        all_files = []
+        for file in searched_file_objs:
+            all_files.append(
+                {"id": file[2], "filename": file[0], "search_score": file[1]})
+\end{lstlisting}
