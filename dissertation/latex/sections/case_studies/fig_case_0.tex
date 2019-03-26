@@ -6,31 +6,23 @@ For this study the following details have been assumed:
     the staff member is Teresa Bonner with username `tbonner'
 \end{itemize}
 \vskip 0.5em
-With the details extracted, we can determine the attributes for the policy, where we define \textbf{\textit{Subject} s} and \textbf{\textit{Environment} e} as:
-\begin{itemize}
-  \item[]
-    \textbf{s} $\Rightarrow$ role, accountActiveUntil, username
-  \item[]
-    \textbf{e} $\Rightarrow$ currentDate
-\end{itemize}
-
-Applying the identified attributes for Case Study \#0 (\Cref{subsec:analysis_case_studies_0}) provides the policy in \cref{fig:case_study_policy_0} which would have been embedded in the encrypted lecture slides by the staff member before upload. The encrypted past paper can then remain stored on the server but only accessible to staff members and students.
+Applying the identified attributes for Case Study \#0 provides the policy in \cref{fig:case_study_policy_0} which would have been embedded in the encrypted lecture slides by the staff member before upload. The encrypted past paper can then remain stored on the server but only accessible to staff members and students.
 
 \begin{figure}[ht]
   \centering
 \begin{align*}
-  \text{Policy(\textbf{s},\textbf{e})}
+  \text{Policy($sub$, $env$, $res$)}
   &
     \leftarrow
-    \text{username(\textbf{s})} \equiv \text{`tbonner'}
+    \text{username($sub$)} \equiv \text{`tbonner'}
   \\
   &
     \phantom{::}\vee
-    \text{role(\textbf{s})} \equiv \text{`Staff'} \mid \text{`Student'}
+    \text{role($sub$)} \equiv \text{`Staff'} \mid \text{`Student'}
   \\
   &
     \phantom{::}\wedge
-    \text{accountActiveUntil(\textbf{s})} \geq \text{currentDate(\textbf{e})}
+    \text{accountActiveUntil($sub$)} \geq \text{currentDate($env$)}
 \end{align*}
   \caption{
     \label{fig:case_study_policy_0}

@@ -1,68 +1,68 @@
-Applying the identified attributes for Case Study \#5 (\Cref{subsec:analysis_case_studies_5}) provides the policy in \cref{fig:case_study_policy_5} which would have been embedded in the encrypted minutes by the member of staff before upload. The encrypted minutes can then remain stored on the server but will only be accessible to Research \& Teaching staff members, Administration staff members and the current Head of School. Further access would also be granted to all students presently serving as Class Representatives.
+Applying the identified attributes for Case Study \#5 (\Cref{subsec:analysis_case_studies_5}) provides the \thePolicyLang policy in \cref{fig:case_study_policy_5} which would have been embedded in the encrypted minutes by the member of staff before upload. The encrypted minutes can then remain stored on the server but will only be accessible to Research \& Teaching staff members, Administration staff members and the current Head of School. Further access would also be granted to all students presently serving as Class Representatives.
 
 \begin{figure}[ht]
   \centering
 \begin{align*}
-  \text{Policy(\textbf{s},\textbf{e})}
+  \text{Policy($sub$, $env$, $res$)}
   &
     \leftarrow
-    \text{username(\textbf{s})} \equiv \text{`tgalabova'}
+    \text{username($sub$)} \equiv \text{`tgalabova'}
   \\
   &
     \phantom{::}\vee
-    \text{( role(\textbf{s})} \equiv \text{`Staff'}
+    \text{( role($sub$)} \equiv \text{`Staff'}
   \\
   &
     \phantom{::::::::}\wedge
-    \text{jobField(\textbf{s})} \equiv \text{`Research \& Teaching' )}
+    \text{jobField($sub$)} \equiv \text{`Research \& Teaching' )}
   \\
   &
     \phantom{::}\vee
-    \text{( role(\textbf{s})} \equiv \text{`Staff'}
+    \text{( role($sub$)} \equiv \text{`Staff'}
   \\
   &
     \phantom{::::::::}\wedge
-    \text{jobField(\textbf{s})} \equiv \text{`Professional, Administrative \& Support'}
+    \text{jobField($sub$)} \equiv \text{`Professional, Administrative \& Support'}
   \\
   &
     \phantom{::::::::}\wedge
-    \text{jobRole(\textbf{s})} \equiv \text{`Administration' )}
+    \text{jobRole($sub$)} \equiv \text{`Administration' )}
   \\
   &
     \phantom{::}\vee
-    \text{( role(\textbf{s})} \equiv \text{`Staff'}
+    \text{( role($sub$)} \equiv \text{`Staff'}
   \\
   &
     \phantom{::::::::}\wedge
-    \text{staffRole(\textbf{s})} \equiv \text{`Head of School'}
+    \text{staffRole($sub$)} \equiv \text{`Head of School'}
   \\
   &
     \phantom{::::::::}\wedge
-    \text{headSchoolFrom(\textbf{s})} \geq \text{17 Sep 2019}
+    \text{headSchoolFrom($sub$)} \geq \text{17 Sep 2019}
   \\
   &
     \phantom{::::::::}\wedge
-    \text{headSchoolTo(\textbf{s})} \leq \text{16 Sep 2020 )}
+    \text{headSchoolTo($sub$)} \leq \text{16 Sep 2020 )}
   \\
   &
     \phantom{::}\vee
-    \text{( role(\textbf{s})} \equiv \text{`Student'}
+    \text{( role($sub$)} \equiv \text{`Student'}
   \\
   &
     \phantom{::::::::}\wedge
-    \text{studentRole(\textbf{s})} \equiv \text{`Class Representative'}
+    \text{studentRole($sub$)} \equiv \text{`Class Representative'}
   \\
   &
     \phantom{::::::::}\wedge
-    \text{classRepFrom(\textbf{s})} \geq \text{17 Sep 2019}
+    \text{classRepFrom($sub$)} \geq \text{17 Sep 2019}
   \\
   &
     \phantom{::::::::}\wedge
-    \text{classRepTo(\textbf{s})} \leq \text{16 Sep 2020 )}
+    \text{classRepTo($sub$)} \leq \text{16 Sep 2020 )}
   \\
   &
     \phantom{::}\wedge
-    \text{accountActiveUntil(\textbf{s})} \geq \text{currentDate(\textbf{e})}
+    \text{accountActiveUntil($sub$)} \geq \text{currentDate($env$)}
 \end{align*}
   \caption{
     \label{fig:case_study_policy_5}

@@ -1,44 +1,43 @@
-Applying the identified attributes for Case Study \#1 (\Cref{subsec:analysis_case_studies_1}) provides the policy in \cref{fig:case_study_policy_1} which would have been embedded in the encrypted lecture slides by the Lecturer before upload. The encrypted slides can then remain stored on the server but only accessible to Research \& Teaching staff members until 24 hours before the lecture date of 23/10/19, when students on the course will also be granted access.
+Applying the identified attributes for Case Study \#1 (\Cref{subsec:analysis_case_studies_1}) provides the \thePolicyLang policy in \Cref{fig:case_study_policy_1}, which would be embedded in the encrypted lecture slides by the Lecturer before upload. The encrypted slides can then remain stored on the server but only accessible to Research \& Teaching staff members until 24 hours before the lecture date of 23/10/19, when students on the course will also be granted access.
 
 \begin{figure}[ht]
   \centering
 \begin{align*}
-  \text{Policy(\textbf{s},\textbf{e})}
+  \text{Policy($sub$, $env$, $res$)}
   &
     \leftarrow
-    \text{username(\textbf{s})} \equiv \text{`jspringer'}
+    \text{username($sub$)} \equiv \text{`jspringer'}
   \\
   &
     \phantom{::}\vee
-    \text{( role(\textbf{s})} \equiv \text{`Staff'}
+    \text{( role($sub$)} \equiv \text{`Staff'}
   \\
   &
     \phantom{::::::::}\wedge
-    \text{jobField(\textbf{s})} \equiv \text{`Research \& Teaching' )}
+    \text{jobField($sub$)} \equiv \text{`Research \& Teaching' )}
   \\
   &
     \phantom{::}\vee
-    \text{( role(\textbf{s})} \equiv \text{`Student'}
+    \text{( role($sub$)} \equiv \text{`Student'}
   \\
   &
     \phantom{::::::::}\wedge
-    \text{studentLevel(\textbf{s})} \equiv \text{2}
+    \text{studentLevel($sub$)} \equiv \text{2}
   \\
   &
     \phantom{::::::::}\wedge
-    \text{enrolledCourses(\textbf{s})} \equiv \text{2001}
+    \text{enrolledCourses($sub$)} \equiv \text{2001}
   \\
   &
     \phantom{::::::::}\wedge
-    \text{currentDate(\textbf{e})} \geq \text{22 October 2019 )}
+    \text{currentDate($env$)} \geq \text{22 October 2019 )}
   \\
   &
     \phantom{::}\wedge
-    \text{accountActiveUntil(\textbf{s})} \geq \text{currentDate(\textbf{e})}
+    \text{accountActiveUntil($sub$)} \geq \text{currentDate($env$)}
 \end{align*}
   \caption{
     \label{fig:case_study_policy_1}
     Case Study \#1 policy dictating access to a set of course 2001 lecture slides.
-    Successful decryption would be possible for the author of the slides (with username `jspringer') \textbf{or} a member of staff in the Research \& Teaching field \textbf{or} a Level 2 student enrolled in the 2001 course if the lecture slides' release date has passed. In all cases an active account is also required.
   }
 \end{figure}
