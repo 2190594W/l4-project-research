@@ -15,7 +15,13 @@
   \interpB{\EnumTrue} &\Coloneqq\text{\ttfamily True}\\
   \interpB{d}&\Coloneqq\text{\ttfamily datetime.date(}d\text{\ttfamily)}\\
   \interpB{s}&\Coloneqq\text{\ttfamily str(}s\text{\ttfamily)}\\
-  \interpB{l}&\Coloneqq\text{\ttfamily [}l\text{\ttfamily]}\\
+  \interpB{l_s}&\Coloneqq\text{\ttfamily [}\interpB{l}\alt l \leftarrow l_s\text{\ttfamily]}\\
+  \interpB{sub}&\Coloneqq\interpB{sub}_{s}\\
+  \interpB{proj_{sub}}&\Coloneqq\interpB{proj_{sub}}_{s}\\
+  \interpB{env}&\Coloneqq\interpB{env}_{e}\\
+  \interpB{proj_{env}}&\Coloneqq\interpB{proj_{env}}_{e}\\
+  \interpB{res}&\Coloneqq\interpB{res}_{r}\\
+  \interpB{proj_{res}}&\Coloneqq\interpB{proj_{res}}_{r}\\
   \interpB{\exprOr{a}{b}}  &\Coloneqq\interpB{a}\,\text{\ttfamily or}\,\interpB{b}\\
   \interpB{\exprAnd{a}{b}} &\Coloneqq\interpB{a}\,\text{\ttfamily and}\,\interpB{b}\\
   \interpB{\exprGT{a}{b}}  &\Coloneqq\interpB{a}\,\text{\ttfamily \textgreater}\,\interpB{b}\\

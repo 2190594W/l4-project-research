@@ -1,16 +1,16 @@
 \section{Case Studies}
 \label{sec:analysis_case_studies}
 
-From the work completed in \cref{ch:background} and Sections \ref{sec:analysis_security}, \ref{sec:analysis_deployment} \& \ref{sec:analysis_enrolment}, the project had determined the users of the \theResServer system (see \cref{appendix:roles_users}) as well as the features the service would need to provide. With this information, several Case Studies were designed to show the extensibility of the system in real-world scenarios.
+From the work completed in \Cref{ch:background} and Sections \ref{sec:analysis_security}, \ref{sec:analysis_deployment} \& \ref{sec:analysis_enrolment}, the project had determined the users of the \theResServer system (see \cref{appendix:roles_users}) as well as the features the service would need to provide. With this information, several Case Studies were designed to show the extensibility of the system in real-world scenarios.
 
-Of the six Case Studies presented here, \Cref{subsec:analysis_case_studies_3} and \Cref{subsec:analysis_case_studies_5} are examined and discussed at the most in-depth level.
+Of the six Case Studies presented here, \Cref{subsec:analysis_case_studies_1} and \Cref{subsec:analysis_case_studies_5} are examined and discussed at the most in-depth level, with the other Case Studies examined fully in their respective Appendices.
 
-\subsection{\#0 \textemdash\ Past Exam Paper}
+\subsection{Study \#0 \textemdash\ Past Exam Paper}
 \label{subsec:analysis_case_studies_0}
 
 Case Study \#0 considers a past exam paper uploaded as an encrypted resource by a member of the Administration staff for an arbitrary course. The staff member would like the past paper to be shared with all members of staff and students in the Department of Computing Science. The details of Case Study \#0 are contained in \Cref{appendix:case_study_0_policy}.
 
-\subsection{\#1 \textemdash\ Course Lecture Slides}
+\subsection{Study \#1 \textemdash\ Course Lecture Slides}
 \label{subsec:analysis_case_studies_1}
 
 Case Study \#1 considers a set of Lecture Slides uploaded as an encrypted resource by the Lecturer of an arbitrary course. The Lecturer would like the slides to be shared with other members of staff, to allow for suggestions and even collaboration, but only for Research \& Teaching staff. The Lecturer does not want the slides to be accessible to students until 24 hours before the scheduled lecture date, inline with university policy. For the sake of the scenario, the Java Programming 2 course was selected with Course Code 2001 to show the creation of a policy.
@@ -28,65 +28,25 @@ For this study the following details have been assumed:
   \item
     Course 2001 is a Level 2 course
 \end{itemize}
-\vskip 0.5em
-With the details extracted, we can determine the attributes for the policy, where we define \textbf{\textit{Subject} s} and \textbf{\textit{Environment} e} as:
-\begin{itemize}
-  \item[]
-    \textbf{s} $\Rightarrow$ role, jobField, studentLevel, enrolledCourses, accountActiveUntil, username
-  \item[]
-    \textbf{e} $\Rightarrow$ currentDate
-\end{itemize}
 
-\subsection{\#2 \textemdash\ Course Lab Solutions}
+\subsection{Study \#2 \textemdash\ Course Lab Solutions}
 \label{subsec:analysis_case_studies_2}
 
 Case Study \#2 considers a lab solution uploaded as an encrypted resource by the Lecturer of an arbitrary course. The Lecturer would like to upload the solutions in advance of the lab date, allowing for other members of staff to verify the solutions, but only for Research \& Teaching staff. The Lecturer does not want the solutions to be accessible to students until 3 days after the scheduled lab date, allowing the Lecturer to talk through the solutions in a lecture before release. The Lecturer would like the solutions to be available to tutors \& demonstrators that will be assisting in the lab, so that they can properly offer help to students. The details of Case Study \#2 are contained in \Cref{appendix:case_study_2_policy}.
 
-\subsection{\#3 \textemdash\ In-progress Exam Script}
+\subsection{Study \#3 \textemdash\ In-progress Exam Script}
 \label{subsec:analysis_case_studies_3}
 
 Case Study \#3 considers an in-progress exam script uploaded as an encrypted resource by the Lecturer of an arbitrary course. The exam script is still a draft and is still being worked on by other members of staff in preparation for the exam period. The Lecturer would like to upload the script in advance of the exam date, allowing for other members of staff to verify the script and offer feedback, but only for Research \& Teaching staff.
 
 The script is considered confidential and should only accessible to staff within the Lecturer's Research Group (e.g. FATA, GLASS, IDA) and more specifically their Theme\slash Topic group (e.g. FDTST, MOG, HUSH), unless the Lecturer has specifically granted an individual access. The exam script must also be accessible to Admin staff so that it can be passed to the Exam board for final review. The exam has a scheduled date and a following marking period in which markers will also need access.
 
-For the sake of the scenario, the Programming Languages course was selected with Course Code 4016 to show the creation of a policy.
-\vskip 0.5em
-For this study the following details have been assumed:
-\begin{itemize}
-  \item
-    the exam script is a work in progress resource
-  \item
-    the exam script has been uploaded in advance of the exam date
-  \item
-    the solutions were encrypted and then uploaded by the Lecturer
-  \item
-    the Lecturer's Research Group is FATA
-  \item
-    the Lecturer's Research Theme\slash Topic is Programming Languages
-  \item
-    the exam date is 12/05/20
-  \item
-    the marking deadline is 10/06/20
-  \item
-    the Lecturer for 4016 is Ornela Dardha with username `odardha'
-  \item
-    collaborators include Simon Gay (`sgay'), John O'Donnell (`jodonnell')
-\end{itemize}
-\vskip 0.5em
-With the details extracted, we can determine the attributes for the policy, where we define \textbf{\textit{Subject} s} and \textbf{\textit{Environment} e} as:
-\begin{itemize}
-  \item[]
-    \textbf{s} $\Rightarrow$ role, jobField, jobRole, researchGroup, researchTheme, accountActiveUntil, staffRole, markerFrom, markerTo, markerCourses, username
-  \item[]
-    \textbf{e} $\Rightarrow$ currentDate
-\end{itemize}
-
-\subsection{\#4 \textemdash\ Level 4 Honours Individual Project}
+\subsection{Study \#4 \textemdash\ Level 4 Honours Individual Project}
 \label{subsec:analysis_case_studies_4}
 
 Case Study \#4 considers a completed individual project from a Level 4 student, particularly the dissertation resource although the project source code could also be treated identically if submitted as a compressed .tar.gz or .zip file. The details of Case Study \#4 are contained in \Cref{appendix:case_study_4_policy}.
 
-\subsection{\#5 \textemdash\ Class Representative Meeting Minutes}
+\subsection{Study \#5 \textemdash\ Class Representative Meeting Minutes}
 \label{subsec:analysis_case_studies_5}
 
 Case Study \#5 considers the secure storage of the minutes from a Class Representative meeting, which would have been uploaded as an encrypted resource by a member of Admin staff after recording. The minutes should be accessible to all Research \& Teaching staff as well as the rest of the Administration team. Further, all active class reps should also have access to the minutes, as it is assumed that they will have attended the meeting. Lastly, the Head of the \acrshort{dcs} (Head of School) should also have access to the minutes to see what was discussed \& decided.
@@ -99,12 +59,4 @@ For this study the following details have been assumed:
     the member of staff is Tania Galabova with username `tgalabova'
   \item
     the meeting occurred on 12/09/19
-\end{itemize}
-\vskip 0.5em
-With the details extracted, we can determine the attributes for the policy, where we define \textbf{\textit{Subject} s} and \textbf{\textit{Environment} e} as:
-\begin{itemize}
-  \item[]
-    \textbf{s} $\Rightarrow$ role, accountActiveUntil, username
-  \item[]
-    \textbf{e} $\Rightarrow$ currentDate
 \end{itemize}
