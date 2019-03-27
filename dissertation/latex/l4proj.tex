@@ -64,6 +64,11 @@
 
 \maketitle
 
+\newcommand{\thePolicyLang}{\textsc{PolLang}\textsubscript{ABE}\xspace}
+\newcommand{\theResServer}{\textsc{ResSrvr}\textsubscript{ABE}\xspace}
+\newcommand{\OpenABE}{\textsc{OpenABE}\xspace}
+\newcommand{\PyOpenABE}{\textsc{PyOpenABE}\xspace}
+
 %==============================================================================
 %% ABSTRACT
 \input{sections/abstract}
@@ -114,11 +119,6 @@
 %
 %==================================================================================================================================
 
-\newcommand{\thePolicyLang}{\textsc{PolLang}\textsubscript{ABE}\xspace}
-\newcommand{\theResServer}{\textsc{ResSrvr}\textsubscript{ABE}\xspace}
-\newcommand{\OpenABE}{\textsc{OpenABE}\xspace}
-\newcommand{\PyOpenABE}{\textsc{PyOpenABE}\xspace}
-
 \chapter{Introduction}
 \label{ch:introduction}
 
@@ -140,7 +140,7 @@
 \chapter{Background}
 \label{ch:background}
 
-Research into Access Control systems and Encryption methods, as well as the concept of a Public Key Infrastructure. Determining the uses \& requirements of Resource Servers, along with identifying an \acrshort{abe} tool for the system; the \OpenABE library.
+We present background information for the project, with discussion of Access Control systems and Encryption methods, as well as the concept of Public Key Infrastructures. We further present the uses \& requirements of Resource Servers, along with identifying an \acrshort{abe} tool for the system; the \OpenABE library.
 
 \input{sections/background/access_control}
 
@@ -152,13 +152,31 @@ Research into Access Control systems and Encryption methods, as well as the conc
 
 \input{sections/background/openabe}
 
+\section{Summary}
+\label{sec:bkgr_summary}
+
+Having discussed the pros and cons of an Access Control system, and establishing that at-rest encryption was an absolute requirement for the \theResServer system, the project identified \acrfull{abe} as an ideal method of encrypting resources securely, whilst offering the granularity in access policies that \acrfull{abac} provides.
+
+The choice of \acrshort{abe} ensured that the system would not have to implement a Public Key Infrastructure for distributing private keys and would be able to offer all the services that would be expected of a resource server, securely.
+
+Lastly, the project identified the \OpenABE library as a perfect candidate for integrating as the system's \acrshort{abe} library, due to its track record; deployed as a hospital medical record system \citep{Akinyele2011}.
+
 %==================================================================================================================================
 \chapter{Analysis/Requirements}
 \label{ch:analysis}
 
-The \theResServer system would require the defining of two servers: an offline \acrfull{mks} that would be tasked with provisioning the master private key for the entire service and a separate \acrfull{prs} for storing all encrypted resources. An end user product would also be required, to run locally on a user's device and then connect to the \acrshort{prs} to provide the services on offer through a simple \acrshort{gui}\@.
+The \theResServer system would require the defining of two servers: an offline \acrfull{mks} tasked with provisioning the master private key and subsequent user keys, and a separate \acrfull{prs} for storing all encrypted resources. An end user product would also be required, to run locally on a user's device and then connect to the \acrshort{prs} to provide the services on offer through a simple \acrshort{gui}, shown in \Cref{fig:deployment_abbrv2_diagram}.
 
-We present the analysis of the deployment scenario and the identified requirements of the \theResServer system along with the enrolment process for new users. From analysis of the \acrfull{dcs} we also present a set of Case Studies, considered by thr project throughout design, implementation \& evaluation.
+\begin{figure}[htp]
+  \centering
+  \includegraphics[width=\linewidth,keepaspectratio]{images/infrastructure/deployment_abbrv2.pdf}
+
+  \caption{A second, high-level diagram of the \acrshort{dcs} \theResServer system.}
+
+  \label{fig:deployment_abbrv2_diagram}
+\end{figure}
+
+We present the analysis of the deployment scenario and the identified requirements of the \theResServer system along with the enrolment process for new users. From analysis of the \acrfull{dcs} we also present a set of Case Studies, considered by the project throughout design, implementation \& evaluation.
 
 \input{sections/analysis_requirements/security}
 
@@ -167,6 +185,15 @@ We present the analysis of the deployment scenario and the identified requiremen
 \input{sections/analysis_requirements/enrolment}
 
 \input{sections/analysis_requirements/case_studies}
+
+\section{Summary}
+\label{sec:analysis_summary}
+
+With analysis of the \acrfull{dcs} deployment presented, we presented the security considerations of the \theResServer system, discussing the requirement of securing uploaded resources and the reasons the project selected \acrfull{abe} for this purpose, including the integration with \acrshort{abe}.
+
+We also presented the individual security considerations of both the \acrfull{prs} and \acrfull{mks} in the context of the \acrshort{dcs}, along with the enrolment process for new users (accounting for the offline status of the \acrshort{mks}).
+
+Finally, we described the six Case Studies for the \theResServer system and demonstrated the applicability of each study to the \acrshort{dcs}.
 
 %==================================================================================================================================
 \chapter{Design}
@@ -189,6 +216,13 @@ This includes the formal language definition (\Cref{sec:formal_lang}) for \theRe
 
 \input{sections/design/filename_searching}
 
+\section{Summary}
+\label{sec:design_summary}
+
+We have presented the design of the \theResServer system, with a breakdown of the required software and the formal definition of a policy language, \thePolicyLang, that defines the types and syntax for \acrfull{abe} policies. We have also demonstrated use of \thePolicyLang to construct policies for 2 Case Studies \textit{(the remaining 4 Case Study policies are presented in Appendices \ref{appendix:case_study_0_policy}\textemdash\ref{appendix:case_study_4_policy})} and the process for users building new policies.
+
+Finally, we discussed the user key design and system architecture for the \theResServer system, and described the design of a search utility for the \acrfull{prs} to enable users to discover resources.
+
 %==================================================================================================================================
 \chapter{Implementation}
 \label{ch:implementation}
@@ -209,7 +243,7 @@ From the designs in \Cref{ch:design}, we present the implementation of the \theR
 \chapter{Evaluation}
 \label{ch:evaluation}
 
-Evaluation of the project is presented in the form of a risk assessment, verifying the security of the project and a discussion of the project achievements, with reference to the functionality validation that the Case Studies designed in \Cref{sec:analysis_case_studies} provide.
+Evaluation of the project is presented in the form of a risk assessment, verifying the security of the project and a discussion of the project achievements, with reference to the Case Studies designed in \Cref{sec:analysis_case_studies} that provide evidence that the system produced meets the needs of the users in the \acrfull{dcs}.
 
 \input{sections/evaluation/risk_assessment}
 

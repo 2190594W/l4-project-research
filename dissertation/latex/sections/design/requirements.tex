@@ -2,38 +2,36 @@
 \label{subsec:design_deployment}
 
 The \theResServer system is designed around the specific deployment scenario of the \acrfull{dcs} and as such, aims to meet the requirements of users belonging to the \acrshort{dcs}. Identified by an analysis of the \acrshort{dcs} structure, considering students, teaching staff, technical \& admin staff and identifying both key roles and individuals within the organisation (see \Cref{appendix:roles_users}).
-
-Meaning that the \theResServer system focuses on the secure distribution of resources between members of a department with particular emphasis on the sharing of course resources between members of staff and the students taking their course(s).
 \vskip 0.5em
-This scenario also lends itself well to proving the extensibility of the product as students have varying and changing attributes that are assigned in their private user keys \textemdash\ the dynamic nature of which allows the product to maintain a high level of portability.
+This scenario also lends itself well to proving the extensibility of the \theResServer system, as students have varying and changing attributes that are assigned in their private user keys \textemdash\ the dynamic nature of which allows the product to maintain a high level of portability.
 
-This granularity in attributes, and thus policies, also provides long-term support for the product by allowing it to adapt to future changes in user structure and policy requirements. Furthermore, the system is can also be deployed in completely new environments as the attributes can be unique to an industry and do not require complete definition before deployment.
+This granularity in attributes, and thus policies, also provides long-term support for the \theResServer system by allowing it to adapt to future changes in user structure and policy requirements. Furthermore, the system can also be deployed in completely new environments as required.
 \vskip 0.5em
-The product was thus determined to require one central \acrfull{mks}, tasked with maintaining the master private key, provisioning the corresponding master public key and using said private key to sign new user keys.
+As described in \Cref{ch:analysis}, the \theResServer system was determined to require one central \acrfull{mks}, tasked with provisioning the master private and public keys, and using said private key to sign new user keys.
 
-A second server would handle the distribution of the master public key, storage of the encrypted resources and serving \& receiving encrypted resources.
+A second, \acrfull{prs} would handle the distribution of the master public key, storage of the encrypted resources and serving \& receiving all encrypted resources.
 
-Further, it was determined that for the \acrshort{dcs} deployment, the \acrshort{mks} would serve as an offline or 'cold' server with no network connection; as this provides a strong level of base security against external threats. Such offline status is possible because the \acrshort{mks} is not required to distribute data automatically, but rather the master public key can be manually uploaded to the \acrfull{prs}.
+Further, it was determined that for the \acrshort{dcs} deployment, the \acrshort{mks} would serve as an offline server with no network connection; as this provides a strong level of base security against external threats. Such offline status is possible because the \acrshort{mks} is not required to distribute data automatically, but rather the master public key can be manually uploaded to the \acrfull{prs}.
 
 \subsection{Verifying the Public Key}
 \label{subsec:design_pub_key_ver}
 
-A deployed secure resource server, that uses \acrfull{abe}, must also be able to process the verification of its distributed public key or risk users encrypting resources with a rogue key. Whilst such a deployment would make use of \acrshort{tls} for communication with devices \textemdash\ verifying its public \acrshort{tls}/\acrshort{ssl} certificate with a public \acrshort{ca} \textemdash\ the public key itself cannot directly be verified by the same \acrshort{ca}.
+A deployed secure resource server, that uses \acrfull{abe}, must also be able to facilitate the verification of its distributed public key, or risk users encrypting resources with a rogue key. Whilst the \acrshort{prs} would use \acrshort{tls} for communication with devices \textemdash\ verifying its public \acrshort{tls}/\acrshort{ssl} certificate with a public \acrshort{ca} \textemdash\ the public key itself cannot directly be verified by the same \acrshort{ca}.
 
-Thus, a deployment of the \theResServer system must instead offer the \acrfull{prs} as the \acrfull{ca} for the public key for the \acrfull{mks} \textemdash\ which would not be directly accessible to users. This is still secure and verifiable, as when a user communicates with the \theResServer system, they do so via \acrshort{tls} and have verified via a public \acrshort{ca} that they are genuinely communicating with the \theResServer system. They can then download the public key from the \acrshort{prs} (still over \acrshort{tls}) and separately validate their copy of the public key against a checksum hosted on the \acrshort{prs}.
+Thus, a deployment of the \theResServer system must instead offer the \acrfull{prs} as the \acrfull{ca} for the public key of the \acrfull{mks}. This is still secure and verifiable, as when a user communicates with the \theResServer system, they do so via \acrshort{tls} and have verified via a public \acrshort{ca} that they are genuinely communicating with the \theResServer system. They can then download the public key from the \acrshort{prs} (still over \acrshort{tls}) and separately validate their copy of the public key against a checksum hosted on the \acrshort{prs}.
 
 \subsection{ABE System}
 \label{subsec:design_abe_sys}
 
-An \acrfull{abe} system requires a defined policy language for building the policies that resources will be encrypted with. This policy language, \thePolicyLang, is defined in \Cref{sec:formal_lang} and describes the syntax \& types for policies. It is tailored to the deployment described above by allowing for attributes that are required for students and staff of the \acrshort{dcs}.
+An \acrfull{abe} system requires a defined policy language for building the policies that resources will be encrypted with. This policy language, \thePolicyLang, is defined in \Cref{sec:formal_lang} and describes the syntax \& types for policies.
 
-The \acrshort{abe} system required an \acrshort{abe} library for employment and since creating such a library was beyond the scope of the project, the \href{https://github.com/zeutro/openabe}{\OpenABE library} from Zeutro LLC was selected instead (see \Cref{sec:bkgr_openabe} for more information). \OpenABE was selected based upon the open source philosophy it adopts and the demonstration of its deployment as an electronic medical record system \citet{Akinyele2011} \textemdash\ a system that aligns well with that of a secure, departmental resource server but with even greater requirements for security.
+The \acrshort{abe} system required an \acrshort{abe} library for integration and since creating such a library was beyond the scope of the project, the \href{https://github.com/zeutro/openabe}{\OpenABE library} from Zeutro LLC was selected instead, as described in \Cref{sec:bkgr_openabe}.
 
 \subsection{Resources}
 \label{subsec:design_resources}
 
-Since uploaded resources have to be securely encrypted with \acrshort{abe} before transmission, the \acrfull{prs} is unaware of the contents of all resources and is in the disadvantaged position of being unable to help users identify which resources are which.
+Since uploaded resources have to be securely encrypted with \acrshort{abe} before transmission, the \acrfull{prs} is unaware of the contents of all resources it receives and is in the disadvantaged position of being unable to help users identify which resources are which.
 
 As such, the server must utilise a different method for resource identification, instead relying on an internal database to store metadata of resources as provided when a user performs an upload. This metadata includes filename, extension, file size and author, but most importantly keeps a record of the resource's policy, allowing the system to determine if a user should even be able to download the resource. Additionally, the metadata stored is entirely extensible and could be further extended in future as needs evolve.
 
-Importantly, any user \textit{could} download \textit{any} encrypted resource without risk of unauthorised decryption, however the user experience would be degraded due to an overwhelming visibility of all uploaded resources. As such, a simple Access Control (see \Cref{sec:bkgr_acc_ctrl}) system was built into the system to only offer visibility to resources a user may download \& decrypt successfully.
+Importantly, any user \textit{could} download \textit{any} encrypted resource without risk of unauthorised decryption.

@@ -1,9 +1,12 @@
 \begin{abstract}
-  Development of a cryptographically secure resource server for staff \& students of the Department of Computing Science to distribute encrypted resources internally.
-
-  Resources can be encrypted with unique, fine-grained policies of attributes that must then be resolved by an end user's private key to complete decryption.
+  Sharing of resources within an organisation is complex and users must resort to trusting that the service they are using will store their resources securely, only granting access to authorised users.
+  This is implicitly flawed as users cannot \textit{know} that the service is truly secure, even if it claims an implementation of end-to-end encryption.
   \vskip 0.5em
-  Required the implementation and deployment of an Attribute-Based Encryption system built from a cryptographically-proven external library and designed with a complete enrolment process for generating \& signing user private keys securely.
-  
-  Requirements are proven by cryptographic mathematics, use-case based testing and a risk assessment of the system's deployment according to ISO 27005.
+  \acrfull{abe} allows a user to encrypt their resources \textit{prior} to upload with fine-grained access control policies that are \textit{cryptographically} embedded into the encrypted resources. Thus, users \textit{know} that their upload can only be accessed by users specified in the policy.
+  \vskip 0.5em
+  Encrypting \& decrypting resources manually, however, is a complex \acrshort{cli} task with a steep learning curve that \textit{non-technical} users may struggle with.
+  \vskip 0.5em
+  We propose a full resource server system, \theResServer, that performs as a cryptographically secure resource sharing service for \textbf{all} staff \& students in the \acrlong{dcs}. This service allows users to encrypt \& upload resources through a simple \acrshort{gui} that guides the process of creating access policies and helps users find uploaded resources to download \& automatically decrypt with their private key.
+  \vskip 0.5em
+  We offer an ISO 27005:2008-compliant risk assessment as evidence that the proposed solution is secure in implementation \& deployment and discuss Case Studies that prove the system meets the needs of users in the \acrlong{dcs}.
 \end{abstract}

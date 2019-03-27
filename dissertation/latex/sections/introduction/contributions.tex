@@ -1,20 +1,14 @@
 \section{Contributions}
 \label{sec:intro_contrib}
 
-The project produced a formal language definition of a policy language for the \acrshort{abe} system, known as \thePolicyLang. Additionally the \theResServer system was produced as three software products serving the different purposes outlined in \Cref{sec:intro_aims}. The contributions can be summarised as:
+The project produced a formal language definition of a policy language for the \theResServer system, known as \thePolicyLang. Additionally the \theResServer system was produced as three software products serving the different purposes outlined in \Cref{sec:intro_aims}. The contributions can be summarised as:
 
 \begin{enumerate}
-  \item \thePolicyLang language for the \theResServer system
-  \begin{enumerate}
-    \item Syntax, Types \& Context
-    \item Typing \& Substitution Rules
-    \item Big Step Semantics
-    \item Interpretation Rules
-  \end{enumerate}
-  \item Software implementation of the \theResServer system
-  \begin{enumerate}
-    \item Offline \acrfull{mks}
-    \item Online \acrfull{prs}
-    \item Local \acrfull{crs}
-  \end{enumerate}
+  \item \textbf{\thePolicyLang} (\Cref{sec:formal_lang}) \textemdash\ a formal language definition for the \theResServer system including abstract syntax, types \& context. We also present typing \& substitution rules, big step semantics and interpretation rules.
+  \item \textbf{Software} (\Cref{ch:implementation}) \textemdash\ implementation of the \theResServer system including the \acrfull{mks}, \acrfull{prs} and \acrfull{crs}. We also present the integration of the \OpenABE library.
+  \item \textbf{Users Analysis} (Sections \ref{sec:analysis_case_studies}, \ref{subsec:design_deployment}) \textemdash\ analysis of the users in the \acrfull{dcs}, identifying the many roles \& groups users may have.
+  \item \textbf{Case Studies} (\Cref{sec:analysis_case_studies}) \textemdash\ six Case Studies designed to simulate use of the \theResServer system by users in the \acrshort{dcs}.
+  \item \textbf{Risk Assessment} (\Cref{sec:eval_risk_assess}) \textemdash\ an ISO 27005:2008-compliant risk assessment of the \theResServer system.
 \end{enumerate}
+
+As presented, the project produced a secure resource server system for the \acrfull{dcs}, consisting of three software products and employing the formal definition of the \thePolicyLang language. The product is proven effective with Case Studies designed from a user analysis of the \acrshort{dcs} and the system's security is assured by a standard risk assessment.

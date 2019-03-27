@@ -1,13 +1,19 @@
 \section{\OpenABE}
 \label{sec:bkgr_openabe}
 
-\OpenABE is an Attribute Based Encryption library from Zeutro LLC, implemented with the C language that provides several \acrshort{abe} encryption schemes, as described by \citet{Akinyele2011}. The library also provides Python bindings for simple use with Python applications and scripts. Of particular interest are the key-policy and ciphertext-policy schemes, wherein the policy defining access to a resource is embedded in either the user's key or within the encrypted resource ciphertext.
+The project looked into the Johns Hopkins Hospital deployment of an electronic medical records system, see \citet{Akinyele2011}. This represented a good scenario for comparison, as the secure distribution of medical records amongst staff and patients relied on dynamic and extremely granular access control but with an even higher requirement for security than that of a departmental resource server.
+
+Deployment scenarios were sufficiently similar such that the setup used for the Johns Hopkins deployment would translate well to the project's \acrfull{dcs} deployment. This includes the enrolment process (by which a user receives their private key from a central admin service) and the granularity of the policies used to encrypt records.
+
+\OpenABE is an open source \acrfull{abe} library from Zeutro LLC, implemented with the C language that provides several \acrshort{abe} encryption schemes, as described by \citet{Akinyele2011}. The library also provides Python bindings for simple use with Python applications and scripts. Of note, are the key-policy and ciphertext-policy schemes, wherein the policy defining access to a resource is embedded in either the user's key, or a ciphertext.
+
+Since the Johns Hopkins deployment integrated the \OpenABE library and an analysis of the library confirmed the extensibility of the attributes \& policies created with the library. The project had identified an \acrshort{abe} library that exceeded the conditions laid out in \Cref{sec:intro_aims}.
 
 \subsection{PyOpenABE Bindings}
 \label{subsec:bkgr_pyopenabe}
 
-\OpenABE is a library designed and implemented by Zeutro LLC in the C language with dual support for a C++ API, with v1.0.0 released in April 2018, via the \href{https://github.com/zeutro/openabe/releases}{\OpenABE library repository}. Python bindings (\PyOpenABE) were initially added a month later at the request of users in May 2018, with a further update in November 2018.
+\OpenABE as an \acrshort{abe} library provides dual support for C \& C++ APIs, via the \href{https://github.com/zeutro/openabe/releases}{\OpenABE library repository}. \OpenABE was released in April 2018, with Python bindings (\PyOpenABE) added at the request of users, in May 2018.
 
-\PyOpenABE provides functions in Python that bind to the \OpenABE library, to achieve similar performance as the C library but fluidly from within Python applications. This also allows for seamless data processing between a Python application and the \OpenABE library, allowing for a resource to be read with Python, sent to and then encrypted by \OpenABE (via the \PyOpenABE bindings) and then returned to Python for storing or sending the encrypted ciphertext.
+\PyOpenABE provides functions in Python that bind to the \OpenABE library, to achieve similar performance as the C library but fluidly from within Python applications \citep{Akinyele2011}. This also allows for seamless data processing between a Python application and the \OpenABE library, allowing for a resource to be read with Python, sent to and then encrypted by \OpenABE (via the \PyOpenABE bindings) and then returned to Python for storing or sending the encrypted ciphertext.
 
 To offer this functionality, \PyOpenABE uses the Cython programming language to generate a CPython extension module which acts as the compiled bridge between Python and the \OpenABE library at runtime. As stated before, this means that \PyOpenABE functions can encrypt \& decrypt resources at a performance rate, nearly equivalent to that of direct \OpenABE use \citep{Akinyele2011}. It also allows for the \OpenABE library to update in future without necessarily requiring updates to the \PyOpenABE bindings \textemdash\ as long as the \OpenABE API does not make any breaking changes to the functions \PyOpenABE binds to.

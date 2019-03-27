@@ -1,12 +1,10 @@
 \section{Public Key Infrastructure}
 \label{sec:bkgr_pub_key_infr}
 
-Public key cryptography is briefly discussed in the Encryption section (\Cref{sec:bkgr_encryption}) above and is originally attributed to \citet{Diffie1976} where a full description of the pubic key encryption \& decryption processes can be found.
+Public key cryptography is briefly discussed in the \Cref{sec:bkgr_encryption}, and is originally attributed to \citet{Diffie1976} where a full description of the pubic key encryption \& decryption processes can be found.
 
 When employed in a real-world product, public key cryptography requires an infrastructure for the distribution of public keys. This is an absolute requirement, as an end user must be able to trust that the public key they have received is genuinely the public key of the system or person they are communicating with.
-
-Chatrooms or messaging services have central servers that process this distribution of public keys, ensuring that any party of the communication may verify public keys against a single authority. If a public key fails verification with that authority, then a user may assume that the public key they have received is a rogue or otherwise invalid key.
 \vskip 0.5em
-In the case of websites and the \acrshort{tls} protocol \citep{Rescorla2018}, each server hosting a website must communicate with a browser via the \acrshort{tls} protocol, verifying the communication with a \acrshort{tls}/\acrshort{ssl} certificate. The browser requires the ability to then validate that a certificate it has received, does indeed belong to the website they are trying to visit. Hence, Certificate Authorities (\acrshort{ca}s) serve this purpose for the Internet, by validating that a served certificate is genuinely from the website it claims to be.
+In the case of websites, each server hosting a website must communicate with a browser via the \acrshort{tls} protocol \citep{Rescorla2018}, verifying the communication with a \acrshort{tls}/\acrshort{ssl} certificate. The browser then validates that certificates it receives belong to the website they are trying to visit, by verifying with a \acrfull{ca}.
 
-In the case of the Internet, \acrshort{ca}s are independent, pre-approved companies that securely authorise that a server is genuinely owned and operated by/for a website with tools such as DNS validation \citep{Hunt2001}. These \acrshort{ca}s are thus the full and final authorisation that a browser is genuinely communicating securely with the website the user intended to visit.
+In the case of the Internet, \acrshort{ca}s are independent, pre-approved companies that securely authorise that a server is genuinely owned and operated by/for a website, with tools such as DNS validation \citep{Hunt2001}.

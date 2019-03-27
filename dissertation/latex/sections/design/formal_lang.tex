@@ -1,9 +1,9 @@
 \section{Formal Language Definition}
 \label{sec:formal_lang}
 
-We offer the following formal language definition for the \theResServer system's Attribute-Based Encryption policy language, \thePolicyLang. The language is designed around the Case Studies described in \Cref{sec:analysis_case_studies} and follows an extensible design principle that aims to provide a complete policy solution for the Department of Computing Science.
+We offer the following formal language definition for the \theResServer system's \acrfull{abe} policy language, \thePolicyLang. The language is designed around the Case Studies described in \Cref{sec:analysis_case_studies} and follows an extensible design principle that aims to provide a complete policy solution for the \acrfull{dcs}.
 
-\thePolicyLang directly provides the tools for policies to be constructed for the \Cref{sec:analysis_case_studies} Case Studies, which can then be interpreted to the policy format that the \PyOpenABE python bindings (described in \Cref{sec:bkgr_openabe}) require.
+\thePolicyLang allows for policies to be constructed for the \Cref{sec:analysis_case_studies} Case Studies, which can then be interpreted to the policy format that the \PyOpenABE python bindings (described in \Cref{sec:bkgr_openabe}) require.
 \vskip 0.5em
 \thePolicyLang offers Boolean comparisons for Integer, String \& Date attributes with further support for Lists of multiple values. Additional comparison operations are provided for Integer and Date comparisons with `greater than', `less than' and `equivalent to' all supported, whereas Booleans, Strings and Lists support `equivalent to' operations only.
 

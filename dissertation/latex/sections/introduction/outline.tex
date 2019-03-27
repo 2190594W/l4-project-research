@@ -2,45 +2,10 @@
 \label{sec:intro_outline}
 
 \begin{enumerate}
-  \item \textbf{Background}
-  \begin{enumerate}
-    \item Access control \& encryption
-		\item Public key infrastructure \& resource servers
-		\item \OpenABE library and \PyOpenABE bindings
-  \end{enumerate}
-  \item \textbf{Analysis/Requirements}
-  \begin{enumerate}
-    \item Security considerations
-    \item Deployment requirements
-    \item Requirements for enrolling
-		\item Case Studies for deployment scenario
-  \end{enumerate}
-	\item \textbf{Design}
-  \begin{enumerate}
-    \item Design of the \thePolicyLang language
-    \item Signing \& using user keys
-    \item Deployment scenario \& system architecture
-		\item Building policies \& searching across filenames
-  \end{enumerate}
-	\item \textbf{Implementation}
-  \begin{enumerate}
-    \item Working with the \OpenABE toolset
-    \item Choosing Python's Flask for web servers
-    \item Client server security
-		\item Storing data with mongoDB
-		\item Fuzzy string matching for filenames
-  \end{enumerate}
-	\item \textbf{Evaluation}
-  \begin{enumerate}
-    \item Security evaluation \& risk assessment
-    \item Successfully achieved
-    \item Failed to achieve
-  \end{enumerate}
-	\item \textbf{Conclusion}
-  \begin{enumerate}
-    \item Summary of project
-    \item Future work
-    \item Problems tackled during project
-		\item Real-world deployment
-  \end{enumerate}
+  \item \textbf{Background} (\Cref{ch:background}) \textemdash\ Describing access control \& encryption and the reliance on public key infrastructures for \textit{asymmetric} encryption. Presenting the requirements of resource servers and the capabilities of the \OpenABE \& \PyOpenABE libraries.
+  \item \textbf{Analysis/Requirements} (\Cref{ch:analysis}) \textemdash\ The security \& deployment considerations for the \theResServer system. Analysis of the requirements for enrolling into the system and the Case Studies for the \acrshort{dcs} deployment scenario.
+	\item \textbf{Design} (\Cref{ch:design}) \textemdash\ Presentation of the design of the \thePolicyLang language including a formal language definition and the process for signing \& issuing user keys with consideration for the deployment scenario. How users can build policies and search across filenames on the \acrfull{prs}, with presentation of the \theResServer system architecture.
+	\item \textbf{Implementation} (\Cref{ch:implementation}) \textemdash\ Integrating with the \OpenABE toolset and choosing Python's Flask for web servers. Discussion of the Client server security, the decision to store data with mongoDB and providing a fuzzy string matching service for filenames.
+	\item \textbf{Evaluation} (\Cref{ch:evaluation}) \textemdash\ Presenting the security evaluation \& risk assessment, along with a discussion of features that were successfully achieved and addressing those that the project failed to achieve.
+	\item \textbf{Conclusion} (\Cref{ch:conclusion}) \textemdash\  Summary of the project with a discussion of future work that would add additional functionality to the \theResServer system.
 \end{enumerate}
