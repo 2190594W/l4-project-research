@@ -36,6 +36,8 @@ Then, the servers can each be ran for development with:
 
 ALL servers must be running for the product to work properly.  
 
+And the system should be used by visiting http://localhost:5002 from your browser, where the Client Resource Server (`crs_server`) will be.  
+
 ### Code
 Within the /Code directory there are three 'servers' that work with each other to simulate a possible environment in with the Resource Server would be set up.
 
