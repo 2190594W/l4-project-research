@@ -1,0 +1,16 @@
+@startuml
+
+node "Master Key Server" as mk_server
+
+cloud "Resource Server" as rs_server {
+  frame encrypted_resources
+}
+
+node "Client Resource Server" as crs_server
+
+mk_server .left.> rs_server: "offline updates"
+
+crs_server <-up-> rs_server: "uploads/downloads"
+
+
+@enduml
