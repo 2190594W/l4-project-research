@@ -1,0 +1,29 @@
+@startuml
+
+node "Master Key Server" {
+  artifact mk_server
+  artifact "Master Private Key"
+  artifact "Master Public Key"
+}
+
+cloud "Resource Server" {
+  folder "Encrypted Resource Blocks" {
+    artifact resource_f325d23d82
+    artifact resource_7dhjsn2389
+  }
+  artifact rs_server
+}
+
+node "User Device" {
+  node "Client Resource Server" {
+    artifact "User Private Key"
+    artifact crs_server
+  }
+}
+
+mk_server .right.> rs_server: "offline updates"
+
+crs_server <-up-> rs_server: "uploads/downloads"
+
+
+@enduml
