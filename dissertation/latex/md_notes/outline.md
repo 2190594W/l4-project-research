@@ -94,7 +94,6 @@
   failed to achieve
     CLI tool for encrypt/decrypt with pyopenabe bindings
     full compatibility with openabe library
-    metadata header for files encrypted with toolset
 
 ## Conclusion
   summarise
