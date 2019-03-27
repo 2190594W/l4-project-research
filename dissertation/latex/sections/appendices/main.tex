@@ -64,8 +64,123 @@ The \acrfull{mks} is shown in an offline state with access to a local copy of th
 
 \input{sections/case_studies/fig_case_4}
 
+\section{Appendix H - Physical Assets for Master Key Server}
+\label{appendix:mks_assets}
+
+\begin{table}[htp]
+  \rowcolors{2}{}{gray!3}
+  \begin{tabularx}{\linewidth}{lX}
+    \textbf{Asset}          & \textbf{Description} \\
+    Router or Switch        &	Router (AP) or Switch host is connected to (if host is not offline). \\
+    Network connection      &	Physical connection to network (if host not offline). \\
+    Storage                 &	Storage for host, high risk, contains keys, config, server files etc. \\
+    Monitor                 &	General output for host, low risk. \\
+    Keyboard                &	General input for host, low risk. \\
+    Mouse                   &	General input for host, low risk. \\
+    Computer                &	The actual host machine of the server. \\
+    Room key                &	Simply the key that grants access to the physical room the server is located in. \\
+    Building                &	The physical building the host machine is located in. \\
+    Room                    &	The physical room the host machine is located in. \\
+    External Storage/Media  &	Any external storage/media attached to the host machine during operation. \\
+  \end{tabularx}
+  \caption{Physical assets for the \acrfull{mks}}
+  \label{tab:physical_assets_mk}
+\end{table}
+
+\section{Appendix I - Assets for Public Resource Server}
+\label{appendix:prs_assets}
+
+\begin{table}[htp]
+  \rowcolors{2}{}{gray!3}
+  \begin{tabularx}{\linewidth}{lX}
+    \textbf{Asset}            & \textbf{Description} \\
+    Master Public Key file    &	Not dangerous, value is distributed as part of normal operation. \\
+    Global Attributes file    &	As above, is distributed as part of normal operation but potentially reveals information on the system. \\
+    Server Secret (sessions)  &	Secret used to set up sessions with users, and generate CSRF tokens. Potentially dangerous. \\
+    Local web server files    &	Contains other config files, but also the key files. Needs protection. \\
+    jinja2 plugin             &	Plugin to generate templates. Lowish risk, but an external party provides software. \\
+    flask plugin              &	Tool to create and run a web server, potentially damaging. Produced and updated by an external party. \\
+    PyMongo plugin            &	Plugin used by flask server to communicate with the Mongo DB. \\
+    Python3 lib               &	The Python3 library. Similar to above, lower vulnerability as very openly and globally reviewed. \\
+    MongoDB Database          & Database of resource meta data. \\
+    MongoDB system            & System running MongoDB databases. Produced and updated by an external party. \\
+    C lib                     &	The C library. Similar to Python, low vulnerability as extremely openly and globally reviewed. Slow to update as well. \\
+    Resource files            & Encrypted ciphertexts representing the resources stored on the server. \\
+    Firewall                  &	Firewall of the host. Should block incoming requests. May not even be necessary as Key Server should be offline when deployed. \\
+    UNIX OS                   &	The UNIX OS the host is running on. External party software so potential risk.
+  \end{tabularx}
+  \caption{Virtual assets for the \acrfull{prs}}
+  \label{tab:virtual_assets_pr}
+\end{table}
+
+\begin{table}[htp]
+  \rowcolors{2}{}{gray!3}
+  \begin{tabularx}{\linewidth}{lX}
+    \textbf{Asset}          & \textbf{Description} \\
+    Router or Switch        &	Router (AP) or Switch host is connected to. \\
+    Network connection      &	Physical connection to network. \\
+    Storage                 &	Storage for host, high risk, contains resources, config, server files etc. \\
+    Computer                &	The actual host machine of the server. \\
+    Building                &	The physical building the host machine is located in. \\
+    Room                    &	The physical room the host machine is located in. \\
+    External Storage/Media  &	Any external storage/media attached to the host machine during operation. \\
+  \end{tabularx}
+  \caption{Physical assets for the \acrfull{prs}}
+  \label{tab:physical_assets_pr}
+\end{table}
+
+\section{Appendix J - Assets for Client Resource Server}
+\label{appendix:crs_assets}
+
+\begin{table}[htp]
+  \rowcolors{2}{}{gray!3}
+  \begin{tabularx}{\linewidth}{lX}
+    \textbf{Asset}            & \textbf{Description} \\
+    User Key                  & High risk. The end user's private key, used to decrypt all resources. \\
+    Master Public Key file    &	Not dangerous, value is distributed as part of normal operation. \\
+    Global Attributes file    &	As above, is distributed as part of normal operation but potentially reveals information on the system. \\
+    Server Secret (sessions)  &	Secret used to set up sessions with users, and generate CSRF tokens. Potentially dangerous. \\
+    Local web server files    &	Contains other config files, but also the key files. Needs protection. \\
+    jinja2 plugin             &	Plugin to generate templates. Lowish risk, but an external party provides software. \\
+    flask plugin              &	Tool to create and run a web server, potentially damaging. Produced and updated by an external party. \\
+    PyMongo plugin            &	Plugin used by flask server to communicate with the Mongo DB. \\
+    PyOpenABE bindings        &	Python bindings for decryption. High risk. Also maintained by external party. \\
+    cython lib/plugin         &	Python tool to compile python down to C. Interprets all bindings. So as above. \\
+    Python3 lib               &	The Python3 library. Similar to above, lower vulnerability as very openly and globally reviewed. \\
+    OpenABE C lib             &	OpenABE library for all user key generation. High risk. Maintained by external party. \\
+    MongoDB Database          & Database of resource meta data. \\
+    MongoDB system            & System running MongoDB databases. Produced and updated by an external party. \\
+    C lib                     &	The C library. Similar to Python, low vulnerability as extremely openly and globally reviewed. Slow to update as well. \\
+    Resource files            & Decrypted resources downloaded from server. \\
+    Firewall                  &	Firewall of the host. Up to user. \\
+    UNIX OS                   &	The UNIX OS the host is running on. External party software so potential risk.
+  \end{tabularx}
+  \caption{Virtual assets for the \acrfull{crs}}
+  \label{tab:virtual_assets_cr}
+\end{table}
+
+\begin{table}[htp]
+  \rowcolors{2}{}{gray!3}
+  \begin{tabularx}{\linewidth}{lX}
+    \textbf{Asset}          & \textbf{Description} \\
+    Router or Switch        &	Router (AP) or Switch host is connected to (if host is not offline). \\
+    Network connection      &	Physical connection to network (if host not offline). \\
+    Storage                 &	Storage for host, high risk, contains keys, config, server files etc. \\
+    Monitor                 &	General output for host, low risk. \\
+    Keyboard                &	General input for host, low risk. \\
+    Mouse                   &	General input for host, low risk. \\
+    Computer                &	The actual host machine of the server. \\
+    External Storage/Media  &	Any external storage/media attached to the host machine during operation. \\
+  \end{tabularx}
+  \caption{Physical assets for the \acrfull{crs}}
+  \label{tab:physical_assets_cr}
+\end{table}
+
 \section{Electronic Appendices}
 \label{appendix:electronic_appendices}
+
+\subsection{Risk Assessment}
+\label{appendix:risk_assessment}
 
 We make note of the Risk Assessment Excel document. Too large to submit within the dissertation, it is included in the submitted code file under: \texttt{l4-project-research/reports/RiskAssessment.xlsx}.
 

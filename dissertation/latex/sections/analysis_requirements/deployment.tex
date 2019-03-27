@@ -26,10 +26,6 @@ Regardless, once deployed the system should implement the university's SSO authe
 Comparatively, the \acrfull{mks} represents the greatest risk to the \theResServer system, as the master \textbf{private} key stored within is capable of generating \& signing any private key desired. If the \acrshort{mks} becomes compromised, so does the entire system, since the master private key can then be maliciously used to generate any arbitrary decryption key as desired \textemdash\ eventually providing access to every encrypted resource.
 
 To combat this risk, the \acrshort{mks} is designed to be kept `offline' after initial setup is complete and the whole system has been successfully provisioned. This drastically reduces attack vectors to the server and eliminates the risk of an external party gaining unauthorised digital access to the underlying system.
-\vskip 0.5em
-Unfortunately, this still leaves physical access to the \acrshort{mks} as a concern, since the server will create any arbitrary user key it is instructed to. It was thus determined that physical access to the server must also be restricted, meaning the \acrshort{mks} would be deployed in a physically locked room with access only granted to \acrshort{dcs} Admin staff, as shown in \Cref{fig:deployment_diagram}.
-
-Furthermore, the server would be built on a UNIX \acrshort{os} allowing for user authentication and system logging of events. This would ensure that even in the event of a physical breach of security, a rogue party could not access the \acrshort{mks} to issue new keys and that a rogue member of staff could not misuse the server to generate false keys without leaving an auditable trail.
 
 \begin{figure}[htp]
     \includegraphics[width=\linewidth,keepaspectratio]{images/infrastructure/deployment.pdf}
@@ -39,23 +35,30 @@ Furthermore, the server would be built on a UNIX \acrshort{os} allowing for user
     \label{fig:deployment_diagram}
 \end{figure}
 
+Unfortunately, this still leaves physical access to the \acrshort{mks} as a concern, since the server will create any arbitrary user key it is instructed to. It was thus determined that physical access to the server must also be restricted, meaning the \acrshort{mks} would be deployed in a physically locked room with access only granted to \acrshort{dcs} Admin staff, as shown in \Cref{fig:deployment_diagram}.
+
+Furthermore, the server would be built on a UNIX \acrshort{os} allowing for user authentication and system logging of events. This would ensure that even in the event of a physical breach of security, a rogue party could not access the \acrshort{mks} to issue new keys and that a rogue member of staff could not misuse the server to generate false keys without leaving an auditable trail.
+
 \subsection{Issuing User Keys}
 \label{subsec:analysis_deployment_iuk}
 
 From \Cref{subsec:analysis_deployment_mks}, the \acrfull{mks} generates \& signs decryption keys for the \theResServer system, using the stored master \textbf{private} key. Further, as discussed in \Cref{subsec:analysis_abe}, the decryption keys for the system are private user keys which contain embedded attributes that describe a user in terms that are defined by the organisation, which in this case is the \acrshort{dcs}.
 
-For a user to start using the \theResServer system, they must enrol in the system by having a member of the \acrshort{dcs} Admin staff generate \& sign a new user key with their personal details from the \acrshort{mks} (see \Cref{fig:enrolment_diagram} and appendix \ref{appendix:enrolment_diagram}). The key is created with attributes that should be retrieved from a department system such as MyCampus for students or the HR/Payroll system for staff. The \acrshort{mks} would be designed to \textit{validate} the attributes of a new user to ensure compatibility with encrypted resources and that all generated user keys are comparable.
-\vskip 0.5em
-However, the \acrshort{mks} would not be designed to \textit{verify} the attributes of a new user, since it is assumed that the Admin staff are responsible for verifying both the identity of a user and that the attributes about to be assigned to them are correct. The server would thus, implicitly trust that any inputs it receives have been verified and therefore, once validated would produce a new key; meaning both physical and login access to the server \textit{must only} be granted to trained members of staff.
-
-In order for a new user key to be provided to the relevant user, the Admin staff member must physically transfer the newly created key from the master server key to the user via some form of hardware storage such as a provided USB flash drive. Care would have to be taken to ensure that the \acrshort{mks} does not become infected from malicious storage devices that might be provided by an unaware user or 3rd party.
-
 \begin{figure}[htp]
     \centering
     \includegraphics[width=\linewidth,keepaspectratio]{images/flow_of_info/enrollment_stu_sequence.pdf}
 
-    \caption{A sequence diagram demonstrating the \theResServer enrolment process for a student.
-    The student can be seen requesting a user key \#1 (and providing their student ID) from the \acrshort{dcs} Teaching Assistant, whom verifies the student's identity and then retrieves their details \#2 from the Student Centre (or MyCampus) system. The Teaching Assistant then processes the returned attributes \#5 for the Master Key Server, and then requests a new key \#6 by providing the student's attributes. The Master Key Server can be seen processing \#7 and then returning the newly generated key \#8 to the Teaching Assistant, whom finally provides the key to the student.}
+    \caption{A sequence diagram demonstrating the \theResServer enrolment process for a student.}
 
     \label{fig:enrolment_diagram}
 \end{figure}
+
+For a user to start using the \theResServer system, they must enrol in the system by having a member of the \acrshort{dcs} Admin staff generate \& sign a new user key with their personal details from the \acrshort{mks}, see \Cref{fig:enrolment_diagram} and Appendix \ref{appendix:enrolment_diagram}.
+
+Where the student can be seen requesting a user key \#1 (and providing their student ID) from the \acrshort{dcs} Teaching Assistant, whom verifies the student's identity and then retrieves their details \#2 from the Student Centre (or MyCampus) system. The Teaching Assistant then processes the returned attributes \#5 for the Master Key Server, and then requests a new key \#6 by providing the student's attributes. The Master Key Server can be seen processing \#7 and then returning the newly generated key \#8 to the Teaching Assistant, whom finally provides the key to the student.
+
+The key is created with attributes that should be retrieved from a department system such as MyCampus for students or the HR/Payroll system for staff. The \acrshort{mks} would be designed to \textit{validate} the attributes of a new user to ensure compatibility with encrypted resources and that all generated user keys are comparable.
+\vskip 0.5em
+However, the \acrshort{mks} would not be designed to \textit{verify} the attributes of a new user, since it is assumed that the Admin staff are responsible for verifying both the identity of a user and that the attributes about to be assigned to them are correct. The server would thus, implicitly trust that any inputs it receives have been verified and therefore, once validated would produce a new key; meaning both physical and login access to the server \textit{must only} be granted to trained members of staff.
+
+In order for a new user key to be provided to the relevant user, the Admin staff member must physically transfer the newly created key from the master server key to the user via some form of hardware storage such as a provided USB flash drive. Care would have to be taken to ensure that the \acrshort{mks} does not become infected from malicious storage devices that might be provided by an unaware user or 3rd party.
