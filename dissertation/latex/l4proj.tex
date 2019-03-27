@@ -20,6 +20,8 @@
 
 \usepackage[acronym,toc]{glossaries}
 
+\renewcommand{\abstitlestyle}[1]{{{\let\newpage\relax\chapter*{#1}\thispagestyle{empty}}}}
+
 % let us define a definition for unnumbered chapters.
 \titleformat{name=\chapter,numberless}
             [display]
@@ -50,6 +52,7 @@
 \newacronym{gui}{GUI}{Graphical User Interface}
 \newacronym{cli}{CLI}{Command Line Interface}
 \newacronym{os}{OS}{Operating System}
+\newacronym{hsm}{HSM}{Hardware Security Module}
 
 \begin{document}
 
@@ -205,7 +208,8 @@ From the designs in \Cref{ch:design}, we present the implementation of the \theR
 %==================================================================================================================================
 \chapter{Evaluation}
 \label{ch:evaluation}
-How good is your solution? How well did you solve the general problem, and what evidence do you have to support that?
+
+Evaluation of the project is presented in the form of a risk assessment, verifying the security of the project and a discussion of the project achievements, with reference to the functionality validation that the Case Studies designed in \Cref{sec:analysis_case_studies} provide.
 
 \input{sections/evaluation/risk_assessment}
 
@@ -216,21 +220,8 @@ How good is your solution? How well did you solve the general problem, and what 
 %==================================================================================================================================
 \chapter{Conclusion}
 \label{ch:conclusion}
-Summarise the whole project for a lazy reader who didn't read the rest (e.g. a prize-awarding committee).
-\section{Guidance}
-\begin{itemize}
-    \item
-        Summarise briefly and fairly.
-    \item
-        You should be addressing the general problem you introduced in the
-        Introduction.
-    \item
-        Include summary of concrete results (``the new compiler ran 2x
-        faster'')
-    \item
-        Indicate what future work could be done, but remember: \textbf{you
-        won't get credit for things you haven't done}.
-\end{itemize}
+
+\input{sections/conclusion}
 
 %==================================================================================================================================
 %

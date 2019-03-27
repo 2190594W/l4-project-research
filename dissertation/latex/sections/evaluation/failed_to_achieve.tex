@@ -1,2 +1,10 @@
 \section{Failed to Achieve}
 \label{sec:eval_fail_achieve}
+
+Due to the scope and timeframe of the project it was not possible to complete the implementation of all desired features, meaning that the features in \Cref{sec:eval_achievements} were prioritised.
+
+As well as the \acrfull{crs}, the project originally aimed to build a separate, but complimentary, \acrfull{cli} tool that would also interface with the \PyOpenABE library. The \acrshort{crs} and the \acrshort{cli} tool would have shared a central codebase of the functions created for the \acrshort{crs}. Completion of such a tool would have required refactoring the code from the \acrshort{crs} into two parts, the web server code and a separate library of functions interfacing with \PyOpenABE.
+\vskip 0.5em
+Originally, the project made the implicit assumption that the \OpenABE and \PyOpenABE libraries (both produced by Zeutro LLC) would offer full compatibility between produced ciphertexts. As such, the project aimed to offer the ability for users to encrypt resources with either \PyOpenABE \textit{(as currently implemented)} or with their own copy of the \OpenABE library. The \acrfull{prs}, in such a scenario, would offer the storage of resources encrypted with either library.
+
+Unfortunately, the current implementation of \PyOpenABE produces ciphertexts that are not compatible with those that are produced with \OpenABE. This is due to a difference in encoding a metadata header to the output file, the reasoning behind which is unclear. A solution was drafted, for the \theResServer system to overwrite the metadata header of \PyOpenABE ciphertexts, forcing compatibility with \OpenABE, however this was not possible in the project's timeframe.

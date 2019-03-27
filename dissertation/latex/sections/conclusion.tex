@@ -1,0 +1,26 @@
+The project produced a functioning resource server system, that is \textit{cryptographically secure} in implementation and designed for deployment in the \acrlong{dcs}. The \theResServer system offers a complete solution to users, providing a set of services to encrypt, decrypt, upload and download shared resources, within a simple \acrshort{gui}.
+
+Security is key to the \theResServer system, and integration with an \acrfull{abe} library allows users to \textit{cryptographically} apply granular access policies to their resources, automatically enforcing end-to-end encryption in the process. Policies specify attributes that a user must possess to be able to decrypt the resources and proving possession requires a centrally signed private key.
+
+The policies are created by the user using a custom policy building tool that adheres to a formal definition of the system's policy language, \thePolicyLang. The system consists of three base products, a \acrfull{mks} for signing user keys, a \acrfull{prs} for storing encrypted resources, and a local \acrfull{crs} provides the \acrshort{gui} for users.
+
+The \theResServer system is proven to meet the needs of a resource server for the \acrfull{dcs} through six Case Studies simulating both common and complex scenarios for resource sharing in the \acrshort{dcs}. A further ISO 27005:2008-compliant risk assessment serves to verify the security of the system.
+
+\section{Future Work}
+\label{sec:concl_future_work}
+
+Future work on the \theResServer system would focus on:
+\begin{enumerate}
+  \item
+    \textbf{Authentication} \textemdash\ integration with a 3rd party Authentication Service, such as ActiveDirectory or the university's Single-Sign-On (SSO) system.
+  \item
+    \textbf{Policy Parsing} \textemdash\ functionality to parse a policy the user provides through a parser such as ANTLR, performing type checking on the policy.
+  \item
+    \textbf{Ciphertext Header} \textemdash\ implement a process for marking a ciphertext as ``created by the \theResServer system'', could add an identification header to ciphertext metadata.
+  \item
+    \textbf{Selective Uploads} \textemdash\ only allow uploading of resources that were encrypted by the \theResServer system and thus have an identification header in the ciphertext metadata.
+  \item
+    \textbf{Attribute Collecting} \textemdash\ interface with systems such as the Student Centre/MyCampus and the HR/Payroll system to automatically collect a new user's attributes, reducing risk of human error.
+  \item
+    \textbf{Backup System} \textemdash\ implement a secure backup system for the \acrfull{prs}, protecting against loss of data.
+\end{enumerate}

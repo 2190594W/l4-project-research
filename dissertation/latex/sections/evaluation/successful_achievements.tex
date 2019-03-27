@@ -1,2 +1,20 @@
-\section{Achieved}
+\section{Successfully Achieved}
 \label{sec:eval_achievements}
+
+The \theResServer system was designed to be a \textit{cryptographically secure} resource server for the \acrfull{dcs}.
+
+To achieve this design the system was built to be able to encrypt and decrypt resources using an \acrfull{abe} library with configurable policies that granularly define the type of user that may decrypt the resource. Integrating a \acrshort{abe} library, required the defining of a policy language to construct policies with, and so the project presented the formal definition of \thePolicyLang (\Cref{sec:formal_lang}).
+\vskip 0.5em 
+This integration was achieved with \OpenABE as described in \Cref{subsec:analysis_abe_impl} \& \Cref{sec:impl_openabe_libs} and validated against the six Case Studies described in \Cref{sec:analysis_case_studies}.
+
+The six Case Studies were designed to prove both the extensibility of the \thePolicyLang language and the validity of the \theResServer system as a resource server for the \acrshort{dcs}. As a collective, the Case Studies demonstate the range of the system and emulate a number of scenarios that would be required by the \acrshort{dcs} for real-world deployment. All six Case Studies were simulated with the final, implemented \theResServer system and prove that the system meets the requirements set out in \Cref{ch:analysis}.
+\vskip 0.5em
+The \theResServer system was also designed to facilitate the secure enrolment of new users and implements the process described in \Cref{sec:analysis_enrolment} for issuing new user keys to users. This process is secure due to the design of the \acrfull{mks} as an \textit{offline} system and is verified by the risk assessment described in \Cref{sec:eval_risk_assess}.
+\vskip 0.5em
+The \acrfull{prs} is designed and implemented to allow users to upload \& store their encrypted resources, such that they can then be viewed by other users if they have the required attributes. Users are also able to search the \acrshort{prs} for resources by the filename the resource was uploaded with. This search utility offers two search methods, described in \Cref{sec:design_file_search} \& \Cref{sec:impl_fuzzy_finder}.
+
+All communication with the \acrshort{prs} can be processed by a client tool, the \acrfull{crs}, which runs locally on a user's machine and wraps the services offered by the \acrshort{prs} in a simple \acrshort{gui}\@. The \acrshort{crs} also offers a proof-of-concept Authentication Service in place of integration with the university's Single-Sign-On (SSO) system. This proof-of-concept service allows the \acrshort{crs} to automatically decrypt resources with the user's key, on their behalf.
+\vskip 0.5em
+As the \thePolicyLang language allows an infinite universe of attributes (see \Cref{sec:formal_lang}) and this extensibility is supported by the \OpenABE library, the \theResServer system provides a workflow for tracking the current list of assigned attributes. The \acrshort{mks} keeps a constantly updating list of all attributes that it has signed into user keys, the \acrshort{prs} keeps this same list but updates it only upon a manual, offline update by a member of the \acrshort{dcs} Admin staff. This list of attributes is then distributed by the \acrshort{prs}, so that the \acrshort{crs} can offer a complete policy building service, as described in \Cref{sec:design_pol_build}.
+\vskip 0.5em
+The \theResServer system also offers the ability to extract policies from encrypted resources (ciphertexts) and to extract the attributes from a user key, through the \acrshort{crs}. This allows a user to determine the attributes required to decrypt a ciphertext and to extract their own attributes, making it possible to debug decryption issues. This does \textbf{not} impact the security of the system, as a user cannot make a new key or alter their own key \citep{Akinyele2011}.

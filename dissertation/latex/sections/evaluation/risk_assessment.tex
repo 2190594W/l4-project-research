@@ -1,11 +1,11 @@
 \section{Risk Assessment}
-\label{sec:eval_risk_asses}
+\label{sec:eval_risk_assess}
 
 The \theResServer system is designed and implemented to be cryptographically secure with careful consideration of the security risks of deploying a public system. Where possible, steps have been taken to mitigate any risks to the system (see \Cref{sec:analysis_security} \& \Cref{sec:impl_web_srvrs}) and if not possible, the deployment or implementation has been designed to limit the system's exposure to risks (see \Cref{subsec:analysis_deployment_mks}).
 
 Identifying the risks to the system was vital to creating a secure system that can be deployed publicly by the \acrfull{dcs} and ensured that the implementation was able to mitigate as many risks as possible. Identifying the risks to a system is not a simple task \citep{Gadd2003} and multiple organisations offer guidance on completing successful risk assessments without the common pitfalls \citep{HSE2014, EuropeanCommission2015}.
 \vskip 0.5em
-Internationally, the International Organisation of Standards (ISO) publishes standards that are applied across the world and as such its legislature is a more widely recognised body of work than that of the UK's Health and Safety Executive. As such this project decided to follow the ISO 27005 \citep{JointTechnicalCommitteeISOIIECJTC12008} for conducting a risk assessment on the \theResServer system.
+Internationally, the International Organisation of Standards (ISO) publishes standards that are applied across the world and as such its legislature is a more widely recognised body of work than that of the UK's Health and Safety Executive. As such this project decided to follow the ISO 27005:2008 \citep{ISO2008} for conducting a risk assessment on the \theResServer system.
 
 Such a risk assessment requires an iterative process for identifying assets and their respective risks:
 \begin{enumerate}
@@ -35,61 +35,72 @@ Such a risk assessment requires an iterative process for identifying assets and 
     Continue to perform risk assessments, re-iterate for next assessment, jump to item \#1
 \end{enumerate}
 
-This process should be repeated for the life of a system, continually re-assessing the risks as the system evolves or expands, or as the environment changes. In the case of the \theResServer system the assets were identified for the \acrfull{mks} 
+This process should be repeated for the life of a system, continually re-assessing the risks as the system evolves or expands, or as the environment changes.
 
-\begin{table}[]
-  \label{tab:assets_mk}
+\begin{table}[htp]
   \rowcolors{2}{}{gray!3}
   \begin{tabularx}{\linewidth}{lX}
-    \textbf{Asset}        & \textbf{Description} \\
-    Master Private Key file   &	Extremely vital and dangerous. Whole system relies on this resource staying secret. Signs all keys in use and can sign any arbitrary attributes.  \\
+    \textbf{Asset}            & \textbf{Description} \\
+    Master Private Key file   &	Considered extremely high risk. MUST stay secret. \\
     Master Public Key file    &	Not dangerous, value is distributed as part of normal operation. \\
-    Global Attributes file    &	As above, is distributed as part of normal operation but potentially reveals information on the system. \\
-    Server Secret (sessions)  &	Secret used to set up sessions with users, and generate CSRF tokens. Potentially dangerous. \\
+    Global Attributes file    &	As above, but potentially reveals information on the system. \\
+    Server Secret (sessions)  &	Secret used to set up sessions with users, and generate CSRF tokens. \\
     Local web server files    &	Contains other config files, but also the key files. Needs protection. \\
-    jinja2 plugin             &	Plugin to generate templates. Lowish risk, but an external party provides software. \\
-    flask plugin              &	Tool to create and run a web server, potentially damaging. Produced and updated by an external party. \\
-    PyOpenABE bindings        &	Python bindings for OpenABE library for all user key generation. Clearly high risk. Also maintained by external party. \\
-    cython lib/plugin         &	Python tool to compile python down to C. Interprets all bindings. So as above. \\
-    Python3 lib               &	The Python3 library. Similar to above, lower vulnerability as very openly and globally reviewed. \\
-    OpenABE C lib             &	OpenABE library for all user key generation. Clearly high risk. Maintained by external party. \\
-    C lib                     &	The C library. Similar to Python, low vulnerability as extremely openly and globally reviewed. Slow to update as well. \\
-    Firewall                  &	Firewall of the host. Should block incoming requests. May not even be necessary as Key Server should be offline when deployed. \\
-    UNIX OS                   &	The UNIX OS the host is running on. Although offline, external party software so potential risk.
+    jinja2 plugin             &	Template plugin. Low risk, but external party provides software. \\
+    flask plugin              &	Creates and runs the web server, some risk. By an external party. \\
+    PyOpenABE bindings        &	Bindings for \OpenABE. High risk. Maintained by external party. \\
+    cython lib/plugin         &	Binds Python to C. Interprets all bindings. So as above. \\
+    Python3 lib               &	Python 3 environment. As above, lower risk, as globally reviewed. \\
+    OpenABE C lib             &	\OpenABE library. High risk. Maintained by external party. \\
+    C lib                     &	C environment. Low risk as global reviews \& slow to update as well. \\
+    Firewall                  &	Firewall of host. Potential risk, but Key Server should be offline. \\
+    User details              & Details a user has provided during the enrolment process. \\
+    Generated User key        & Generated User keys. Held in memory, may be held in temp storage. \\
+    Staff credentials         & Staff login credentials for the host machine OS. \\
+    UNIX OS                   &	The UNIX OS of host. By external party so potential risk.
   \end{tabularx}
+  \caption{Virtual assets for the \acrfull{mks}}
+  \label{tab:assets_mk}
 \end{table}
 
-\begin{table}[]
-  \label{tab:example_threats_vulns}
-  \begin{tabularx}{\linewidth}{cXX}
+We present the virtual assets identified for the \acrfull{mks} in \Cref{tab:assets_mk} and refer to Appendix \ref{appendix:mks_assets} for the \acrshort{mks}'s physical assets. We further refer to the Appendices \ref{appendix:prs_assets} \& \ref{appendix:crs_assets} for the virtual \& physical assets of the \acrfull{prs} and \acrfull{crs}.
+
+\begin{table}[htp]
+  \begin{tabularx}{\linewidth}{|l|l|X|}
+    \hline
     \rowcolor[HTML]{8497B0}
-    \multicolumn{2}{c}{\cellcolor[HTML]{8497B0}\textbf{Threats}} & \multicolumn{1}{c}{\cellcolor[HTML]{8497B0}} \\
-    \rowcolor[HTML]{FFD966}
-    \multicolumn{1}{l}{\cellcolor[HTML]{FFD966}\textbf{Threat-Source}} & \textbf{Threat-Actions} & \multicolumn{1}{c}{\multirow{-2}{*}{\cellcolor[HTML]{8497B0}\textbf{Vulnerabilities}}} \\
+    \multicolumn{2}{|c|}{\cellcolor[HTML]{8497B0}\textbf{Threats}} & \multicolumn{1}{c|}{\cellcolor[HTML]{8497B0}} \\ \cline{1-2}
+    \rowcolor[HTML]{FFD967}
+    \multicolumn{1}{|c|}{\cellcolor[HTML]{FFD967}\textbf{Threat-Source}} & \multicolumn{1}{c|}{\cellcolor[HTML]{FFD967}\textbf{Threat-Actions}} & \multicolumn{1}{c|}{\multirow{-2}{*}{\cellcolor[HTML]{8497B0}\textbf{Vulnerabilities}}} \\ \hline
     \rowcolor[HTML]{A9D08E}
-    \cellcolor[HTML]{F3B084}{\color[HTML]{000000} } & Fire & Irreparable fire damage to equipment \\
+    \cellcolor[HTML]{F4B183} & Fire & Irreparable fire damage to equipment \\ \cline{2-3}
     \rowcolor[HTML]{A9D08E}
-    \cellcolor[HTML]{F3B084}{\color[HTML]{000000} } & Water Damage & Irreparable water damage to equipment \\
+    \cellcolor[HTML]{F4B183} & Water Damage & Irreparable water damage to equipment \\ \cline{2-3}
     \rowcolor[HTML]{A9D08E}
-    \cellcolor[HTML]{F3B084}{\color[HTML]{000000} } & Pollution & Damage from pollution \\
+    \cellcolor[HTML]{F4B183} & Pollution & Damage from pollution \\ \cline{2-3}
     \rowcolor[HTML]{A9D08E}
-    \cellcolor[HTML]{F3B084}{\color[HTML]{000000} } & Major Accident & Physical accident to equipment \\
+    \cellcolor[HTML]{F4B183} & Major Accident & Physical accident to equipment \\ \cline{2-3}
     \rowcolor[HTML]{A9D08E}
-    \cellcolor[HTML]{F3B084}{\color[HTML]{000000} } & \cellcolor[HTML]{A9D08E} & Lack of periodic replacement schemes \\
+    \cellcolor[HTML]{F4B183} & \cellcolor[HTML]{A9D08E} & Lack of periodic replacement schemes \\ \cline{3-3}
     \rowcolor[HTML]{A9D08E}
-    \cellcolor[HTML]{F3B084}{\color[HTML]{000000} } & \cellcolor[HTML]{A9D08E} & Inadequate recruitment procedures (untrained/unskilled staff) \\
+    \cellcolor[HTML]{F4B183} & \cellcolor[HTML]{A9D08E} & Inadequate recruitment procedures (untrained/unskilled staff) \\ \cline{3-3}
     \rowcolor[HTML]{A9D08E}
-    \cellcolor[HTML]{F3B084}{\color[HTML]{000000} } & \multirow{-3}{*}{\cellcolor[HTML]{A9D08E}Destruction of Equipment or Media} & Inadequate or careless use of physical access control to buildings and rooms \\
+    \cellcolor[HTML]{F4B183} & \multirow{-3}{*}{\cellcolor[HTML]{A9D08E}Destruction of Equipment or Media} & Inadequate or careless use of physical access control to buildings and rooms \\ \cline{2-3}
     \rowcolor[HTML]{A9D08E}
-    \multirow{-8}{*}{\cellcolor[HTML]{F3B084}{\color[HTML]{000000} Physical Damage}} & Dust, Corrosion, Freezing & Susceptibility to humidity, dust, soiling
+    \multirow{-8}{*}{\cellcolor[HTML]{F4B183}\textbf{Physical Damage}} & Dust, Corrosion, Freezing & Susceptibility to humidity, dust, soiling \\ \hline
   \end{tabularx}
+  \caption{Sample of `physical damage' vulnerabilities from the ISO 27005:2008 standard.}
+  \label{tab:example_threats_vulns}
 \end{table}
 
-\begin{table}[]
-  \label{tab:example_vulns_risks}
+With the assets identified, we present a sample of vulnerabilities from ISO 27005:2008 \citep{ISO2008}, the eight `Physical Damage' vulnerabilities, in \Cref{tab:example_threats_vulns}.
+
+This represents just 5.1\% of the vulnerabilities assessed for the \theResServer system, with the full one hundred and fifty seven vulnerabilities in Appendix \ref{appendix:risk_assessment}. Each vulnerability is identified from a `Threat-Action' \textit{(e.g. Fire Damage, Water Damage)} with each `Threat-Action' being encompassed by a `Threat-Source' such as `Physical Damage'.
+
+\begin{table}[htp]
   \begin{tabularx}{\linewidth}{Xllllll}
     \rowcolor[HTML]{9BC1E6}
-    \multicolumn{1}{c}{\cellcolor[HTML]{8497B0}} & \multicolumn{3}{l}{\cellcolor[HTML]{9BC1E6}\textbf{Master Private Key file}} & \multicolumn{3}{l}{\cellcolor[HTML]{9BC1E6}\textbf{Master Public Key file}} \\
+    \multicolumn{1}{c}{\cellcolor[HTML]{8497B0}} & \multicolumn{3}{c}{\cellcolor[HTML]{9BC1E6}\textbf{Master Private Key file}} & \multicolumn{3}{c}{\cellcolor[HTML]{9BC1E6}\textbf{Master Public Key file}} \\
     \multicolumn{1}{c}{\multirow{-2}{*}{\cellcolor[HTML]{8497B0}\textbf{Vulnerabilities}}} & \cellcolor[HTML]{D87B79}\textbf{Impact} & \cellcolor[HTML]{C6E0B4}\textbf{Likelihood} & \cellcolor[HTML]{8EA9DB}\textbf{Risk} & \cellcolor[HTML]{D87B79}\textbf{Impact} & \cellcolor[HTML]{C6E0B4}\textbf{Likelihood} & \cellcolor[HTML]{8EA9DB}\textbf{Risk} \\
     \cellcolor[HTML]{A9D08E}Irreparable fire damage to equipment & 5 & 3 & \cellcolor[HTML]{FDBB7B}15 & 2 & 3 & \cellcolor[HTML]{A3C37C}6 \\
     \rowcolor[HTML]{EFEFEF}
@@ -104,4 +115,59 @@ This process should be repeated for the life of a system, continually re-assessi
     \rowcolor[HTML]{EFEFEF}
     \cellcolor[HTML]{A9D08E}Susceptibility to humidity, dust, soiling & 3 & 2 & \cellcolor[HTML]{A3C37C}6 & 2 & 3 & \cellcolor[HTML]{A3C37C}6
   \end{tabularx}
+  \caption{Sample of calculated impacts, likelihoods and risks for the `physical damage' vulnerabilities, regarding the public and private key files of the \acrfull{mks}.}
+  \label{tab:example_vulns_risks}
 \end{table}
+
+Finally, we present \Cref{tab:example_vulns_risks}, a sample of calculated Impacts, Likelihoods and Risks for two of the assets identified in the \acrshort{mks}. For this purpose, the \textit{Master Private Key file} and \textit{Master Public Key file} assets were selected, and we again refer to \Cref{tab:example_threats_vulns} for the eight vulnerabilities that are sampled in \Cref{tab:example_vulns_risks}.
+
+For each vulnerability, an asset was assigned a \texttt{Threat} score \textit{(1\textemdash5)} and a \texttt{Likelihood} score \textit{(1\textemdash5)}, where each scoring represented the threat from, or likelihood of, the vulnerability occurring. A final \texttt{Risk} was calculated for that asset as \texttt{Threat} * \texttt{Likelihood}, providing a \texttt{Risk} score of \textit{1\textemdash25}.
+\vskip 0.5em
+Appendix \ref{appendix:risk_assessment}, represents the full risk assessment with all calculations and insights, however, we summarise some of the results for the report.
+
+\begin{table}[htp]
+  \centering
+  \rowcolors{2}{}{gray!3}
+  \begin{tabular}{lllllll}
+                    & \textbf{Asset Count}  & \textbf{Vuln. * Asset} & \textbf{High Risk} & \textbf{High \%} & \textbf{Low Risk} & \textbf{Low \%} \\
+    \acrshort{mks}   &  30  & 4,710 & 12  &  0.25\% & 3,044  & 64.63\% \\
+    \acrshort{prs}   &  19  & 2,983 & 1   &  0.03\% & 1,879  & 62.99\% \\
+    \acrshort{crs}   &	32  & 5,024 & 6   &  0.12\% & 3,113  & 61.96\% \\
+  \end{tabular}
+  \caption{Analysis of Risk Assessment for \acrfull{mks}, \acrfull{prs} \& \acrfull{crs}}
+  \label{tab:risk_assess_analysis}
+\end{table}
+
+As expected, the risk assessment identified the \acrfull{mks} as the highest \texttt{Risk} service with twelve high risk vulnerabilities. \Cref{tab:risk_assess_analysis} summarises the findings of the risk assessment for each server, where a high risk vulnerability is one with a \texttt{Risk} score greater than \textit{16/25} and a low risk vulnerability has a \texttt{Risk} score less than \textit{6/25}.
+
+For the \acrshort{mks}, the following vulnerabilities were calculated as high risk with at least one asset:
+\begin{enumerate}
+  \item
+    \textit{`Physical access to system not restricted appropriately'} \textemdash\ treated with the physical access restrictions described in \Cref{subsec:analysis_deployment_mks}.
+  \item
+    \textit{`System stores confidential information on storage'} \textemdash\ unavoidable, since the master private key must be stored somewhere, we accept this risk, but it can also be partially treated with physical access restrictions and storing the key on a \acrfull{hsm} as described by \citet{DBLP:conf/esas/TrichinaK04} and suggested by \citet{Akinyele2011}.
+  \item
+    \textit{`Escalated privileges grant full access to all information stored on system, including master signing key'} \textemdash\ as above, this is unavoidable and we must accept this risk but it can also be partially treated with physical access restrictions and storing the key on a \acrshort{hsm}.
+  \item
+    \textit{`Physical access to system grants full access to host data'} \textemdash\ treated with the physical access restrictions described in \Cref{subsec:analysis_deployment_mks}.
+  \item
+    \textit{`Admin staff could misplace user keys'} \textemdash\ cannot be fully treated, as human error will introduce some risk, however full training of staff should be a requirement for the granting of physical access to the \acrshort{mks} and would limit this risk.
+  \item
+    \textit{`Bugs in operating system could have drastic consequences on cryptographic integrity'} \textemdash\ the \acrshort{mks} host \acrshort{os} security is beyond the control of the project, we must accept that the \acrshort{os} could have bugs, we can partially treat by enforcing frequent security updates as they become available.
+\end{enumerate}
+
+For the \acrshort{prs}, the following vulnerability was calculated as high risk with at least one asset:
+\begin{enumerate}
+  \item
+    \textit{`Escalated privileges grant full access to all information stored on system'} \textemdash\ the \acrshort{prs} does not store confidential information by design, however full access could enable a 3rd party to delete data from the local MongoDB database, potentially losing all stored metadata and would also allow the deletion of all store resources. This can be mitigated with frequent backups of the system, however even then, some data may be lost.
+\end{enumerate}
+
+For the \acrshort{crs}, the following vulnerabilities were calculated as high risk with at least one asset:
+\begin{enumerate}
+  \item
+    \textit{`Physical access to system not restricted appropriately'} \textemdash\ the \acrshort{crs} runs on a user's local device and as such we have no control on physical access. If compromised, a user's private key could be stolen and resources could be decrypted with their key. Cannot be treated, we must accept this risk, and communicate the issues to users, explaining that it is their responsibility to protect their private key.
+  \item
+    \textit{`Physical access to system grants full access to host data'} \textemdash\ as above, this is unavoidable and we must accept this risk but we can communicate the risk to users, encouraging them to protect their devices with updates and strong passwords.
+\end{enumerate}
+\vskip 0.5em
+We offer treatments where possible for the identified high risk vulnerabilities and otherwise acknowledge that we must accept and communicate the risk to users of the \theResServer system. The deployment of the \acrfull{mks} in an \textit{offline} state (as described in \Cref{subsec:analysis_deployment_mks} \& \Cref{sec:design_sys_arch}) mitigates the majority of the high risk vulnerabilities, as explained, and proves that the designed system is secure in both design and implementation.
