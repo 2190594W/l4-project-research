@@ -5,10 +5,24 @@
 
 ### Installation
 It is assumed that before continuing with installation of this code, you have downloaded, built and installed the OpenABE library from https://github.com/zeutro/openabe. This project relies on OpenABE for all cryptographic processes and so cannot operate without this library.  
+
 A guide for this installation is not provided as part of this project, as Zeutro LLC has provided proper, up-to-date instructions within their ([repo](https://github.com/zeutro/openabe)).  
+
 Since this project is built with Python, it is also necessary to configure, build and install the Python bindings for OpenABE (PyOpenABE) located within the OpenABE repo ([here](https://github.com/zeutro/openabe/tree/master/bindings/python)).  
+
 After the OpenABE library has been installed and successfully passed the provided tests, the Python bindings should also be tested on the relevant tests and you should check that they can be properly imported into a Python terminal.  
+
+Before running the servers, an instance of MongoDB (https://www.mongodb.com/download-center/community) should be up and running with two databases, titled `ResourceServer` and `UserServer`.  
+
+The `ResourceServer` database also requires a collection titled `resource_meta` and the `UserServer` requires a collection titled `users`.  
+
+Setting up the databases and collections is easiest from a GUI client, such as robo3T (https://robomongo.org/) or MongoDB Compass (https://www.mongodb.com/download-center/compass). But completing this step is up to the user, as the MongoDB docs, provide plenty of information on this process (https://docs.mongodb.com/).  
+
+Both collections may be empty, the servers will configure them on launch. To start the MongoDB system, run:
+  `mongod`  
+
 Once both the library and the bindings are correctly installed, you may wish to create virtualenvs in each of the 3 server files (explained further below) before installing the required Python packages with pip:  
+  `. venv/bin/activate`  
   `pip install -r requirements.txt`  
 Then pip will need to install the PyOpenABE bindings into the virtualenvs, with:  
   `pip install path/to/openabe/bindings/python`  
@@ -19,6 +33,8 @@ Then, the servers can each be ran for development with:
   `flask run --port 5000` - mk_server  
   `flask run --port 5001` - res_server  
   `flask run --port 5002` - crs_server  
+
+ALL servers must be running for the product to work properly.  
 
 ### Code
 Within the /Code directory there are three 'servers' that work with each other to simulate a possible environment in with the Resource Server would be set up.
